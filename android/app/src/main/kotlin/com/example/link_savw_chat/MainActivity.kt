@@ -1,0 +1,5 @@
+package com.example.link_savw_chat
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity : FlutterActivity()

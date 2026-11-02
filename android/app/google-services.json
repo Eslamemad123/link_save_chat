@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "143356028916",
+    "project_id": "chatsavelink",
+    "storage_bucket": "chatsavelink.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:143356028916:android:9535fb4d50aefa38237ba1",
+        "android_client_info": {
+          "package_name": "com.example.link_savw_chat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSB8IVmfxTj5ignqTpcDqrQgpk7LaYtZc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
