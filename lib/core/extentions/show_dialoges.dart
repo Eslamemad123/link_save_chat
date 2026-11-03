@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:link_savw_chat/core/utils/colors.dart';
 
 enum DialogType { error, success, warning }
 
@@ -14,9 +15,9 @@ void showMyDialog(
   };
 
   final bgColor = switch (type) {
-    DialogType.error => Colors.red,
-    DialogType.warning => Colors.yellow,
-    DialogType.success => Colors.green,
+    DialogType.error => AppColors.error,
+    DialogType.warning => AppColors.warning,
+    DialogType.success => AppColors.success,
   };
 
   ScaffoldMessenger.of(context).showSnackBar(
@@ -28,15 +29,15 @@ void showMyDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       content: Row(
         children: [
-          Icon(icon, color: Colors.white),
-          SizedBox(width: 12),
+          Icon(icon, color: AppColors.white),
+          const SizedBox(width: 12),
           Expanded(
             child: Text(
               message,
               style: TextStyle(
                 color: (type == DialogType.warning)
-                    ? Colors.white
-                    : Colors.white,
+                    ? AppColors.white
+                    : AppColors.white,
               ),
             ),
           ),
@@ -44,7 +45,7 @@ void showMyDialog(
       ),
       action: SnackBarAction(
         label: '✕',
-        textColor: Colors.white,
+        textColor: AppColors.white,
         onPressed: () {
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
         },

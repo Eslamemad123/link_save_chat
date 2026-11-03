@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:link_savw_chat/core/utils/colors.dart';
 
 class MainButton extends StatelessWidget {
   const MainButton({
@@ -28,7 +29,7 @@ class MainButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(borderRadius ?? 15),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: alph),
+              color: AppColors.black.withValues(alpha: alph),
               blurRadius: 6,
               offset: const Offset(0, 4), // لتحت فقط
             ),
