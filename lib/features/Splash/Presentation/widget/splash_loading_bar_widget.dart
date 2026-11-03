@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:link_savw_chat/core/utils/colors.dart';
+import 'package:link_save_chat/core/utils/colors.dart';
 
 class SplashLoadingBarWidget extends StatefulWidget {
   const SplashLoadingBarWidget({super.key});

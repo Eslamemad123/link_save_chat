@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:link_savw_chat/core/utils/colors.dart';
+import 'package:link_save_chat/core/utils/colors.dart';
 
 class SplashTitleWidget extends StatelessWidget {
   const SplashTitleWidget({super.key});

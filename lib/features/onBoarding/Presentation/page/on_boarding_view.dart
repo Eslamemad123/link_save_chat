@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:link_savw_chat/features/onBoarding/Presentation/widget/on_boarding_view_body.dart';
+import 'package:link_save_chat/features/onBoarding/Presentation/widget/on_boarding_view_body.dart';
 
 class OnBoardingView extends StatelessWidget {
   const OnBoardingView({super.key});

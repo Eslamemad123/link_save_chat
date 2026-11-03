@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:link_savw_chat/features/Splash/Presentation/widget/splash_logo_widget.dart';
-import 'package:link_savw_chat/features/Splash/Presentation/widget/splash_title_widget.dart';
+import 'package:link_save_chat/features/Splash/Presentation/widget/splash_logo_widget.dart';
+import 'package:link_save_chat/features/Splash/Presentation/widget/splash_title_widget.dart';
 
 class SplashCenterContentWidget extends StatelessWidget {
   const SplashCenterContentWidget({super.key});

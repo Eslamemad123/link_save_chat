@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:link_savw_chat/core/routes/routes.dart';
-import 'package:link_savw_chat/core/utils/theme.dart';
+import 'package:link_save_chat/core/routes/routes.dart';
+import 'package:link_save_chat/core/utils/theme.dart';
 
 //import 'package:firebase_core/firebase_core.dart';
 //import 'firebase_options.dart';

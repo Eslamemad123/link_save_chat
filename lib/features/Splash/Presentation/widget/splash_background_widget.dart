@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:link_savw_chat/core/constatnts/images.dart';
+import 'package:link_save_chat/core/constatnts/images.dart';
 
 class SplashBackgroundWidget extends StatelessWidget {
   const SplashBackgroundWidget({super.key});

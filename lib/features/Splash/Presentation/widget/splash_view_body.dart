@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:link_savw_chat/core/routes/routes.dart';
-import 'package:link_savw_chat/core/utils/colors.dart';
-import 'package:link_savw_chat/features/Splash/Presentation/widget/splash_background_widget.dart';
-import 'package:link_savw_chat/features/Splash/Presentation/widget/splash_bottom_section_widget.dart';
-import 'package:link_savw_chat/features/Splash/Presentation/widget/splash_center_content_widget.dart';
+import 'package:link_save_chat/core/routes/routes.dart';
+import 'package:link_save_chat/core/utils/colors.dart';
+import 'package:link_save_chat/features/Splash/Presentation/widget/splash_background_widget.dart';
+import 'package:link_save_chat/features/Splash/Presentation/widget/splash_bottom_section_widget.dart';
+import 'package:link_save_chat/features/Splash/Presentation/widget/splash_center_content_widget.dart';
 
 class SplashViewBody extends StatefulWidget {
   const SplashViewBody({super.key});

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
-import 'package:link_savw_chat/core/constatnts/animations.dart';
-import 'package:link_savw_chat/core/utils/colors.dart';
+import 'package:link_save_chat/core/constatnts/animations.dart';
+import 'package:link_save_chat/core/utils/colors.dart';
 
 class SplashLogoWidget extends StatelessWidget {
   const SplashLogoWidget({super.key});

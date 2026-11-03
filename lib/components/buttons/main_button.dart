@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:link_savw_chat/core/utils/colors.dart';
+import 'package:link_save_chat/core/utils/colors.dart';
 
 class MainButton extends StatelessWidget {
   const MainButton({
