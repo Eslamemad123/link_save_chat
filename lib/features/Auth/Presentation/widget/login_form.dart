@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_savw_chat/components/buttons/main_button.dart';
 import 'package:link_savw_chat/components/inputs/main_text_form_field.dart';
 import 'package:link_savw_chat/core/constatnts/icons.dart';
+import 'package:link_savw_chat/core/routes/navigation.dart';
+import 'package:link_savw_chat/core/routes/routes.dart';
 import 'package:link_savw_chat/features/Auth/Presentation/widget/login_forgot_password_button.dart';
 
 class LoginForm extends StatefulWidget {
@@ -59,7 +61,9 @@ class _LoginFormState extends State<LoginForm> {
             textInputNext: TextInputAction.done,
           ),
           SizedBox(height: 8.h),
-          const LoginForgotPasswordButton(),
+          LoginForgotPasswordButton(
+            onPressed: () => pushTo(context, Routes.forgotPassword),
+          ),
           SizedBox(height: 20.h),
           MainButton(
             buttonText: 'Log In',
