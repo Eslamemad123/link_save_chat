@@ -33,7 +33,7 @@ class _OnBoardingViewBodyState extends State<OnBoardingViewBody> {
 
   void _onActionButtonPressed() {
     if (_currentIndex == OnBoardingModel.items.length - 1) {
-      pushReplacement(context, Routes.home);
+      pushReplacement(context, Routes.login);
     } else {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),

@@ -36,4 +36,5 @@ flutter:
   assets:
     - assets/
     - assets/image/
+    - assets/icons/
     - assets/lottie Animation/
