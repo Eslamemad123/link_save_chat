@@ -28,7 +28,18 @@ class AppColors {
   static const Color textSecondaryDark = Color(0xFFA0A0A0);
 
   static const Color borderLight = Color(0xFFE4E7EC);
+  static const Color cardBorderLight = Color(0xFFE4E7EC);
+  static const Color cardBorderDark = Color(0xFF2A2A2A);
+  static const Color socialBorder = Color(0xFFEAECF0);
   static const Color progressTrackLight = Color(0xFFE4E7EC);
+
+  static const Color iconContainerLight = Color(0xFFEFF4FF);
+  static const Color iconContainerDark = Color(0xFF1E293B);
+
+  static const Color inputFillLight = Color(0xFFFFFFFF);
+  static const Color inputFillDark = Color(0xFF1E1E1E);
+
+  static const Color shadowLight = Color(0x0C000000);
 
   static const Color taskCompletedLight = Color(0xFF2E7D32);
   static const Color taskCompletedDark = Color(0xFF4CAF50);

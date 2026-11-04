@@ -11,7 +11,7 @@ class OnBoardingSkipButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () {
-        pushReplacement(context, Routes.home);
+        pushReplacement(context, Routes.login);
       },
       style: TextButton.styleFrom(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
@@ -25,4 +25,3 @@ class OnBoardingSkipButton extends StatelessWidget {
     );
   }
 }
-
