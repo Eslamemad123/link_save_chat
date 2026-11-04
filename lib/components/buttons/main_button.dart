@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:link_save_chat/core/utils/colors.dart';
+import 'package:link_savw_chat/core/utils/colors.dart';
 
 class MainButton extends StatelessWidget {
   const MainButton({
@@ -21,7 +21,7 @@ class MainButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:  EdgeInsets.symmetric(horizontal: 15), // مساحة للشادو
+      padding: EdgeInsets.symmetric(horizontal: 15), // مساحة للشادو
       child: Container(
         width: width ?? double.infinity,
         height: height ?? 55,
@@ -35,8 +35,8 @@ class MainButton extends StatelessWidget {
             ),
           ],
         ),
-        child: SizedBox()
-      )
+        child: SizedBox(),
+      ),
     );
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:link_save_chat/core/utils/colors.dart';
+import 'package:link_savw_chat/core/utils/colors.dart';
 
 enum DialogType { error, success, warning }
 
@@ -61,7 +61,13 @@ showLoadingDialog(BuildContext context) {
     builder: (context) => Center(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [Expanded(child: /*Lottie.asset(AppAssets.loaderCirclerJSON*/Image.asset('f'))],
+        children: [
+          Expanded(
+            child: /*Lottie.asset(AppAssets.loaderCirclerJSON*/ Image.asset(
+              'f',
+            ),
+          ),
+        ],
       ),
     ),
   );

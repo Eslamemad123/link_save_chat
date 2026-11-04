@@ -1,6 +1,5 @@
-
 //!ServerException
-import 'package:link_save_chat/core/error/error_model.dart';
+import 'package:link_savw_chat/core/error/error_model.dart';
 
 class ServerException implements Exception {
   final ErrorModel errorModel;
