@@ -18,10 +18,7 @@ class OnBoardingSkipButton extends StatelessWidget {
         minimumSize: Size.zero,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       ),
-      child: Text(
-        'Skip',
-        style: AppFontStyles.font14MediumSkip(context),
-      ),
+      child: Text('Skip', style: AppFontStyles.font16RegularSubtitle(context)),
     );
   }
 }

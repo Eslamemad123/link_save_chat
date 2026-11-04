@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:link_savw_chat/features/Auth/Presentation/page/forgot_password_view.dart';
 import 'package:link_savw_chat/features/Auth/Presentation/page/login_view.dart';
 import 'package:link_savw_chat/features/Splash/Presentation/page/splash_view.dart';
 import 'package:link_savw_chat/features/home/Presentation/page/home_view.dart';
@@ -12,6 +13,7 @@ class Routes {
   static const String onBoarding = '/onBoarding';
   static const String login = '/login';
   static const String home = '/home';
+  static const String forgotPassword = '/forgotPassword';
 
   static final routes = GoRouter(
     navigatorKey: navigatorKey,
@@ -29,6 +31,10 @@ class Routes {
       GoRoute(
         path: home,
         builder: (context, state) => const HomeView(),
+      ),
+      GoRoute(
+        path: forgotPassword,
+        builder: (context, state) => const ForgotPasswordView(),
       ),
     ],
   );
