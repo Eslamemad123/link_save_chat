@@ -22,4 +22,41 @@ class AppFontStyles {
       letterSpacing: 2.0,
     );
   }
+
+  static TextStyle font22BoldTitle(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return TextStyle(
+      fontSize: 22.sp,
+      fontWeight: FontWeight.bold,
+      color: isDark ? AppColors.textPrimaryDark : AppColors.textTitleLight,
+      height: 1.3,
+    );
+  }
+
+  static TextStyle font16RegularSubtitle(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return TextStyle(
+      fontSize: 16.sp,
+      fontWeight: FontWeight.normal,
+      color: isDark ? AppColors.textSecondaryDark : AppColors.textSubtitleLight,
+      height: 1.5,
+    );
+  }
+
+  static TextStyle font14MediumSkip(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return TextStyle(
+      fontSize: 14.sp,
+      fontWeight: FontWeight.w500,
+      color: isDark ? AppColors.textSecondaryDark : AppColors.textSubtitleLight,
+    );
+  }
+
+  static TextStyle font16BoldButton(BuildContext context) {
+    return TextStyle(
+      fontSize: 16.sp,
+      fontWeight: FontWeight.w600,
+      color: AppColors.white,
+    );
+  }
 }
