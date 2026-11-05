@@ -25,6 +25,7 @@ class MainTextFormField extends StatefulWidget {
     this.keyboardType,
     this.readOnly = false,
     this.onTap,
+    this.onChanged,
   });
 
   final TextEditingController? controller;
@@ -44,6 +45,7 @@ class MainTextFormField extends StatefulWidget {
   final TextInputType? keyboardType;
   final bool readOnly;
   final VoidCallback? onTap;
+  final ValueChanged<String>? onChanged;
 
   @override
   State<MainTextFormField> createState() => _MainTextFormFieldState();
@@ -129,6 +131,7 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
         maxLines: widget.ispassword ? 1 : widget.maxTextLines,
         textInputAction: widget.textInputNext,
         onFieldSubmitted: widget.onFieldSubmitted,
+        onChanged: widget.onChanged,
         keyboardType: widget.keyboardType,
         readOnly: widget.readOnly,
         onTap: widget.onTap,

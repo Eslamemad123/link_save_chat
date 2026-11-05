@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:link_savw_chat/features/Auth/Presentation/widget/login_view_body.dart';
+import 'package:link_savw_chat/features/Auth/Presentation/widget/login/login_view_body.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
