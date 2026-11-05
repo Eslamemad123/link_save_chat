@@ -3,13 +3,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_savw_chat/core/utils/colors.dart';
 import 'package:link_savw_chat/core/utils/textStyles.dart';
 
-class LoginDivider extends StatelessWidget {
-  const LoginDivider({super.key});
+class AuthDivider extends StatelessWidget {
+  const AuthDivider({
+    super.key,
+    this.text,
+  });
+
+  final String? text;
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final dividerColor = isDark ? AppColors.cardBorderDark : AppColors.cardBorderLight;
+    final dividerColor =
+        isDark ? AppColors.cardBorderDark : AppColors.cardBorderLight;
 
     return Row(
       children: [
@@ -22,7 +28,7 @@ class LoginDivider extends StatelessWidget {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 12.w),
           child: Text(
-            'Or continue with',
+            text ?? 'Or continue with',
             style: AppFontStyles.font14RegularSubtitle(context),
           ),
         ),
@@ -36,3 +42,4 @@ class LoginDivider extends StatelessWidget {
     );
   }
 }
+

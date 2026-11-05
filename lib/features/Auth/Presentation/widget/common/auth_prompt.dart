@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_savw_chat/core/utils/textStyles.dart';
 
-class LoginSignUpPrompt extends StatelessWidget {
-  const LoginSignUpPrompt({
+class AuthPrompt extends StatelessWidget {
+  const AuthPrompt({
     super.key,
-    this.onSignUpPressed,
+    required this.promptText,
+    required this.actionText,
+    this.onActionPressed,
   });
 
-  final VoidCallback? onSignUpPressed;
+  final String promptText;
+  final String actionText;
+  final VoidCallback? onActionPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -16,14 +20,15 @@ class LoginSignUpPrompt extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          "Don't have an account?",
+          promptText,
           style: AppFontStyles.font14RegularSubtitle(context),
         ),
         SizedBox(width: 6.w),
         GestureDetector(
-          onTap: onSignUpPressed ?? () {},
+          onTap: onActionPressed,
+          behavior: HitTestBehavior.opaque,
           child: Text(
-            'Sign Up',
+            actionText,
             style: AppFontStyles.font14BoldPrimary(context),
           ),
         ),
@@ -31,3 +36,4 @@ class LoginSignUpPrompt extends StatelessWidget {
     );
   }
 }
+

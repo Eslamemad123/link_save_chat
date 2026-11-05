@@ -25,6 +25,7 @@ dependencies:
   smooth_page_indicator: ^1.2.1
   flutter:
     sdk: flutter
+  password_strength_checker: ^1.3.2
 
 dev_dependencies:
   flutter_test:

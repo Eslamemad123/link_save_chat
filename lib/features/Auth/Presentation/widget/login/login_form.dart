@@ -5,7 +5,7 @@ import 'package:link_savw_chat/components/inputs/main_text_form_field.dart';
 import 'package:link_savw_chat/core/constatnts/icons.dart';
 import 'package:link_savw_chat/core/routes/navigation.dart';
 import 'package:link_savw_chat/core/routes/routes.dart';
-import 'package:link_savw_chat/features/Auth/Presentation/widget/login_forgot_password_button.dart';
+import 'package:link_savw_chat/features/Auth/Presentation/widget/login/login_forgot_password_button.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});

@@ -3,5 +3,7 @@ class AppIcons {
   static const String facebookLogo = 'assets/icons/facebook_logo.svg';
   static const String email = 'assets/icons/email.svg';
   static const String lock = 'assets/icons/lock.svg';
+  static const String user = 'assets/icons/userFiled.svg';
+  static const String verify = 'assets/icons/verify.svg';
 }
 

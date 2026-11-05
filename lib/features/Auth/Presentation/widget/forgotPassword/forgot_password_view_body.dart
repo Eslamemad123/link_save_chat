@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:link_savw_chat/features/Auth/Presentation/widget/forgot_password_animation.dart';
-import 'package:link_savw_chat/features/Auth/Presentation/widget/forgot_password_back_button.dart';
-import 'package:link_savw_chat/features/Auth/Presentation/widget/forgot_password_form.dart';
-import 'package:link_savw_chat/features/Auth/Presentation/widget/forgot_password_header_text.dart';
-import 'package:link_savw_chat/features/Auth/Presentation/widget/forgot_password_spam_notice.dart';
+import 'package:link_savw_chat/features/Auth/Presentation/widget/forgotPassword/forgot_password_animation.dart';
+import 'package:link_savw_chat/features/Auth/Presentation/widget/forgotPassword/forgot_password_back_button.dart';
+import 'package:link_savw_chat/features/Auth/Presentation/widget/forgotPassword/forgot_password_form.dart';
+import 'package:link_savw_chat/features/Auth/Presentation/widget/forgotPassword/forgot_password_header_text.dart';
+import 'package:link_savw_chat/features/Auth/Presentation/widget/forgotPassword/forgot_password_spam_notice.dart';
 
 class ForgotPasswordViewBody extends StatelessWidget {
   const ForgotPasswordViewBody({super.key});
