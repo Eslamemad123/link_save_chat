@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:link_savw_chat/core/GetIt/gi.dart';
+import 'package:link_savw_chat/features/Auth/Presentation/cubit/auth_cubit.dart';
 import 'package:link_savw_chat/features/Auth/Presentation/page/forgot_password_view.dart';
 import 'package:link_savw_chat/features/Auth/Presentation/page/login_view.dart';
 import 'package:link_savw_chat/features/Auth/Presentation/page/sign_up_view.dart';
@@ -21,7 +24,13 @@ class Routes {
     navigatorKey: navigatorKey,
     initialLocation: splash,
     routes: [
-      GoRoute(path: splash, builder: (context, state) => const SplashView()),
+      GoRoute(
+        path: splash,
+        builder: (context, state) => BlocProvider(
+          create: (context) => gi<AuthCubit>(),
+          child: const SplashView(),
+        ),
+      ),
       GoRoute(
         path: onBoarding,
         builder: (context, state) => const OnBoardingView(),

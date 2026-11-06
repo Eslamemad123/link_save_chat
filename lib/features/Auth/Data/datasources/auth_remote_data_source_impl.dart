@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
 import '../models/user_model.dart';
 import 'auth_remote_data_source.dart';
 
@@ -12,8 +15,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   AuthRemoteDataSourceImpl({
     FirebaseAuth? firebaseAuth,
     FirebaseFirestore? firestore,
-  })  : firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
-        firestore = firestore ?? FirebaseFirestore.instance;
+  }) : firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
+       firestore = firestore ?? FirebaseFirestore.instance;
 
   @override
   Stream<User?> authStateChanges() {
@@ -130,35 +133,43 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       permissions: ['email', 'public_profile'],
     );
 
-    if (loginResult.status == LoginStatus.cancelled) {
-      throw FirebaseAuthException(
-        code: 'facebook-sign-in-canceled',
-        message: 'Facebook login was canceled by user.',
+    if (loginResult.status != LoginStatus.success) {
+      log('Facebook login error: ${loginResult.message} | status: ${loginResult.status}');
+      throw Exception(
+        loginResult.message ?? 'Facebook login failed: ${loginResult.status.name}',
       );
     }
 
-    if (loginResult.status != LoginStatus.success || loginResult.accessToken == null) {
-      throw FirebaseAuthException(
-        code: 'facebook-sign-in-failed',
-        message: loginResult.message ?? 'Facebook login failed.',
-      );
-    }
+    final OAuthCredential facebookAuthCredential =
+        FacebookAuthProvider.credential(loginResult.accessToken!.tokenString);
 
-    final OAuthCredential credential = FacebookAuthProvider.credential(
-      loginResult.accessToken!.tokenString,
-    );
-    return firebaseAuth.signInWithCredential(credential);
+    return firebaseAuth.signInWithCredential(facebookAuthCredential);
   }
 
   @override
   Future<UserCredential> signInWithGoogle() async {
+    await GoogleSignIn.instance.initialize(
+      serverClientId: '143356028916-pult9hi7vkfs91a0d29g2di9b0a9rbmn.apps.googleusercontent.com', //id web
+    );
+
     final GoogleSignInAccount googleUser = await GoogleSignIn.instance
         .authenticate(scopeHint: ['email']);
     final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+
     final credential = GoogleAuthProvider.credential(
       idToken: googleAuth.idToken,
     );
-    return firebaseAuth.signInWithCredential(credential);
+
+    final UserCredential userCredential = await firebaseAuth
+        .signInWithCredential(credential);
+
+    // بيانات المستخدم
+    final User? user = userCredential.user;
+
+    log('Name: ${user?.displayName}');
+    log('Email: ${user?.email}');
+    log('Photo: ${user?.photoURL}');
+
+    return userCredential;
   }
 }
-
