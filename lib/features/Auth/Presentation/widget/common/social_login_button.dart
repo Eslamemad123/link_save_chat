@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -47,7 +48,10 @@ class SocialLoginButton extends StatelessWidget {
         borderRadius: radius,
         child: InkWell(
           borderRadius: radius,
-          onTap: isLoading ? null : (onPressed ?? () {}),
+          onTap:
+              (onPressed ??
+              () {
+              }),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -63,16 +67,9 @@ class SocialLoginButton extends StatelessWidget {
                   ),
                 )
               else
-                SvgPicture.asset(
-                  iconPath,
-                  width: 24.w,
-                  height: 24.h,
-                ),
+                SvgPicture.asset(iconPath, width: 24.w, height: 24.h),
               SizedBox(width: 12.w),
-              Text(
-                text,
-                style: AppFontStyles.font15MediumText(context),
-              ),
+              Text(text, style: AppFontStyles.font15MediumText(context)),
             ],
           ),
         ),
@@ -80,4 +77,3 @@ class SocialLoginButton extends StatelessWidget {
     );
   }
 }
-

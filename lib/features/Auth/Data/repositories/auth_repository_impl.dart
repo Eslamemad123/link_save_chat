@@ -1,6 +1,9 @@
 import 'dart:async';
+
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+
 import '../../../../core/error/failer.dart';
 import '../../Domain/entities/user_entity.dart';
 import '../../Domain/repositories/auth_repository.dart';
@@ -17,8 +20,9 @@ class AuthRepositoryImpl implements AuthRepository {
     return remoteDataSource.authStateChanges().asyncMap((firebaseUser) async {
       if (firebaseUser == null) return null;
       try {
-        final firestoreUser =
-            await remoteDataSource.getUserData(userId: firebaseUser.uid);
+        final firestoreUser = await remoteDataSource.getUserData(
+          userId: firebaseUser.uid,
+        );
         if (firestoreUser != null && firestoreUser.isDeleted) {
           await remoteDataSource.logout();
           return null;
@@ -83,7 +87,8 @@ class AuthRepositoryImpl implements AuthRepository {
         return Left(Failure(message: 'This account has been deleted.'));
       }
 
-      final userEntity = existingData ??
+      final userEntity =
+          existingData ??
           UserEntity(
             id: user.uid,
             name: user.displayName ?? '',
@@ -212,15 +217,35 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, UserEntity>> signInWithGoogle() async {
     try {
+      debugPrint('1. Starting Google Sign In');
+
       final credential = await remoteDataSource.signInWithGoogle();
+      debugPrint('2. Google Sign In completed');
+
       final user = credential.user;
+
       if (user == null) {
+        debugPrint('3. User is NULL');
         return Left(Failure(message: 'Google sign in failed.'));
       }
-      return await _syncSocialUserDocument(user);
-    } on FirebaseAuthException catch (e) {
+
+      debugPrint('3. User ID: ${user.uid}');
+
+      final result = await _syncSocialUserDocument(user);
+
+      debugPrint('4. User document synced');
+
+      return result;
+    } on FirebaseAuthException catch (e, stackTrace) {
+      debugPrint('Firebase Auth Error: ${e.code}');
+      debugPrint('Message: ${e.message}');
+      debugPrintStack(stackTrace: stackTrace);
+
       return Left(Failure(message: _mapFirebaseAuthError(e.code)));
-    } catch (_) {
+    } catch (e, stackTrace) {
+      debugPrint('Unknown Error: $e');
+      debugPrintStack(stackTrace: stackTrace);
+
       return Left(Failure(message: 'Google sign-in failed.'));
     }
   }
@@ -236,8 +261,8 @@ class AuthRepositoryImpl implements AuthRepository {
       return await _syncSocialUserDocument(user);
     } on FirebaseAuthException catch (e) {
       return Left(Failure(message: _mapFirebaseAuthError(e.code)));
-    } catch (_) {
-      return Left(Failure(message: 'Facebook sign-in failed.'));
+    } catch (e) {
+      return Left(Failure(message: e.toString().replaceFirst('Exception: ', '')));
     }
   }
 

@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../Data/models/user_model.dart';
 import '../../Domain/entities/user_entity.dart';
 import '../../Domain/usecases/delete_account_use_case.dart';
@@ -72,10 +75,7 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<void> login({
-    required String email,
-    required String password,
-  }) async {
+  Future<void> login({required String email, required String password}) async {
     emit(const AuthLoading());
     final result = await loginUseCase(email: email, password: password);
     result.fold(
@@ -153,13 +153,19 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> signInWithGoogle() async {
+    log('goggle 1');
     if (signInWithGoogleUseCase == null) return;
+    log('goggle 2');
+
     emit(const AuthLoading());
     final result = await signInWithGoogleUseCase!();
+    log('goggle 3');
+
     result.fold(
       (failure) => emit(AuthError(failure.message)),
       (user) => emit(LoginSuccess(user)),
     );
+    log('goggle 4');
   }
 
   Future<void> signInWithFacebook() async {
@@ -178,4 +184,3 @@ class AuthCubit extends Cubit<AuthState> {
     return super.close();
   }
 }
-
