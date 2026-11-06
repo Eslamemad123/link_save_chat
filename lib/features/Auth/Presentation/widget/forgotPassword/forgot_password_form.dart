@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_savw_chat/components/buttons/main_button.dart';
 import 'package:link_savw_chat/components/inputs/main_text_form_field.dart';
 import 'package:link_savw_chat/core/constatnts/icons.dart';
 import 'package:link_savw_chat/core/extentions/Regix.dart';
+import 'package:link_savw_chat/features/Auth/Presentation/cubit/auth_cubit.dart';
+import 'package:link_savw_chat/features/Auth/Presentation/cubit/auth_state.dart';
 
 class ForgotPasswordForm extends StatefulWidget {
   const ForgotPasswordForm({
@@ -36,7 +39,9 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
 
   void _onSendResetLink() {
     if (_formKey.currentState?.validate() ?? false) {
-      widget.onResetRequested?.call(_emailController.text.trim());
+      final email = _emailController.text.trim();
+      widget.onResetRequested?.call(email);
+      context.read<AuthCubit>().resetPassword(email: email);
     }
   }
 
@@ -65,9 +70,14 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
             },
           ),
           SizedBox(height: 20.h),
-          MainButton(
-            buttonText: 'Send Reset Link 📩',
-            onPressed: _onSendResetLink,
+          BlocBuilder<AuthCubit, AuthState>(
+            builder: (context, state) {
+              return MainButton(
+                buttonText: 'Send Reset Link ',
+                isLoading: state is AuthLoading,
+                onPressed: _onSendResetLink,
+              );
+            },
           ),
         ],
       ),

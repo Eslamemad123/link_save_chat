@@ -10,11 +10,13 @@ class SocialLoginButton extends StatelessWidget {
     required this.text,
     required this.iconPath,
     this.onPressed,
+    this.isLoading = false,
   });
 
   final String text;
   final String iconPath;
   final VoidCallback? onPressed;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -45,15 +47,27 @@ class SocialLoginButton extends StatelessWidget {
         borderRadius: radius,
         child: InkWell(
           borderRadius: radius,
-          onTap: onPressed ?? () {},
+          onTap: isLoading ? null : (onPressed ?? () {}),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SvgPicture.asset(
-                iconPath,
-                width: 24.w,
-                height: 24.h,
-              ),
+              if (isLoading)
+                SizedBox(
+                  width: 20.w,
+                  height: 20.h,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      isDark ? AppColors.white : AppColors.brandBlue,
+                    ),
+                  ),
+                )
+              else
+                SvgPicture.asset(
+                  iconPath,
+                  width: 24.w,
+                  height: 24.h,
+                ),
               SizedBox(width: 12.w),
               Text(
                 text,

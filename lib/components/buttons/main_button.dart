@@ -15,6 +15,7 @@ class MainButton extends StatelessWidget {
     this.backgroundColor,
     this.textStyle,
     this.icon,
+    this.isLoading = false,
   });
 
   final String buttonText;
@@ -26,6 +27,7 @@ class MainButton extends StatelessWidget {
   final Color? backgroundColor;
   final TextStyle? textStyle;
   final Widget? icon;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -49,23 +51,34 @@ class MainButton extends StatelessWidget {
         color: buttonColor,
         borderRadius: radius,
         child: InkWell(
-          onTap: onPressed,
+          onTap: isLoading ? null : onPressed,
           borderRadius: radius,
           child: Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (icon != null) ...[
-                  icon!,
-                  SizedBox(width: 8.w),
-                ],
-                Text(
-                  buttonText,
-                  style: textStyle ?? AppFontStyles.font16BoldButton(context),
-                ),
-              ],
-            ),
+            child: isLoading
+                ? SizedBox(
+                    width: 24.w,
+                    height: 24.h,
+                    child: const CircularProgressIndicator(
+                      strokeWidth: 2.5,
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(AppColors.white),
+                    ),
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (icon != null) ...[
+                        icon!,
+                        SizedBox(width: 8.w),
+                      ],
+                      Text(
+                        buttonText,
+                        style:
+                            textStyle ?? AppFontStyles.font16BoldButton(context),
+                      ),
+                    ],
+                  ),
           ),
         ),
       ),
