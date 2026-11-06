@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_savw_chat/components/buttons/main_button.dart';
 import 'package:link_savw_chat/components/inputs/main_text_form_field.dart';
 import 'package:link_savw_chat/core/constatnts/icons.dart';
+import 'package:link_savw_chat/core/extentions/Regix.dart';
 import 'package:link_savw_chat/core/routes/navigation.dart';
 import 'package:link_savw_chat/core/routes/routes.dart';
+import 'package:link_savw_chat/features/Auth/Presentation/cubit/auth_cubit.dart';
+import 'package:link_savw_chat/features/Auth/Presentation/cubit/auth_state.dart';
 import 'package:link_savw_chat/features/Auth/Presentation/widget/login/login_forgot_password_button.dart';
 
 class LoginForm extends StatefulWidget {
@@ -35,7 +39,12 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void _onLoginPressed() {
-    if (_formKey.currentState?.validate() ?? false) {}
+    if (_formKey.currentState?.validate() ?? false) {
+      context.read<AuthCubit>().login(
+            email: _emailController.text.trim(),
+            password: _passwordController.text,
+          );
+    }
   }
 
   @override
@@ -51,6 +60,15 @@ class _LoginFormState extends State<LoginForm> {
             prefixIcon: AppIcons.email,
             keyboardType: TextInputType.emailAddress,
             textInputNext: TextInputAction.next,
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Please enter your email';
+              }
+              if (!AppRegEx.isEmailValied(value.trim())) {
+                return 'Please enter a valid email address';
+              }
+              return null;
+            },
           ),
           SizedBox(height: 16.h),
           MainTextFormField(
@@ -59,15 +77,30 @@ class _LoginFormState extends State<LoginForm> {
             prefixIcon: AppIcons.lock,
             ispassword: true,
             textInputNext: TextInputAction.done,
+            onFieldSubmitted: (_) => _onLoginPressed(),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter your password';
+              }
+              if (value.length < 6) {
+                return 'Password must be at least 6 characters';
+              }
+              return null;
+            },
           ),
           SizedBox(height: 8.h),
           LoginForgotPasswordButton(
             onPressed: () => pushTo(context, Routes.forgotPassword),
           ),
           SizedBox(height: 20.h),
-          MainButton(
-            buttonText: 'Log In',
-            onPressed: _onLoginPressed,
+          BlocBuilder<AuthCubit, AuthState>(
+            builder: (context, state) {
+              return MainButton(
+                buttonText: 'Log In',
+                isLoading: state is AuthLoading,
+                onPressed: _onLoginPressed,
+              );
+            },
           ),
         ],
       ),

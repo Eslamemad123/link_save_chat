@@ -79,7 +79,7 @@ Future<void> setupServiceLocator() async {
     () => SignInWithFacebookUseCase(repository: gi<AuthRepository>()),
   );
 
-  gi.registerFactory<AuthCubit>(
+  gi.registerLazySingleton<AuthCubit>(
     () => AuthCubit(
       watchAuthStateUseCase: gi<WatchAuthStateUseCase>(),
       getCurrentUserUseCase: gi<GetCurrentUserUseCase>(),

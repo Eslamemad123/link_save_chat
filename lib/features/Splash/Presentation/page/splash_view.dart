@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:link_savw_chat/core/routes/navigation.dart';
 import 'package:link_savw_chat/core/routes/routes.dart';
+import 'package:link_savw_chat/features/Auth/Presentation/cubit/auth_cubit.dart';
 import 'package:link_savw_chat/features/Splash/Presentation/widget/splash_view_body.dart';
 
 class SplashView extends StatefulWidget {
@@ -19,7 +21,14 @@ class _SplashViewState extends State<SplashView> {
     super.initState();
     _timer = Timer(const Duration(seconds: 3), () {
       if (mounted) {
-        pushReplacement(context, Routes.onBoarding);
+        final authCubit = context.read<AuthCubit>();
+        authCubit.getCurrentUserAuthState();
+        final user = authCubit.currentUser;
+        if (user != null) {
+          PupushAndRemoveUntilsh(context, Routes.home);
+        } else {
+          pushReplacement(context, Routes.onBoarding);
+        }
       }
     });
   }

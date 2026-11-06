@@ -63,6 +63,15 @@ class AuthCubit extends Cubit<AuthState> {
 
   UserEntity? get currentUser => getCurrentUserUseCase();
 
+  void getCurrentUserAuthState() {
+    final user = getCurrentUserUseCase();
+    if (user != null) {
+      emit(AuthAuthenticated(user));
+    } else {
+      emit(const AuthUnauthenticated());
+    }
+  }
+
   Future<void> login({
     required String email,
     required String password,
