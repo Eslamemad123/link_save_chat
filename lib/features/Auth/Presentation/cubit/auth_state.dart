@@ -11,6 +11,16 @@ class AuthChecking extends AuthState {
 class AuthAuthenticated extends AuthState {
   final UserEntity user;
   const AuthAuthenticated(this.user);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AuthAuthenticated &&
+          runtimeType == other.runtimeType &&
+          user == other.user;
+
+  @override
+  int get hashCode => user.hashCode;
 }
 
 class AuthUnauthenticated extends AuthState {
@@ -18,17 +28,48 @@ class AuthUnauthenticated extends AuthState {
 }
 
 class AuthLoading extends AuthState {
-  const AuthLoading();
+  final String? action;
+  const AuthLoading({this.action});
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AuthLoading &&
+          runtimeType == other.runtimeType &&
+          action == other.action;
+
+  @override
+  int get hashCode => action.hashCode;
 }
 
 class LoginSuccess extends AuthState {
   final UserEntity user;
   const LoginSuccess(this.user);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is LoginSuccess &&
+          runtimeType == other.runtimeType &&
+          user == other.user;
+
+  @override
+  int get hashCode => user.hashCode;
 }
 
 class SignUpSuccess extends AuthState {
   final UserEntity user;
   const SignUpSuccess(this.user);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SignUpSuccess &&
+          runtimeType == other.runtimeType &&
+          user == other.user;
+
+  @override
+  int get hashCode => user.hashCode;
 }
 
 class LogoutSuccess extends AuthState {
@@ -54,5 +95,14 @@ class AccountDeleted extends AuthState {
 class AuthError extends AuthState {
   final String message;
   const AuthError(this.message);
-}
 
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AuthError &&
+          runtimeType == other.runtimeType &&
+          message == other.message;
+
+  @override
+  int get hashCode => message.hashCode;
+}

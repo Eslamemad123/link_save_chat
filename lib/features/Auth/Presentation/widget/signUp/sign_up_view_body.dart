@@ -19,69 +19,87 @@ class SignUpViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AuthCubit, AuthState>(
+    return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
-        if (state is SignUpSuccess ||
-            state is LoginSuccess ||
-            state is AuthAuthenticated) {
-          PupushAndRemoveUntilsh(context, Routes.home);
+        if (state is SignUpSuccess || state is LoginSuccess) {
+          pushAndRemoveUntil(context, Routes.home);
         } else if (state is AuthError) {
           showMyDialog(context, state.message, type: DialogType.error);
         }
       },
-      builder: (context, state) {
-        final isLoading = state is AuthLoading;
-
-        return SafeArea(
-          child: AbsorbPointer(
-            absorbing: isLoading,
-            child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              padding: EdgeInsets.symmetric(horizontal: 24.w),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(height: 24.h),
-                  AuthIllustration(height: 110.h),
-                  SizedBox(height: 16.h),
-                  const AuthHeaderText(
-                    title: 'Create Account',
-                    subtitle: 'Sign up to sync your links and tasks seamlessly',
-                  ),
-                  SizedBox(height: 24.h),
-                  const SignUpForm(),
-                  SizedBox(height: 24.h),
-                  const AuthDivider(),
-                  SizedBox(height: 20.h),
-                  SocialLoginButton(
-                    text: 'Continue with Google',
-                    iconPath: AppIcons.googleLogo,
-                    onPressed: () {
-                      context.read<AuthCubit>().signInWithGoogle();
-                    },
-                  ),
-                  SizedBox(height: 12.h),
-                  SocialLoginButton(
-                    text: 'Continue with Facebook',
-                    iconPath: AppIcons.facebookLogo,
-                    onPressed: () {
-                      context.read<AuthCubit>().signInWithFacebook();
-                    },
-                  ),
-                  SizedBox(height: 24.h),
-                  AuthPrompt(
-                    promptText: 'Already have an account?',
-                    actionText: 'Log In',
-                    onActionPressed: () =>
-                        pushReplacement(context, Routes.login),
-                  ),
-                  SizedBox(height: 24.h),
-                ],
+      child: SafeArea(
+        child: BlocSelector<AuthCubit, AuthState, bool>(
+          selector: (state) => state is AuthLoading,
+          builder: (context, isLoading) {
+            return AbsorbPointer(
+              absorbing: isLoading,
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 24.h),
+                    AuthIllustration(height: 110.h),
+                    SizedBox(height: 16.h),
+                    const AuthHeaderText(
+                      title: 'Create Account',
+                      subtitle:
+                          'Sign up to sync your links and tasks seamlessly',
+                    ),
+                    SizedBox(height: 24.h),
+                    const SignUpForm(),
+                    SizedBox(height: 24.h),
+                    const AuthDivider(),
+                    SizedBox(height: 20.h),
+                    BlocBuilder<AuthCubit, AuthState>(
+                      buildWhen: (prev, curr) =>
+                          (prev is AuthLoading) != (curr is AuthLoading),
+                      builder: (context, state) {
+                        final isGoogleLoading =
+                            state is AuthLoading && state.action == 'google';
+                        return SocialLoginButton(
+                          text: 'Continue with Google',
+                          iconPath: AppIcons.googleLogo,
+                          isLoading: isGoogleLoading,
+                          onPressed: () {
+                            context.read<AuthCubit>().signInWithGoogle();
+                          },
+                        );
+                      },
+                    ),
+                    SizedBox(height: 12.h),
+                    BlocBuilder<AuthCubit, AuthState>(
+                      buildWhen: (prev, curr) =>
+                          (prev is AuthLoading) != (curr is AuthLoading),
+                      builder: (context, state) {
+                        final isFacebookLoading =
+                            state is AuthLoading && state.action == 'facebook';
+                        return SocialLoginButton(
+                          text: 'Continue with Facebook',
+                          iconPath: AppIcons.facebookLogo,
+                          isLoading: isFacebookLoading,
+                          onPressed: () {
+                            context.read<AuthCubit>().signInWithFacebook();
+                          },
+                        );
+                      },
+                    ),
+                    SizedBox(height: 24.h),
+                    AuthPrompt(
+                      promptText: 'Already have an account?',
+                      actionText: 'Log In',
+                      onActionPressed: () =>
+                          pushReplacement(context, Routes.login),
+                    ),
+                    SizedBox(height: 24.h),
+                  ],
+                ),
               ),
-            ),
-          ),
-        );
-      },
+            );
+          },
+        ),
+      ),
     );
   }
 }

@@ -12,7 +12,7 @@ class ForgotPasswordAnimation extends StatelessWidget {
       height: 280.h,
       width: double.infinity,
       child: Center(
-        child: Lottie.asset(AppAnimation.emptyChat, fit: BoxFit.contain),
+        child: Lottie.asset(AppAnimation.resetPassword, fit: BoxFit.contain),
       ),
     );
   }

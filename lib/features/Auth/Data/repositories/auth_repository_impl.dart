@@ -192,9 +192,10 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, void>> editProfile({required UserModel user}) async {
+  Future<Either<Failure, void>> editProfile({required UserEntity user}) async {
     try {
-      await remoteDataSource.updateUserData(user: user);
+      final userModel = UserModel.fromEntity(user);
+      await remoteDataSource.updateUserData(user: userModel);
       final currentUser = remoteDataSource.getCurrentUser();
       if (currentUser != null) {
         if (user.name.isNotEmpty && currentUser.displayName != user.name) {

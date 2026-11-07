@@ -13,6 +13,19 @@ class UserModel extends UserEntity {
     super.deletedAt,
   });
 
+  factory UserModel.fromEntity(UserEntity entity) {
+    return UserModel(
+      id: entity.id,
+      name: entity.name,
+      email: entity.email,
+      photoUrl: entity.photoUrl,
+      phoneNumber: entity.phoneNumber,
+      accountStatus: entity.accountStatus,
+      createdAt: entity.createdAt,
+      deletedAt: entity.deletedAt,
+    );
+  }
+
   factory UserModel.fromJson(Map<String, dynamic> json) {
     DateTime? parseDate(dynamic value) {
       if (value == null) return null;
@@ -70,4 +83,3 @@ class UserModel extends UserEntity {
     );
   }
 }
-

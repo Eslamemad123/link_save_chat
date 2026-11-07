@@ -71,9 +71,11 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
           ),
           SizedBox(height: 20.h),
           BlocBuilder<AuthCubit, AuthState>(
+            buildWhen: (prev, curr) =>
+                (prev is AuthLoading) != (curr is AuthLoading),
             builder: (context, state) {
               return MainButton(
-                buttonText: 'Send Reset Link ',
+                buttonText: 'Send Reset Link',
                 isLoading: state is AuthLoading,
                 onPressed: _onSendResetLink,
               );

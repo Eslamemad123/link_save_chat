@@ -151,10 +151,14 @@ class _SignUpFormState extends State<SignUpForm> {
           ),
           SizedBox(height: 24.h),
           BlocBuilder<AuthCubit, AuthState>(
+            buildWhen: (prev, curr) =>
+                (prev is AuthLoading) != (curr is AuthLoading),
             builder: (context, state) {
+              final isEmailLoading = state is AuthLoading &&
+                  (state.action == 'email' || state.action == null);
               return MainButton(
                 buttonText: 'Sign Up',
-                isLoading: state is AuthLoading,
+                isLoading: isEmailLoading,
                 onPressed: _onSignUpPressed,
               );
             },

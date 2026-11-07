@@ -42,7 +42,7 @@ class ForgotPasswordBackButton extends StatelessWidget {
           shape: const CircleBorder(),
           child: InkWell(
             customBorder: const CircleBorder(),
-            onTap: onPressed ?? () => Pop(context),
+            onTap: onPressed ?? () => pop(context),
             child: Icon(
               Icons.arrow_back_ios_new_rounded,
               size: 18.r,

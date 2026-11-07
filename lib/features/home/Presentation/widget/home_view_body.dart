@@ -32,7 +32,7 @@ class HomeViewBody extends StatelessWidget {
             onPressed: () async {
               await FirebaseAuth.instance.signOut();
               if (context.mounted) {
-                PupushAndRemoveUntilsh(context, Routes.login);
+                pushAndRemoveUntil(context, Routes.login);
               }
             },
             child: const Text('Log Out'),

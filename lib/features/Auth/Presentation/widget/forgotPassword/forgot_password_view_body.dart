@@ -15,7 +15,7 @@ class ForgotPasswordViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AuthCubit, AuthState>(
+    return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is PasswordResetSent) {
           showMyDialog(
@@ -27,46 +27,47 @@ class ForgotPasswordViewBody extends StatelessWidget {
           showMyDialog(context, state.message, type: DialogType.error);
         }
       },
-      builder: (context, state) {
-        final isLoading = state is AuthLoading;
-
-        return SafeArea(
-          child: AbsorbPointer(
-            absorbing: isLoading,
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                return SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  padding: EdgeInsets.symmetric(horizontal: 24.w),
-                  child: ConstrainedBox(
-                    constraints:
-                        BoxConstraints(minHeight: constraints.maxHeight),
-                    child: IntrinsicHeight(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(height: 12.h),
-                          const ForgotPasswordBackButton(),
-                          SizedBox(height: 12.h),
-                          const ForgotPasswordAnimation(),
-                          SizedBox(height: 24.h),
-                          const ForgotPasswordHeaderText(),
-                          SizedBox(height: 32.h),
-                          const ForgotPasswordForm(),
-                          SizedBox(height: 16.h),
-                          const ForgotPasswordSpamNotice(),
-                          const Spacer(),
-                          SizedBox(height: 24.h),
-                        ],
+      child: SafeArea(
+        child: BlocSelector<AuthCubit, AuthState, bool>(
+          selector: (state) => state is AuthLoading,
+          builder: (context, isLoading) {
+            return AbsorbPointer(
+              absorbing: isLoading,
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    padding: EdgeInsets.symmetric(horizontal: 24.w),
+                    child: ConstrainedBox(
+                      constraints:
+                          BoxConstraints(minHeight: constraints.maxHeight),
+                      child: IntrinsicHeight(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(height: 12.h),
+                            const ForgotPasswordBackButton(),
+                            SizedBox(height: 12.h),
+                            const ForgotPasswordAnimation(),
+                            SizedBox(height: 24.h),
+                            const ForgotPasswordHeaderText(),
+                            SizedBox(height: 32.h),
+                            const ForgotPasswordForm(),
+                            SizedBox(height: 16.h),
+                            const ForgotPasswordSpamNotice(),
+                            const Spacer(),
+                            SizedBox(height: 24.h),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
-            ),
-          ),
-        );
-      },
+                  );
+                },
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 }

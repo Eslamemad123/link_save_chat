@@ -20,5 +20,30 @@ class UserEntity {
   });
 
   bool get isDeleted => accountStatus == 'deleted';
-}
 
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is UserEntity &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          name == other.name &&
+          email == other.email &&
+          photoUrl == other.photoUrl &&
+          phoneNumber == other.phoneNumber &&
+          accountStatus == other.accountStatus &&
+          createdAt == other.createdAt &&
+          deletedAt == other.deletedAt;
+
+  @override
+  int get hashCode => Object.hash(
+        id,
+        name,
+        email,
+        photoUrl,
+        phoneNumber,
+        accountStatus,
+        createdAt,
+        deletedAt,
+      );
+}

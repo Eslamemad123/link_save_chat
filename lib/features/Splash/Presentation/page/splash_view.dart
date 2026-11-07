@@ -25,7 +25,7 @@ class _SplashViewState extends State<SplashView> {
         authCubit.getCurrentUserAuthState();
         final user = authCubit.currentUser;
         if (user != null) {
-          PupushAndRemoveUntilsh(context, Routes.home);
+          pushAndRemoveUntil(context, Routes.home);
         } else {
           pushReplacement(context, Routes.onBoarding);
         }

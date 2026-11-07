@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../Data/models/user_model.dart';
 import '../../Domain/entities/user_entity.dart';
 import '../../Domain/usecases/delete_account_use_case.dart';
 import '../../Domain/usecases/edit_profile_use_case.dart';
@@ -52,6 +50,11 @@ class AuthCubit extends Cubit<AuthState> {
   void _initSessionWatcher() {
     _authStateSubscription = watchAuthStateUseCase().listen(
       (user) {
+        if (state is AuthLoading ||
+            state is LoginSuccess ||
+            state is SignUpSuccess) {
+          return;
+        }
         if (user != null) {
           emit(AuthAuthenticated(user));
         } else {
@@ -76,7 +79,7 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> login({required String email, required String password}) async {
-    emit(const AuthLoading());
+    emit(const AuthLoading(action: 'email'));
     final result = await loginUseCase(email: email, password: password);
     result.fold(
       (failure) => emit(AuthError(failure.message)),
@@ -90,7 +93,7 @@ class AuthCubit extends Cubit<AuthState> {
     required String name,
   }) async {
     if (signUpUseCase == null) return;
-    emit(const AuthLoading());
+    emit(const AuthLoading(action: 'email'));
     final result = await signUpUseCase!(
       email: email,
       password: password,
@@ -114,7 +117,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> resetPassword({required String email}) async {
     if (resetPasswordUseCase == null) return;
-    emit(const AuthLoading());
+    emit(const AuthLoading(action: 'reset'));
     final result = await resetPasswordUseCase!(email: email);
     result.fold(
       (failure) => emit(AuthError(failure.message)),
@@ -142,7 +145,7 @@ class AuthCubit extends Cubit<AuthState> {
     );
   }
 
-  Future<void> editProfile({required UserModel user}) async {
+  Future<void> editProfile({required UserEntity user}) async {
     if (editProfileUseCase == null) return;
     emit(const AuthLoading());
     final result = await editProfileUseCase!(user: user);
@@ -153,24 +156,18 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   Future<void> signInWithGoogle() async {
-    log('goggle 1');
     if (signInWithGoogleUseCase == null) return;
-    log('goggle 2');
-
-    emit(const AuthLoading());
+    emit(const AuthLoading(action: 'google'));
     final result = await signInWithGoogleUseCase!();
-    log('goggle 3');
-
     result.fold(
       (failure) => emit(AuthError(failure.message)),
       (user) => emit(LoginSuccess(user)),
     );
-    log('goggle 4');
   }
 
   Future<void> signInWithFacebook() async {
     if (signInWithFacebookUseCase == null) return;
-    emit(const AuthLoading());
+    emit(const AuthLoading(action: 'facebook'));
     final result = await signInWithFacebookUseCase!();
     result.fold(
       (failure) => emit(AuthError(failure.message)),

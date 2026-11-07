@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/error/failer.dart';
-import '../../Data/models/user_model.dart';
 import '../entities/user_entity.dart';
 
 abstract class AuthRepository {
@@ -27,10 +26,9 @@ abstract class AuthRepository {
 
   Future<Either<Failure, void>> deleteAccount();
 
-  Future<Either<Failure, void>> editProfile({required UserModel user});
+  Future<Either<Failure, void>> editProfile({required UserEntity user});
 
   Future<Either<Failure, UserEntity>> signInWithGoogle();
 
   Future<Either<Failure, UserEntity>> signInWithFacebook();
 }
-
