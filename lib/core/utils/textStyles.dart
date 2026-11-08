@@ -112,4 +112,21 @@ class AppFontStyles {
       letterSpacing: 2.0,
     );
   }
+
+  static TextStyle font18BoldTitle(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return TextStyle(
+      fontSize: 18.sp,
+      fontWeight: FontWeight.bold,
+      color: isDark ? AppColors.textPrimaryDark : AppColors.textTitleLight,
+    );
+  }
+
+  static TextStyle font13MediumChip(BuildContext context, {Color? color}) {
+    return TextStyle(
+      fontSize: 13.sp,
+      fontWeight: FontWeight.w600,
+      color: color ?? AppColors.brandBlue,
+    );
+  }
 }

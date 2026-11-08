@@ -108,4 +108,15 @@ class AppColors {
     avatarTeal,
     avatarCyan,
   ];
+
+  static const Color dragHandleLight = Color(0xFFD0D5DD);
+  static const Color dragHandleDark = Color(0xFF475467);
+  static const Color closeButtonBackgroundLight = Color(0xFFF2F4F7);
+  static const Color closeButtonBackgroundDark = Color(0xFF282F3E);
+  static const Color avatarBackgroundLight = Color(0xFFE0EAFF);
+  static const Color avatarBackgroundDark = Color(0xFF1E293B);
+  static const Color descriptionFillLight = Color(0xFFF9FAFB);
+  static const Color descriptionFillDark = Color(0xFF1F242F);
+  static const Color categoryVideoText = Color(0xFFE11D48);
+  static const Color categoryArticleText = Color(0xFF059669);
 }
