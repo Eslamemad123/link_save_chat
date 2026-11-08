@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../Data/datasources/home_data_source.dart';
 import '../../Data/models/chat_model.dart';
 import 'home_state.dart';
@@ -27,7 +28,7 @@ class HomeCubit extends Cubit<HomeState> {
       id: '2',
       name: 'Important Tasks',
       description: 'Firebase Project Integration',
-      lastMessage: 'Firebase Project Integration',
+      lastMessage: 'https://testiqx.web.app/?fbclid=IwZXh0bgNhZW0CMTEAcGRvZgVzcnRjBmFwcF9pZAwzNTA2ODU1MzE3MjgAAR-XhgXp1KNiMhKRKURhLSdRF_N8fgfodceTFjA0yVko_Nw_QRK8fVAr1tXcYw_aem_vElDeNon_Lbf14SJodOO5Q',
       color_backgroung_icon: 0xFFF57F17,
       nummessage: 3,
       date: DateTime.now().subtract(const Duration(hours: 2)),
@@ -100,31 +101,36 @@ class HomeCubit extends Cubit<HomeState> {
     try {
       final models = await dataSource.getChats();
       final List<ChatModel> list = models.isNotEmpty ? models : _mockChats;
-      emit(state.copyWith(
-        status: HomeStatus.success,
-        allChats: list,
-        filteredChats: _filter(list, state.selectedFilter, state.searchQuery),
-      ));
+      emit(
+        state.copyWith(
+          status: HomeStatus.success,
+          allChats: list,
+          filteredChats: _filter(list, state.selectedFilter, state.searchQuery),
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: HomeStatus.failure,
-        errorMessage: e.toString(),
-      ));
+      emit(
+        state.copyWith(status: HomeStatus.failure, errorMessage: e.toString()),
+      );
     }
   }
 
   void changeFilter(HomeFilter filter) {
-    emit(state.copyWith(
-      selectedFilter: filter,
-      filteredChats: _filter(state.allChats, filter, state.searchQuery),
-    ));
+    emit(
+      state.copyWith(
+        selectedFilter: filter,
+        filteredChats: _filter(state.allChats, filter, state.searchQuery),
+      ),
+    );
   }
 
   void searchChats(String query) {
-    emit(state.copyWith(
-      searchQuery: query,
-      filteredChats: _filter(state.allChats, state.selectedFilter, query),
-    ));
+    emit(
+      state.copyWith(
+        searchQuery: query,
+        filteredChats: _filter(state.allChats, state.selectedFilter, query),
+      ),
+    );
   }
 
   List<ChatModel> _filter(
@@ -140,7 +146,8 @@ class HomeCubit extends Cubit<HomeState> {
       };
 
       final q = query.trim().toLowerCase();
-      final matchesQuery = q.isEmpty ||
+      final matchesQuery =
+          q.isEmpty ||
           chat.name.toLowerCase().contains(q) ||
           chat.description.toLowerCase().contains(q) ||
           chat.lastMessage.toLowerCase().contains(q);
