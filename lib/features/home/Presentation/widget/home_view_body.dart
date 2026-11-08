@@ -1,45 +1,58 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:link_savw_chat/core/routes/navigation.dart';
-import 'package:link_savw_chat/core/routes/routes.dart';
-import 'package:link_savw_chat/core/utils/colors.dart';
-import 'package:link_savw_chat/core/utils/textStyles.dart';
+import '../../../../core/utils/colors.dart';
+import '../cubit/home_cubit.dart';
+import '../cubit/home_state.dart';
+import 'chat_list_view.dart';
+import 'home_filter_bar.dart';
+import 'home_header.dart';
 
-class HomeViewBody extends StatelessWidget {
-  const HomeViewBody({super.key});
+class HomeViewBody extends StatefulWidget {
+  final VoidCallback onSettingsPressed;
+  final VoidCallback onSearchPressed;
+
+  const HomeViewBody({
+    super.key,
+    required this.onSettingsPressed,
+    required this.onSearchPressed,
+  });
 
   @override
+  State<HomeViewBody> createState() => _HomeViewBodyState();
+}
+
+class _HomeViewBodyState extends State<HomeViewBody> {
+  @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'Home',
-            style: AppFontStyles.font22BoldTitle(context),
-          ),
-          SizedBox(height: 24.h),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.error,
-              foregroundColor: AppColors.white,
-              padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.r),
-              ),
-            ),
-            onPressed: () async {
-              await FirebaseAuth.instance.signOut();
-              if (context.mounted) {
-                pushAndRemoveUntil(context, Routes.login);
+    return Column(
+      children: [
+        HomeHeader(
+          onSearchPressed: widget.onSearchPressed,
+          onSettingsPressed: widget.onSettingsPressed,
+        ),
+        SizedBox(height: 8.h),
+        const HomeFilterBar(),
+        SizedBox(height: 8.h),
+        Expanded(
+          child: BlocBuilder<HomeCubit, HomeState>(
+            builder: (context, state) {
+              if (state.status == HomeStatus.loading && state.allChats.isEmpty) {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: AppColors.brandBlue,
+                  ),
+                );
               }
+
+              return ChatListView(
+                chats: state.filteredChats,
+                onRefresh: () => context.read<HomeCubit>().loadChats(),
+              );
             },
-            child: const Text('Log Out'),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
-

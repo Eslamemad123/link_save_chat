@@ -56,4 +56,56 @@ class AppColors {
   static const Color success = Color(0xFF4CAF50);
   static const Color warning = Color(0xFFFFC107);
   static const Color error = Color(0xFFF44336);
+
+  static const Color amberContainerLight = Color(0xFFFEF3C7);
+  static const Color amberContainerDark = Color(0xFF3E2723);
+
+  static const Color greenContainerLight = Color(0xFFDCFCE7);
+  static const Color greenContainerDark = Color(0xFF1B382B);
+
+  static const Color purpleContainerLight = Color(0xFFF3E8FF);
+  static const Color purpleContainerDark = Color(0xFF2D1B4E);
+  static const Color purplePrimary = Color(0xFF7C3AED);
+
+  static const Color tealContainerLight = Color(0xFFCCFBF1);
+  static const Color tealContainerDark = Color(0xFF133E38);
+  static const Color tealPrimary = Color(0xFF0D9488);
+
+  static const Color redContainerLight = Color(0xFFFEE2E2);
+  static const Color redContainerDark = Color(0xFF3B1E1E);
+
+  static const Color filterChipActiveLight = Color(0xFFDBEAFE);
+  static const Color filterChipActiveDark = Color(0xFF1E3A5F);
+
+  static const Color badgeTextLight = Color(0xFFFFFFFF);
+  static const Color badgeTextDark = Color(0xFFFFFFFF);
+
+  static const Color avatarGrayLight = Color(0xFFE5E7EB);
+  static const Color avatarGrayDark = Color(0xFF374151);
+  static const Color avatarTextLight = Color(0xFF4B5563);
+  static const Color avatarTextDark = Color(0xFFE5E7EB);
+
+  static const Color avatarBlue = Color(0xFF2563EB);
+  static const Color avatarIndigo = Color(0xFF4F46E5);
+  static const Color avatarPurple = Color(0xFF7C3AED);
+  static const Color avatarPink = Color(0xFFDB2777);
+  static const Color avatarRed = Color(0xFFE11D48);
+  static const Color avatarOrange = Color(0xFFEA580C);
+  static const Color avatarAmber = Color(0xFFD97706);
+  static const Color avatarGreen = Color(0xFF059669);
+  static const Color avatarTeal = Color(0xFF0D9488);
+  static const Color avatarCyan = Color(0xFF0284C7);
+
+  static const List<Color> avatarColors = [
+    avatarBlue,
+    avatarIndigo,
+    avatarPurple,
+    avatarPink,
+    avatarRed,
+    avatarOrange,
+    avatarAmber,
+    avatarGreen,
+    avatarTeal,
+    avatarCyan,
+  ];
 }

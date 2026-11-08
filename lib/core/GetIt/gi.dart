@@ -17,6 +17,12 @@ import '../../features/Auth/Domain/usecases/sign_up_use_case.dart';
 import '../../features/Auth/Domain/usecases/update_password_use_case.dart';
 import '../../features/Auth/Domain/usecases/watch_auth_state_use_case.dart';
 import '../../features/Auth/Presentation/cubit/auth_cubit.dart';
+import '../../features/home/Data/datasources/home_data_source.dart';
+import '../../features/home/Data/datasources/home_data_source_impl.dart';
+import '../../features/home/Data/repositories/home_repository_impl.dart';
+import '../../features/home/Domain/repositories/home_repository.dart';
+import '../../features/home/Domain/usecases/get_chats_use_case.dart';
+import '../../features/home/Presentation/cubit/home_cubit.dart';
 
 final gi = GetIt.instance;
 
@@ -93,5 +99,16 @@ Future<void> setupServiceLocator() async {
       signInWithGoogleUseCase: gi<SignInWithGoogleUseCase>(),
       signInWithFacebookUseCase: gi<SignInWithFacebookUseCase>(),
     ),
+  );
+
+  gi.registerLazySingleton<HomeDataSource>(() => HomeDataSourceImpl());
+  gi.registerLazySingleton<HomeRepository>(
+    () => HomeRepositoryImpl(dataSource: gi<HomeDataSource>()),
+  );
+  gi.registerLazySingleton<GetChatsUseCase>(
+    () => GetChatsUseCase(repository: gi<HomeRepository>()),
+  );
+  gi.registerFactory<HomeCubit>(
+    () => HomeCubit(dataSource: gi<HomeDataSource>()),
   );
 }
