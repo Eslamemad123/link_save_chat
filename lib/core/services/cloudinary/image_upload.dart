@@ -12,44 +12,39 @@ Future<String?> uploadImageToCloudinary(
   String uploadPreset,
   BuildContext context,
 ) async {
-  // 1. Create the upload URL
   final url = Uri.parse(
     'https://api.cloudinary.com/v1_1/$cloudName/image/upload',
   );
 
-  // 2. Create a new multipart request
   final request = http.MultipartRequest('POST', url);
-
-  // 3. Add the upload preset
   request.fields['upload_preset'] = uploadPreset;
-
-  // 4. Add the file to the request
   request.files.add(
     await http.MultipartFile.fromPath(
-      'file', // This 'file' key is required by Cloudinary
+      'file',
       imageFile.path,
     ),
   );
 
   try {
-    // 5. Send the request
-    final response = await request.send();
+    final response = await request.send().timeout(
+      const Duration(seconds: 25),
+    );
 
     if (response.statusCode == 200) {
-      // 6. Read and decode the response
       final responseBody = await response.stream.bytesToString();
       final responseData = json.decode(responseBody);
-
-      // 7. Return the secure URL
       log('responseData: $responseData');
       return responseData['secure_url'];
     } else {
+      final responseBody = await response.stream.bytesToString();
+      log('Cloudinary upload error (${response.statusCode}): $responseBody');
       if (context.mounted) {
         showMyDialog(context, 'Failed to upload image. Please try again.');
       }
       return null;
     }
   } catch (e) {
+    log('Cloudinary upload exception: $e');
     if (context.mounted) {
       showMyDialog(context, 'Failed to upload image. Please try again.');
     }
