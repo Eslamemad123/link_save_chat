@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_savw_chat/core/utils/colors.dart';
@@ -7,6 +9,7 @@ class CreateChatAvatarPicker extends StatelessWidget {
   final IconData icon;
   final Color? iconColor;
   final Color? backgroundColor;
+  final File? imageFile;
   final VoidCallback? onCameraTap;
 
   const CreateChatAvatarPicker({
@@ -14,6 +17,7 @@ class CreateChatAvatarPicker extends StatelessWidget {
     required this.icon,
     this.iconColor,
     this.backgroundColor,
+    this.imageFile,
     this.onCameraTap,
   });
 
@@ -33,18 +37,29 @@ class CreateChatAvatarPicker extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Container(
-              width: 96.w,
-              height: 96.h,
-              decoration: BoxDecoration(
-                color: bg,
-                shape: BoxShape.circle,
-              ),
-              alignment: Alignment.center,
-              child: Icon(
-                icon,
-                size: 42.r,
-                color: ic,
+            GestureDetector(
+              onTap: onCameraTap,
+              child: Container(
+                width: 96.w,
+                height: 96.h,
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  color: bg,
+                  shape: BoxShape.circle,
+                ),
+                alignment: Alignment.center,
+                child: imageFile != null
+                    ? Image.file(
+                        imageFile!,
+                        width: 96.w,
+                        height: 96.h,
+                        fit: BoxFit.cover,
+                      )
+                    : Icon(
+                        icon,
+                        size: 42.r,
+                        color: ic,
+                      ),
               ),
             ),
             Positioned(

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:link_savw_chat/core/routes/navigation.dart';
@@ -19,7 +20,7 @@ class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
     super.initState();
-    _timer = Timer(const Duration(seconds: 3), () {
+    _timer = Timer(const Duration(milliseconds: 2500), () {
       if (mounted) {
         final authCubit = context.read<AuthCubit>();
         authCubit.getCurrentUserAuthState();

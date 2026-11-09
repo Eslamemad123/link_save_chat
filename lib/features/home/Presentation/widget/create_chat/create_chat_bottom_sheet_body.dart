@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'category_item_data.dart';
@@ -18,6 +20,8 @@ class CreateChatBottomSheetBody extends StatelessWidget {
   final VoidCallback? onClosePressed;
   final VoidCallback? onCameraTap;
   final VoidCallback onSubmitPressed;
+  final File? imageFile;
+  final bool isLoading;
 
   const CreateChatBottomSheetBody({
     super.key,
@@ -29,6 +33,8 @@ class CreateChatBottomSheetBody extends StatelessWidget {
     this.onClosePressed,
     this.onCameraTap,
     required this.onSubmitPressed,
+    this.imageFile,
+    this.isLoading = false,
   });
 
   @override
@@ -54,6 +60,7 @@ class CreateChatBottomSheetBody extends StatelessWidget {
             backgroundColor: Theme.of(context).brightness == Brightness.dark
                 ? selectedCategory.darkBgColor
                 : selectedCategory.lightBgColor,
+            imageFile: imageFile,
             onCameraTap: onCameraTap,
           ),
           SizedBox(height: 20.h),
@@ -72,6 +79,7 @@ class CreateChatBottomSheetBody extends StatelessWidget {
           ),
           SizedBox(height: 20.h),
           CreateChatSubmitButton(
+            isLoading: isLoading,
             onPressed: onSubmitPressed,
           ),
           SizedBox(height: 20.h),
@@ -80,4 +88,3 @@ class CreateChatBottomSheetBody extends StatelessWidget {
     );
   }
 }
-

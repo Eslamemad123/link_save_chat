@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../core/utils/colors.dart';
 import '../../Data/models/chat_model.dart';
 import 'chat_icon_avatar.dart';
+import 'chat_pin_icon.dart';
 import 'chat_unread_badge.dart';
 
 class ChatCardItem extends StatelessWidget {
   final ChatModel chat;
   final VoidCallback? onTap;
 
-  const ChatCardItem({
-    super.key,
-    required this.chat,
-    this.onTap,
-  });
+  const ChatCardItem({super.key, required this.chat, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final messagePreview =
-        chat.lastMessage.isNotEmpty ? chat.lastMessage : chat.description;
+    final messagePreview = chat.lastMessage.isNotEmpty
+        ? chat.lastMessage
+        : chat.description;
 
     return Material(
       color: AppColors.transparent,
@@ -32,7 +31,9 @@ class ChatCardItem extends StatelessWidget {
             color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
             borderRadius: BorderRadius.circular(20.r),
             border: Border.all(
-              color: isDark ? AppColors.cardBorderDark : AppColors.cardBorderLight,
+              color: isDark
+                  ? AppColors.cardBorderDark
+                  : AppColors.cardBorderLight,
               width: 1.w,
             ),
             boxShadow: const [
@@ -45,10 +46,7 @@ class ChatCardItem extends StatelessWidget {
           ),
           child: Row(
             children: [
-              ChatIconAvatar(
-                image: chat.image,
-                name: chat.name,
-              ),
+              ChatIconAvatar(image: chat.image, name: chat.name),
               SizedBox(width: 12.w),
               Expanded(
                 child: Column(
@@ -109,14 +107,16 @@ class ChatCardItem extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 8.h),
-                  if (chat.nummessage > 0)
-                    ChatUnreadBadge(
-                      count: chat.nummessage,
-                    )
-                  else
-                    SizedBox(height: 22.h),
                 ],
               ),
+              if (chat.boolIsPin) ...[
+                const ChatPinIcon(),
+                if (chat.nummessage > 0) SizedBox(width: 6.w),
+              ],
+              if (chat.nummessage > 0)
+                ChatUnreadBadge(count: chat.nummessage)
+              else if (!chat.boolIsPin)
+                SizedBox(height: 22.h),
             ],
           ),
         ),
@@ -141,8 +141,18 @@ class ChatCardItem extends StatelessWidget {
       return days[dateTime.weekday - 1];
     } else {
       const months = [
-        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
       ];
       return '${months[dateTime.month - 1]} ${dateTime.day}';
     }

@@ -1,12 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:link_savw_chat/core/GetIt/gi.dart';
+import 'package:link_savw_chat/core/extentions/show_dialoges.dart';
+import 'package:link_savw_chat/core/services/cloudinary/image_upload.dart';
 import 'package:link_savw_chat/core/utils/colors.dart';
 import '../../../Data/models/chat_model.dart';
 import '../../cubit/home_cubit.dart';
 import 'category_item_data.dart';
 import 'create_chat_bottom_sheet_body.dart';
+import 'image_source_picker_sheet.dart';
 
 class CreateChatBottomSheet extends StatefulWidget {
   const CreateChatBottomSheet({super.key});
@@ -37,65 +43,11 @@ class CreateChatBottomSheet extends StatefulWidget {
 class _CreateChatBottomSheetState extends State<CreateChatBottomSheet> {
   late final TextEditingController _nameController;
   late final TextEditingController _descriptionController;
+  final ImagePicker _imagePicker = ImagePicker();
 
   int _selectedCategoryIndex = 0;
-
-  final List<CategoryItemData> _categories = const [
-    CategoryItemData(
-      id: 'programming',
-      label: 'Programming',
-      emoji: '💻',
-      icon: Icons.integration_instructions_rounded,
-      lightBgColor: AppColors.filterChipActiveLight,
-      darkBgColor: AppColors.filterChipActiveDark,
-      accentColor: AppColors.brandBlue,
-    ),
-    CategoryItemData(
-      id: 'videos',
-      label: 'Videos',
-      emoji: '🎬',
-      icon: Icons.play_circle_outline_rounded,
-      lightBgColor: AppColors.redContainerLight,
-      darkBgColor: AppColors.redContainerDark,
-      accentColor: AppColors.categoryVideoText,
-    ),
-    CategoryItemData(
-      id: 'articles',
-      label: 'Articles',
-      emoji: '📚',
-      icon: Icons.menu_book_rounded,
-      lightBgColor: AppColors.greenContainerLight,
-      darkBgColor: AppColors.greenContainerDark,
-      accentColor: AppColors.categoryArticleText,
-    ),
-    CategoryItemData(
-      id: 'work',
-      label: 'Work',
-      emoji: '💼',
-      icon: Icons.work_outline_rounded,
-      lightBgColor: AppColors.amberContainerLight,
-      darkBgColor: AppColors.amberContainerDark,
-      accentColor: AppColors.avatarAmber,
-    ),
-    CategoryItemData(
-      id: 'ideas',
-      label: 'Ideas',
-      emoji: '💡',
-      icon: Icons.lightbulb_outline_rounded,
-      lightBgColor: AppColors.purpleContainerLight,
-      darkBgColor: AppColors.purpleContainerDark,
-      accentColor: AppColors.purplePrimary,
-    ),
-    CategoryItemData(
-      id: 'goals',
-      label: 'Goals',
-      emoji: '🎯',
-      icon: Icons.track_changes_rounded,
-      lightBgColor: AppColors.tealContainerLight,
-      darkBgColor: AppColors.tealContainerDark,
-      accentColor: AppColors.tealPrimary,
-    ),
-  ];
+  File? _selectedImage;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -117,29 +69,114 @@ class _CreateChatBottomSheetState extends State<CreateChatBottomSheet> {
     });
   }
 
-  void _onSubmit() {
+  Future<void> _onCameraTap() async {
+    if (_isLoading) return;
+
+    final option = await ImageSourcePickerSheet.show(
+      context: context,
+      hasImage: _selectedImage != null,
+    );
+
+    if (option == null || !mounted) return;
+
+    if (option == ImageSourceOption.remove) {
+      setState(() => _selectedImage = null);
+      return;
+    }
+
+    final source = option == ImageSourceOption.camera
+        ? ImageSource.camera
+        : ImageSource.gallery;
+
+    await _pickImage(source);
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    try {
+      final picked = await _imagePicker.pickImage(
+        source: source,
+        maxWidth: 1024,
+        maxHeight: 1024,
+        imageQuality: 85,
+      );
+
+      if (picked != null && mounted) {
+        setState(() => _selectedImage = File(picked.path));
+      }
+    } catch (_) {
+      if (mounted) {
+        showMyDialog(context, 'Failed to pick image. Please try again.');
+      }
+    }
+  }
+
+  Future<void> _onSubmit() async {
+    if (_isLoading) return;
+
     final name = _nameController.text.trim();
-    if (name.isEmpty) return;
+    if (name.isEmpty) {
+      showMyDialog(context, 'Please enter a chat name');
+      return;
+    }
 
+    setState(() => _isLoading = true);
+
+    try {
+      final imageUrl = await _uploadImageIfNeeded();
+      if (_selectedImage != null && (imageUrl == null || imageUrl.isEmpty)) {
+        return;
+      }
+
+      final newChat = _buildChatModel(name: name, imageUrl: imageUrl);
+
+      if (mounted) {
+        await context.read<HomeCubit>().addChat(newChat);
+      }
+
+      if (mounted) {
+        Navigator.of(context).pop();
+      }
+    } catch (_) {
+      if (mounted) {
+        showMyDialog(context, 'An error occurred while creating chat.');
+      }
+    } finally {
+      if (mounted && _isLoading) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  Future<String?> _uploadImageIfNeeded() async {
+    if (_selectedImage == null) return null;
+    return uploadImageToCloudinary(
+      _selectedImage!,
+      'dislsl3sa',
+      'Chat_Link_Save',
+      context,
+    );
+  }
+
+  ChatModel _buildChatModel({required String name, String? imageUrl}) {
+    final selectedCategory =
+        CategoryItemData.defaultCategories[_selectedCategoryIndex];
     final description = _descriptionController.text.trim();
-    final selectedCategory = _categories[_selectedCategoryIndex];
+    final now = DateTime.now();
 
-    final newChat = ChatModel(
+    return ChatModel(
       id: '',
       name: name,
       description: description,
       lastMessage: description,
+      image: imageUrl,
       color_backgroung_icon: selectedCategory.accentColor.toARGB32(),
       nummessage: 0,
       category: selectedCategory.id,
-      date: DateTime.now(),
-      datecreateChat: DateTime.now(),
+      date: now,
+      datecreateChat: now,
       boolNotification: true,
       boolIsPin: false,
     );
-
-    context.read<HomeCubit>().addChat(newChat);
-    Navigator.of(context).pop();
   }
 
   @override
@@ -160,13 +197,15 @@ class _CreateChatBottomSheetState extends State<CreateChatBottomSheet> {
         child: SafeArea(
           top: false,
           child: CreateChatBottomSheetBody(
-            categories: _categories,
+            categories: CategoryItemData.defaultCategories,
             selectedIndex: _selectedCategoryIndex,
             onCategorySelected: _onCategorySelected,
             nameController: _nameController,
             descriptionController: _descriptionController,
+            imageFile: _selectedImage,
+            isLoading: _isLoading,
             onClosePressed: () => Navigator.of(context).pop(),
-            onCameraTap: () {},
+            onCameraTap: _onCameraTap,
             onSubmitPressed: _onSubmit,
           ),
         ),
