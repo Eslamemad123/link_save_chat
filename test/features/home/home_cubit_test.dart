@@ -13,10 +13,9 @@ class MockHomeDataSource implements HomeDataSource {
   Future<List<ChatModel>> getChats() async => _chats;
 
   @override
-  Future<void> addChat(ChatModel chat) async {}
-
-  @override
-  Future<void> deleteChat(String id) async {}
+  Future<void> addChat(ChatModel chat) async {
+    _chats.add(chat);
+  }
 }
 
 void main() {

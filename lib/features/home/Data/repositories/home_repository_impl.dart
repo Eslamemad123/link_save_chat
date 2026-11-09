@@ -16,9 +16,4 @@ class HomeRepositoryImpl implements HomeRepository {
   Future<void> addChat(ChatModel chat) async {
     await dataSource.addChat(chat);
   }
-
-  @override
-  Future<void> deleteChat(String id) async {
-    await dataSource.deleteChat(id);
-  }
 }

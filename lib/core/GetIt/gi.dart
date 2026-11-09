@@ -21,6 +21,7 @@ import '../../features/home/Data/datasources/home_data_source.dart';
 import '../../features/home/Data/datasources/home_data_source_impl.dart';
 import '../../features/home/Data/repositories/home_repository_impl.dart';
 import '../../features/home/Domain/repositories/home_repository.dart';
+import '../../features/home/Domain/usecases/add_chat_use_case.dart';
 import '../../features/home/Domain/usecases/get_chats_use_case.dart';
 import '../../features/home/Presentation/cubit/home_cubit.dart';
 
@@ -101,12 +102,20 @@ Future<void> setupServiceLocator() async {
     ),
   );
 
-  gi.registerLazySingleton<HomeDataSource>(() => HomeDataSourceImpl());
+  gi.registerLazySingleton<HomeDataSource>(
+    () => HomeDataSourceImpl(
+      firestore: gi<FirebaseFirestore>(),
+      firebaseAuth: gi<FirebaseAuth>(),
+    ),
+  );
   gi.registerLazySingleton<HomeRepository>(
     () => HomeRepositoryImpl(dataSource: gi<HomeDataSource>()),
   );
   gi.registerLazySingleton<GetChatsUseCase>(
     () => GetChatsUseCase(repository: gi<HomeRepository>()),
+  );
+  gi.registerLazySingleton<AddChatUseCase>(
+    () => AddChatUseCase(repository: gi<HomeRepository>()),
   );
   gi.registerFactory<HomeCubit>(
     () => HomeCubit(dataSource: gi<HomeDataSource>()),

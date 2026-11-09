@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_savw_chat/core/utils/colors.dart';
+import '../../../Data/models/chat_model.dart';
+import '../../cubit/home_cubit.dart';
 import 'category_item_data.dart';
 import 'create_chat_bottom_sheet_body.dart';
 
@@ -8,11 +11,15 @@ class CreateChatBottomSheet extends StatefulWidget {
   const CreateChatBottomSheet({super.key});
 
   static Future<void> show(BuildContext context) {
+    final homeCubit = context.read<HomeCubit>();
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: AppColors.transparent,
-      builder: (context) => const CreateChatBottomSheet(),
+      builder: (_) => BlocProvider.value(
+        value: homeCubit,
+        child: const CreateChatBottomSheet(),
+      ),
     );
   }
 
@@ -104,6 +111,27 @@ class _CreateChatBottomSheetState extends State<CreateChatBottomSheet> {
   }
 
   void _onSubmit() {
+    final name = _nameController.text.trim();
+    if (name.isEmpty) return;
+
+    final description = _descriptionController.text.trim();
+    final selectedCategory = _categories[_selectedCategoryIndex];
+
+    final newChat = ChatModel(
+      id: '',
+      name: name,
+      description: description,
+      lastMessage: description,
+      color_backgroung_icon: selectedCategory.accentColor.toARGB32(),
+      nummessage: 0,
+      category: selectedCategory.id,
+      date: DateTime.now(),
+      datecreateChat: DateTime.now(),
+      boolNotification: true,
+      boolIsPin: false,
+    );
+
+    context.read<HomeCubit>().addChat(newChat);
     Navigator.of(context).pop();
   }
 

@@ -55,24 +55,34 @@ class ChatModel {
       return fallback;
     }
 
-    final img = json['image'] as String? ?? json['image_or_icon'] as String?;
-    final lastMsg = json['lastMessage'] as String? ?? json['description'] as String? ?? '';
+    final img = json['image'] as String? ??
+        json['image_or_icon'] as String? ??
+        json['iconUrl'] as String?;
+    final lastMsg = json['lastMessage'] as String? ??
+        json['description'] as String? ??
+        '';
+    final chatName = json['name'] as String? ?? json['title'] as String? ?? '';
+    final isPinned = parseBool(json['boolIsPin'] ?? json['isPinned'], false);
+    final numMsg = parseInt(json['nummessage'] ?? json['uncompletedCount']);
+    final createdDate = parseDate(
+      json['datecreateChat'] ?? json['updatedAt'] ?? json['createdAt'],
+    );
 
     return ChatModel(
       id: json['id'] as String? ?? '',
-      name: json['name'] as String? ?? '',
+      name: chatName,
       description: json['description'] as String? ?? '',
       lastMessage: lastMsg,
       image: img,
       color_backgroung_icon: parseInt(json['color_backgroung_icon']),
-      nummessage: parseInt(json['nummessage']),
+      nummessage: numMsg,
       date: parseDate(json['date']),
       time: json['time'] as String?,
       category: json['category'] as String? ?? 'all',
-      datecreateChat: parseDate(json['datecreateChat']),
+      datecreateChat: createdDate,
       wallpaper: json['wallpaper'] as String?,
       boolNotification: parseBool(json['boolNotification'], true),
-      boolIsPin: parseBool(json['boolIsPin'], false),
+      boolIsPin: isPinned,
     );
   }
 
