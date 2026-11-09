@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:link_savw_chat/core/GetIt/gi.dart';
 import 'package:link_savw_chat/core/utils/colors.dart';
 import '../../../Data/models/chat_model.dart';
 import '../../cubit/home_cubit.dart';
@@ -11,10 +12,16 @@ class CreateChatBottomSheet extends StatefulWidget {
   const CreateChatBottomSheet({super.key});
 
   static Future<void> show(BuildContext context) {
-    final homeCubit = context.read<HomeCubit>();
+    HomeCubit homeCubit;
+    try {
+      homeCubit = context.read<HomeCubit>();
+    } catch (_) {
+      homeCubit = gi<HomeCubit>();
+    }
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      useRootNavigator: true,
       backgroundColor: AppColors.transparent,
       builder: (_) => BlocProvider.value(
         value: homeCubit,

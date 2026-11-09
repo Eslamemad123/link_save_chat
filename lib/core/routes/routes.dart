@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -23,6 +24,21 @@ class Routes {
   static final routes = GoRouter(
     navigatorKey: navigatorKey,
     initialLocation: splash,
+    redirect: (context, state) {
+      final user = FirebaseAuth.instance.currentUser;
+      final isAuth = user != null;
+      final location = state.matchedLocation;
+      final isPublicRoute = location == splash ||
+          location == onBoarding ||
+          location == login ||
+          location == signUp ||
+          location == forgotPassword;
+
+      if (!isAuth && !isPublicRoute) {
+        return login;
+      }
+      return null;
+    },
     routes: [
       GoRoute(
         path: splash,

@@ -12,34 +12,34 @@ class HomeFloatingActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: AppColors.transparent,
-      child: InkWell(
-        onTap: onPressed,
+    return Container(
+      width: 56.w,
+      height: 56.h,
+      decoration: BoxDecoration(
+        color: AppColors.brandBlue,
         borderRadius: BorderRadius.circular(20.r),
-        child: Container(
-          width: 56.w,
-          height: 56.h,
-          decoration: BoxDecoration(
-            color: AppColors.brandBlue,
-            borderRadius: BorderRadius.circular(20.r),
-            boxShadow: const [
-              BoxShadow(
-                color: AppColors.splashGlowDark,
-                blurRadius: 14,
-                offset: Offset(0, 6),
-              ),
-            ],
+        boxShadow: const [
+          BoxShadow(
+            color: AppColors.splashGlowDark,
+            blurRadius: 14,
+            offset: Offset(0, 6),
           ),
-          alignment: Alignment.center,
-          child: Icon(
-            Icons.add_rounded,
-            color: AppColors.white,
-            size: 30.r,
+        ],
+      ),
+      child: Material(
+        color: AppColors.transparent,
+        child: InkWell(
+          onTap: onPressed,
+          borderRadius: BorderRadius.circular(20.r),
+          child: Center(
+            child: Icon(
+              Icons.add_rounded,
+              color: AppColors.white,
+              size: 30.r,
+            ),
           ),
         ),
       ),
     );
   }
 }
-
