@@ -8,6 +8,7 @@ import 'package:link_savw_chat/core/GetIt/gi.dart';
 import 'package:link_savw_chat/core/extentions/show_dialoges.dart';
 import 'package:link_savw_chat/core/services/cloudinary/image_upload.dart';
 import 'package:link_savw_chat/core/utils/colors.dart';
+
 import '../../../Data/models/chat_model.dart';
 import '../../cubit/home_cubit.dart';
 import 'category_item_data.dart';
@@ -97,7 +98,7 @@ class _CreateChatBottomSheetState extends State<CreateChatBottomSheet> {
         source: source,
         maxWidth: 1024,
         maxHeight: 1024,
-        imageQuality: 85,
+        imageQuality: 90,
       );
 
       if (picked != null && mounted) {
@@ -190,9 +191,7 @@ class _CreateChatBottomSheetState extends State<CreateChatBottomSheet> {
       child: Container(
         decoration: BoxDecoration(
           color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(28.r),
-          ),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(28.r)),
         ),
         child: SafeArea(
           top: false,

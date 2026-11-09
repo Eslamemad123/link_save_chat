@@ -25,14 +25,6 @@ class ChatIconAvatar extends StatelessWidget {
             ? NetworkImage(img)
             : FileImage(File(img)) as ImageProvider,
         onBackgroundImageError: (_, _) {},
-        child: Text(
-          name.trim().characters.take(2).toString().toUpperCase(),
-          style: TextStyle(
-            fontSize: 15.sp,
-            fontWeight: FontWeight.bold,
-            color: AppColors.white,
-          ),
-        ),
       );
     }
 

@@ -5,7 +5,7 @@
 
 
     <application
-        android:label="link_savw_chat"
+        android:label="Chats Link"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <meta-data

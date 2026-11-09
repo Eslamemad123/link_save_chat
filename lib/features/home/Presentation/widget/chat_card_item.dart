@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
 
 import '../../../../core/utils/colors.dart';
 import '../../Data/models/chat_model.dart';
@@ -97,6 +98,19 @@ class ChatCardItem extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
+                  Row(
+                    children: [
+                      if (chat.boolIsPin) ...[
+                        const ChatPinIcon(),
+                        if (chat.nummessage > 0) SizedBox(width: 6.w),
+                      ],
+                      if (chat.nummessage > 0)
+                        ChatUnreadBadge(count: chat.nummessage)
+                      else if (!chat.boolIsPin)
+                        SizedBox(height: 22.h),
+                    ],
+                  ),
+                  Gap(8),
                   Text(
                     chat.time ?? _formatTimestamp(chat.date),
                     style: TextStyle(
@@ -106,17 +120,8 @@ class ChatCardItem extends StatelessWidget {
                           : AppColors.textSubtitleLight,
                     ),
                   ),
-                  SizedBox(height: 8.h),
                 ],
               ),
-              if (chat.boolIsPin) ...[
-                const ChatPinIcon(),
-                if (chat.nummessage > 0) SizedBox(width: 6.w),
-              ],
-              if (chat.nummessage > 0)
-                ChatUnreadBadge(count: chat.nummessage)
-              else if (!chat.boolIsPin)
-                SizedBox(height: 22.h),
             ],
           ),
         ),

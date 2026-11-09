@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:link_savw_chat/core/routes/navigation.dart';
