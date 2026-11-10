@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../core/routes/navigation.dart';
+import '../../../../core/routes/routes.dart';
 import '../../../../core/utils/colors.dart';
 import '../cubit/home_cubit.dart';
 import '../cubit/home_state.dart';
@@ -38,6 +40,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               return ChatListView(
                 chats: state.filteredChats,
                 onRefresh: () => context.read<HomeCubit>().loadChats(),
+                onChatTap: (chat) => pushTo(context, Routes.chat, chat),
               );
             },
           ),

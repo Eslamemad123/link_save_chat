@@ -119,4 +119,22 @@ class AppColors {
   static const Color descriptionFillDark = Color(0xFF1F242F);
   static const Color categoryVideoText = Color(0xFFE11D48);
   static const Color categoryArticleText = Color(0xFF059669);
+
+  static const Color chatBlurBlueLight = Color(0x332C5FFC);
+  static const Color chatBlurBlueDark = Color(0x4D2C5FFC);
+  static const Color chatInputGlowLight = Color(0x260B42EE);
+  static const Color chatInputGlowDark = Color(0x330B42EE);
+  static const Color chatSendButtonGlow = Color(0x590B42EE);
+  static const Color chatCardGlowLight = Color(0x1F2C5FFC);
+  static const Color chatCardGlowDark = Color(0x332C5FFC);
+  static const Color chatIllustrationCardLight = Color(0xF2FFFFFF);
+  static const Color chatIllustrationCardDark = Color(0xF21E2430);
+  static const Color chatIllustrationBorderLight = Color(0x402C5FFC);
+  static const Color chatIllustrationBorderDark = Color(0x4090CAF9);
+  static const Color chatWallpaperOverlayLight = Color(0xD9F8F9FA);
+  static const Color chatWallpaperOverlayDark = Color(0xEB121212);
+  static const Color chatHeaderSubtitleLight = Color(0xFF98A2B3);
+  static const Color chatHeaderSubtitleDark = Color(0xFF94A3B8);
+  static const Color chatHeaderIconContainerLight = Color(0xFFEFF4FF);
+  static const Color chatHeaderIconContainerDark = Color(0xFF1E293B);
 }

@@ -7,4 +7,5 @@ class AppAnimation {
   static const String onboarding3 = 'assets/lottie Animation/onboarding_3.json';
   static const String resetPassword =
       'assets/lottie Animation/resetPassword.json';
+  static const String emptyChat = 'assets/lottie Animation/emptyChat.json';
 }
