@@ -5,8 +5,6 @@ enum HomeStatus { initial, loading, success, failure }
 
 class HomeState {
   static const String filterAll = 'all';
-  static const String filterOverdue = 'overdue';
-  static const String filterImportant = 'important';
 
   final HomeStatus status;
   final List<ChatModel> allChats;
@@ -26,18 +24,16 @@ class HomeState {
     this.errorMessage,
   });
 
-  int get overdueCount =>
-      allChats.where((c) => c.category.toLowerCase() == 'overdue').length;
+  int get totalUnreadChatCount =>
+      allChats.where((c) => c.nummessage > 0).length;
 
-  int get importantCount =>
-      allChats.where((c) => c.category.toLowerCase() == 'important').length;
-
-  int categoryChatCount(String categoryId, String categoryName) {
+  int categoryUnreadChatCount(String categoryId, String categoryName) {
     final lowerId = categoryId.toLowerCase();
     final lowerName = categoryName.toLowerCase();
     return allChats.where((c) {
       final chatCat = c.category.toLowerCase();
-      return chatCat == lowerId || chatCat == lowerName;
+      final matchesCategory = chatCat == lowerId || chatCat == lowerName;
+      return matchesCategory && c.nummessage > 0;
     }).length;
   }
 

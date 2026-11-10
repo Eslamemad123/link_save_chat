@@ -6,6 +6,7 @@ import 'package:link_savw_chat/core/utils/colors.dart';
 import '../../../Data/models/category_model.dart';
 import 'create_chat_avatar_picker.dart';
 import 'create_chat_categories_bar.dart';
+import 'create_chat_category_title.dart';
 import 'create_chat_description_field.dart';
 import 'create_chat_drag_handle.dart';
 import 'create_chat_header.dart';
@@ -67,15 +68,14 @@ class CreateChatBottomSheetBody extends StatelessWidget {
             onCameraTap: onCameraTap,
           ),
           SizedBox(height: 20.h),
-          if (categories.isNotEmpty) ...[
-            CreateChatCategoriesBar(
-              categories: categories,
-              selectedIndex: selectedIndex,
-              onCategorySelected: onCategorySelected,
-              onAddCategory: onAddCategory,
-            ),
-            SizedBox(height: 16.h),
-          ],
+          const CreateChatCategoryTitle(),
+          CreateChatCategoriesBar(
+            categories: categories,
+            selectedIndex: selectedIndex,
+            onCategorySelected: onCategorySelected,
+            onAddCategory: onAddCategory,
+          ),
+          SizedBox(height: 16.h),
           CreateChatNameField(
             controller: nameController,
           ),

@@ -188,12 +188,9 @@ class HomeCubit extends Cubit<HomeState> {
     String query,
   ) {
     return list.where((chat) {
-      final matchesFilter = switch (filter) {
-        HomeState.filterAll => true,
-        HomeState.filterOverdue => chat.category.toLowerCase() == 'overdue',
-        HomeState.filterImportant => chat.category.toLowerCase() == 'important',
-        _ => _matchesCustomCategory(chat.category, filter),
-      };
+      final matchesFilter = filter == HomeState.filterAll
+          ? true
+          : _matchesCustomCategory(chat.category, filter);
 
       final q = query.trim().toLowerCase();
       final matchesQuery =

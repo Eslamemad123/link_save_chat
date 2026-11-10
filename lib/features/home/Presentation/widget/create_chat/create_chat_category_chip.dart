@@ -53,23 +53,12 @@ class CreateChatCategoryChip extends StatelessWidget {
               width: isSelected ? 1.5.w : 1.w,
             ),
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.tag_rounded,
-                size: 14.r,
-                color: textColor,
-              ),
-              SizedBox(width: 6.w),
-              Text(
-                category.name,
-                style: AppFontStyles.font13MediumChip(
-                  context,
-                  color: textColor,
-                ),
-              ),
-            ],
+          child: Text(
+            category.name,
+            style: AppFontStyles.font13MediumChip(
+              context,
+              color: textColor,
+            ),
           ),
         ),
       ),

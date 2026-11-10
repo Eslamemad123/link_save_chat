@@ -55,19 +55,16 @@ void main() {
       expect(cubit.state.status, HomeStatus.success);
       expect(cubit.state.allChats.length, 6);
       expect(cubit.state.filteredChats.length, 6);
-      expect(cubit.state.overdueCount, 3);
+      expect(cubit.state.totalUnreadChatCount, greaterThan(0));
     });
 
     test('changeFilter filters chats correctly', () async {
       final cubit = HomeCubit(dataSource: MockHomeDataSource());
       await cubit.loadChats();
 
-      cubit.changeFilter(HomeState.filterOverdue);
-      expect(cubit.state.selectedFilter, HomeState.filterOverdue);
-      expect(cubit.state.filteredChats.length, 3);
-
-      cubit.changeFilter(HomeState.filterImportant);
-      expect(cubit.state.selectedFilter, HomeState.filterImportant);
+      await cubit.addCategory('important');
+      cubit.changeFilter('important');
+      expect(cubit.state.selectedFilter, 'important');
       expect(cubit.state.filteredChats.length, 1);
 
       cubit.changeFilter(HomeState.filterAll);
