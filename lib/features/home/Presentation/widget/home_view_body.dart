@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../core/utils/colors.dart';
 import '../cubit/home_cubit.dart';
 import '../cubit/home_state.dart';
@@ -9,14 +10,7 @@ import 'home_filter_bar.dart';
 import 'home_header.dart';
 
 class HomeViewBody extends StatefulWidget {
-  final VoidCallback onSettingsPressed;
-  final VoidCallback onSearchPressed;
-
-  const HomeViewBody({
-    super.key,
-    required this.onSettingsPressed,
-    required this.onSearchPressed,
-  });
+  const HomeViewBody({super.key});
 
   @override
   State<HomeViewBody> createState() => _HomeViewBodyState();
@@ -27,21 +21,17 @@ class _HomeViewBodyState extends State<HomeViewBody> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        HomeHeader(
-          onSearchPressed: widget.onSearchPressed,
-          onSettingsPressed: widget.onSettingsPressed,
-        ),
+        const HomeHeader(),
         SizedBox(height: 8.h),
         const HomeFilterBar(),
         SizedBox(height: 8.h),
         Expanded(
           child: BlocBuilder<HomeCubit, HomeState>(
             builder: (context, state) {
-              if (state.status == HomeStatus.loading && state.allChats.isEmpty) {
+              if (state.status == HomeStatus.loading &&
+                  state.allChats.isEmpty) {
                 return const Center(
-                  child: CircularProgressIndicator(
-                    color: AppColors.brandBlue,
-                  ),
+                  child: CircularProgressIndicator(color: AppColors.brandBlue),
                 );
               }
 

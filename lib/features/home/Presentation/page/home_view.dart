@@ -32,8 +32,6 @@ class HomeView extends StatelessWidget {
           ),
           body: SafeArea(
             child: HomeViewBody(
-              onSettingsPressed: () {},
-              onSearchPressed: () {},
             ),
           ),
         ),

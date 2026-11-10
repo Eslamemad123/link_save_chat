@@ -10,6 +10,7 @@ import 'package:link_savw_chat/features/Auth/Presentation/page/sign_up_view.dart
 import 'package:link_savw_chat/features/Splash/Presentation/page/splash_view.dart';
 import 'package:link_savw_chat/features/home/Presentation/page/home_view.dart';
 import 'package:link_savw_chat/features/onBoarding/Presentation/page/on_boarding_view.dart';
+import 'package:link_savw_chat/features/setting/Presentation/page/settings_view.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -20,6 +21,7 @@ class Routes {
   static const String signUp = '/signUp';
   static const String home = '/home';
   static const String forgotPassword = '/forgotPassword';
+  static const String settings = '/settings';
 
   static final routes = GoRouter(
     navigatorKey: navigatorKey,
@@ -66,6 +68,10 @@ class Routes {
       GoRoute(
         path: forgotPassword,
         builder: (context, state) => const ForgotPasswordView(),
+      ),
+      GoRoute(
+        path: settings,
+        builder: (context, state) => const SettingsView(),
       ),
     ],
   );
