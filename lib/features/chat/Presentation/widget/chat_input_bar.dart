@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/utils/colors.dart';
+import 'chat_input_divider.dart';
 import 'chat_send_button.dart';
 import 'chat_text_form_field.dart';
 
@@ -52,40 +53,41 @@ class _ChatInputBarState extends State<ChatInputBar> {
           top: 6.h,
         ),
         child: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: 14.w,
-            vertical: 6.h,
+          padding: EdgeInsets.only(
+            left: 14.w,
+            right: 6.w,
+            top: 4.h,
+            bottom: 4.h,
           ),
           decoration: BoxDecoration(
             color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
-            borderRadius: BorderRadius.circular(32.r),
+            borderRadius: BorderRadius.circular(30.r),
             border: Border.all(
               color: isDark
                   ? AppColors.cardBorderDark
                   : AppColors.cardBorderLight,
               width: 1.w,
             ),
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
-                color: isDark
-                    ? AppColors.chatInputGlowDark
-                    : AppColors.chatInputGlowLight,
-                blurRadius: 20.r,
-                spreadRadius: 2.r,
-                offset: Offset(0, 4.h),
+                color: AppColors.shadowLight,
+                blurRadius: 10,
+                offset: Offset(0, 3),
               ),
             ],
           ),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Expanded(
                 child: ChatTextFormField(
                   controller: _controller,
-                  onSubmitted: (_) => _handleSend(),
                 ),
               ),
-              SizedBox(width: 8.w),
+              Padding(
+                padding: EdgeInsets.only(bottom: 9.h),
+                child: const ChatInputDivider(),
+              ),
               ChatSendButton(
                 onPressed: _handleSend,
               ),
@@ -96,4 +98,3 @@ class _ChatInputBarState extends State<ChatInputBar> {
     );
   }
 }
-

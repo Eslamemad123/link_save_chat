@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_savw_chat/features/home/Data/models/chat_model.dart';
+import 'package:link_savw_chat/features/home/Presentation/widget/chat_icon_avatar.dart';
 import '../../../../core/utils/colors.dart';
-import 'chat_avatar_icon.dart';
 import 'chat_back_button.dart';
 import 'chat_header_info.dart';
-import 'chat_more_options_button.dart';
+import 'chat_info_button.dart';
+import 'chat_search_button.dart';
 
 class ChatAppBar extends StatelessWidget {
   final ChatModel chat;
+  final VoidCallback? onSearchTap;
+  final VoidCallback? onInfoTap;
 
   const ChatAppBar({
     super.key,
     required this.chat,
+    this.onSearchTap,
+    this.onInfoTap,
   });
 
   @override
@@ -39,7 +44,7 @@ class ChatAppBar extends StatelessWidget {
           children: [
             const ChatBackButton(),
             SizedBox(width: 12.w),
-            ChatAvatarIcon(
+            ChatIconAvatar(
               image: chat.image,
               name: chat.name,
             ),
@@ -52,10 +57,12 @@ class ChatAppBar extends StatelessWidget {
                     : 'New Chat',
               ),
             ),
-            ChatMoreOptionsButton(
-              onInfoTap: () {},
-              onSearchTap: () {},
-              onClearTap: () {},
+            ChatSearchButton(
+              onTap: onSearchTap,
+            ),
+            SizedBox(width: 8.w),
+            ChatInfoButton(
+              onTap: onInfoTap,
             ),
           ],
         ),

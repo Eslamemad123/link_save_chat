@@ -25,9 +25,9 @@ class ChatTextFormField extends StatelessWidget {
       focusNode: focusNode,
       onChanged: onChanged,
       onSubmitted: onSubmitted,
-      maxLines: 4,
+      maxLines: 5,
       minLines: 1,
-      textInputAction: TextInputAction.send,
+      textInputAction: TextInputAction.newline,
       keyboardType: TextInputType.multiline,
       style: TextStyle(
         fontSize: 14.sp,
@@ -35,7 +35,7 @@ class ChatTextFormField extends StatelessWidget {
         color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight,
       ),
       decoration: InputDecoration(
-        hintText: 'Type a task or paste a link...',
+        hintText: 'Type a message...',
         hintStyle: TextStyle(
           fontSize: 14.sp,
           fontWeight: FontWeight.normal,
@@ -46,11 +46,10 @@ class ChatTextFormField extends StatelessWidget {
         border: InputBorder.none,
         isDense: true,
         contentPadding: EdgeInsets.symmetric(
-          horizontal: 8.w,
+          horizontal: 6.w,
           vertical: 10.h,
         ),
       ),
     );
   }
 }
-

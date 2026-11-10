@@ -36,12 +36,7 @@ void main() {
 
       expect(find.text('Programming Links'), findsOneWidget);
       expect(find.text('A place for coding articles'), findsOneWidget);
-      expect(find.text('No links or tasks yet! 🚀'), findsOneWidget);
-      expect(
-        find.text(
-            'Start sharing links directly from YouTube or browser,\nor write your first task below 👇'),
-        findsOneWidget,
-      );
+      expect(find.text('No links yet'), findsOneWidget);
       expect(find.byType(ChatInputBar), findsOneWidget);
       expect(find.byType(ChatTextFormField), findsOneWidget);
       expect(find.byType(ChatSendButton), findsOneWidget);
@@ -78,4 +73,3 @@ void main() {
     });
   });
 }
-

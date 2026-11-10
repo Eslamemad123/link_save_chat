@@ -10,15 +10,13 @@ class ChatEmptyTitleText extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Text(
-      'No links or tasks yet! 🚀',
+      'No links yet',
       textAlign: TextAlign.center,
       style: TextStyle(
-        fontSize: 19.sp,
-        fontWeight: FontWeight.bold,
+        fontSize: 16.sp,
+        fontWeight: FontWeight.w600,
         color: isDark ? AppColors.textPrimaryDark : AppColors.textTitleLight,
-        letterSpacing: 0.2,
       ),
     );
   }
 }
-

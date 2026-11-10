@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
+
 import '../../../../core/constatnts/animations.dart';
 
 class ChatLottieAnimation extends StatelessWidget {
@@ -9,8 +10,8 @@ class ChatLottieAnimation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 170.w,
-      height: 170.h,
+      width: 300.w,
+      height: 300.h,
       child: Lottie.asset(
         AppAnimation.emptyChat,
         fit: BoxFit.contain,
@@ -19,4 +20,3 @@ class ChatLottieAnimation extends StatelessWidget {
     );
   }
 }
-
