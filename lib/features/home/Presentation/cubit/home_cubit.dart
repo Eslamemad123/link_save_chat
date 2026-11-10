@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../Data/datasources/home_data_source.dart';
+import '../../Data/models/category_model.dart';
 import '../../Data/models/chat_model.dart';
 import 'home_state.dart';
 
@@ -101,13 +102,26 @@ class HomeCubit extends Cubit<HomeState> {
     try {
       final models = await dataSource.getChats();
       final List<ChatModel> list = models.isNotEmpty ? models : _mockChats;
+      final categories = await dataSource.getCategories();
       emit(
         state.copyWith(
           status: HomeStatus.success,
           allChats: list,
+          categories: List<CategoryModel>.from(categories),
           filteredChats: _filter(list, state.selectedFilter, state.searchQuery),
         ),
       );
+    } catch (e) {
+      emit(
+        state.copyWith(status: HomeStatus.failure, errorMessage: e.toString()),
+      );
+    }
+  }
+
+  Future<void> loadCategories() async {
+    try {
+      final categories = await dataSource.getCategories();
+      emit(state.copyWith(categories: categories));
     } catch (e) {
       emit(
         state.copyWith(status: HomeStatus.failure, errorMessage: e.toString()),
@@ -126,7 +140,31 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  void changeFilter(HomeFilter filter) {
+  Future<void> addCategory(String name) async {
+    try {
+      final newCat = await dataSource.addCategory(name);
+      final exists = state.categories.any((c) => c.id == newCat.id);
+      final updatedList = exists
+          ? state.categories
+          : (List<CategoryModel>.from(state.categories)..add(newCat));
+      emit(
+        state.copyWith(
+          categories: updatedList,
+          filteredChats: _filter(
+            state.allChats,
+            state.selectedFilter,
+            state.searchQuery,
+          ),
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(status: HomeStatus.failure, errorMessage: e.toString()),
+      );
+    }
+  }
+
+  void changeFilter(String filter) {
     emit(
       state.copyWith(
         selectedFilter: filter,
@@ -146,14 +184,15 @@ class HomeCubit extends Cubit<HomeState> {
 
   List<ChatModel> _filter(
     List<ChatModel> list,
-    HomeFilter filter,
+    String filter,
     String query,
   ) {
     return list.where((chat) {
       final matchesFilter = switch (filter) {
-        HomeFilter.all => true,
-        HomeFilter.overdue => chat.category.toLowerCase() == 'overdue',
-        HomeFilter.important => chat.category.toLowerCase() == 'important',
+        HomeState.filterAll => true,
+        HomeState.filterOverdue => chat.category.toLowerCase() == 'overdue',
+        HomeState.filterImportant => chat.category.toLowerCase() == 'important',
+        _ => _matchesCustomCategory(chat.category, filter),
       };
 
       final q = query.trim().toLowerCase();
@@ -165,5 +204,20 @@ class HomeCubit extends Cubit<HomeState> {
 
       return matchesFilter && matchesQuery;
     }).toList();
+  }
+
+  bool _matchesCustomCategory(String chatCategory, String filter) {
+    final f = filter.toLowerCase();
+    final c = chatCategory.toLowerCase();
+    if (c == f) return true;
+    for (final cat in state.categories) {
+      if (cat.id.toLowerCase() == f && cat.name.toLowerCase() == c) {
+        return true;
+      }
+      if (cat.name.toLowerCase() == f && (cat.id.toLowerCase() == c || cat.name.toLowerCase() == c)) {
+        return true;
+      }
+    }
+    return false;
   }
 }

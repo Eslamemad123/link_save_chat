@@ -9,9 +9,11 @@ import 'package:link_savw_chat/core/extentions/show_dialoges.dart';
 import 'package:link_savw_chat/core/services/cloudinary/image_upload.dart';
 import 'package:link_savw_chat/core/utils/colors.dart';
 
+import '../../../Data/models/category_model.dart';
 import '../../../Data/models/chat_model.dart';
 import '../../cubit/home_cubit.dart';
-import 'category_item_data.dart';
+import '../../cubit/home_state.dart';
+import '../add_category/add_category_bottom_sheet.dart';
 import 'create_chat_bottom_sheet_body.dart';
 import 'image_source_picker_sheet.dart';
 
@@ -111,7 +113,7 @@ class _CreateChatBottomSheetState extends State<CreateChatBottomSheet> {
     }
   }
 
-  Future<void> _onSubmit() async {
+  Future<void> _onSubmit(List<CategoryModel> categories) async {
     if (_isLoading) return;
 
     final name = _nameController.text.trim();
@@ -128,7 +130,11 @@ class _CreateChatBottomSheetState extends State<CreateChatBottomSheet> {
         return;
       }
 
-      final newChat = _buildChatModel(name: name, imageUrl: imageUrl);
+      final newChat = _buildChatModel(
+        name: name,
+        imageUrl: imageUrl,
+        categories: categories,
+      );
 
       if (mounted) {
         await context.read<HomeCubit>().addChat(newChat);
@@ -158,9 +164,15 @@ class _CreateChatBottomSheetState extends State<CreateChatBottomSheet> {
     );
   }
 
-  ChatModel _buildChatModel({required String name, String? imageUrl}) {
-    final selectedCategory =
-        CategoryItemData.defaultCategories[_selectedCategoryIndex];
+  ChatModel _buildChatModel({
+    required String name,
+    String? imageUrl,
+    required List<CategoryModel> categories,
+  }) {
+    final categoryId = categories.isNotEmpty &&
+            _selectedCategoryIndex < categories.length
+        ? categories[_selectedCategoryIndex].id
+        : 'all';
     final description = _descriptionController.text.trim();
     final now = DateTime.now();
 
@@ -170,9 +182,9 @@ class _CreateChatBottomSheetState extends State<CreateChatBottomSheet> {
       description: description,
       lastMessage: description,
       image: imageUrl,
-      color_backgroung_icon: selectedCategory.accentColor.toARGB32(),
+      color_backgroung_icon: AppColors.brandBlue.toARGB32(),
       nummessage: 0,
-      category: selectedCategory.id,
+      category: categoryId,
       date: now,
       datecreateChat: now,
       boolNotification: true,
@@ -184,31 +196,41 @@ class _CreateChatBottomSheetState extends State<CreateChatBottomSheet> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Padding(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
-      ),
-      child: Container(
-        decoration: BoxDecoration(
-          color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(28.r)),
-        ),
-        child: SafeArea(
-          top: false,
-          child: CreateChatBottomSheetBody(
-            categories: CategoryItemData.defaultCategories,
-            selectedIndex: _selectedCategoryIndex,
-            onCategorySelected: _onCategorySelected,
-            nameController: _nameController,
-            descriptionController: _descriptionController,
-            imageFile: _selectedImage,
-            isLoading: _isLoading,
-            onClosePressed: () => Navigator.of(context).pop(),
-            onCameraTap: _onCameraTap,
-            onSubmitPressed: _onSubmit,
+    return BlocBuilder<HomeCubit, HomeState>(
+      builder: (context, state) {
+        final categories = state.categories;
+        final selectedIndex = _selectedCategoryIndex >= categories.length
+            ? 0
+            : _selectedCategoryIndex;
+
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
-        ),
-      ),
+          child: Container(
+            decoration: BoxDecoration(
+              color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(28.r)),
+            ),
+            child: SafeArea(
+              top: false,
+              child: CreateChatBottomSheetBody(
+                categories: categories,
+                selectedIndex: selectedIndex,
+                onCategorySelected: _onCategorySelected,
+                onAddCategory: () => AddCategoryBottomSheet.show(context),
+                nameController: _nameController,
+                descriptionController: _descriptionController,
+                imageFile: _selectedImage,
+                isLoading: _isLoading,
+                onClosePressed: () => Navigator.of(context).pop(),
+                onCameraTap: _onCameraTap,
+                onSubmitPressed: () => _onSubmit(categories),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_savw_chat/core/utils/colors.dart';
 import 'package:link_savw_chat/core/utils/textStyles.dart';
-import 'category_item_data.dart';
+import '../../../Data/models/category_model.dart';
 
 class CreateChatCategoryChip extends StatelessWidget {
-  final CategoryItemData category;
+  final CategoryModel category;
   final bool isSelected;
   final VoidCallback onTap;
 
@@ -24,13 +24,15 @@ class CreateChatCategoryChip extends StatelessWidget {
         ? (isDark
             ? AppColors.filterChipActiveDark
             : AppColors.filterChipActiveLight)
-        : (isDark ? category.darkBgColor : category.lightBgColor);
+        : (isDark ? AppColors.surfaceDark : AppColors.surfaceLight);
 
     final borderColor = isSelected
         ? AppColors.brandBlue
         : (isDark ? AppColors.cardBorderDark : AppColors.cardBorderLight);
 
-    final textColor = isSelected ? AppColors.brandBlue : category.accentColor;
+    final textColor = isSelected
+        ? AppColors.brandBlue
+        : (isDark ? AppColors.textSecondaryDark : AppColors.textSubtitleLight);
 
     return Material(
       color: AppColors.transparent,
@@ -54,15 +56,14 @@ class CreateChatCategoryChip extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                category.emoji,
-                style: TextStyle(
-                  fontSize: 14.sp,
-                ),
+              Icon(
+                Icons.tag_rounded,
+                size: 14.r,
+                color: textColor,
               ),
               SizedBox(width: 6.w),
               Text(
-                category.label,
+                category.name,
                 style: AppFontStyles.font13MediumChip(
                   context,
                   color: textColor,

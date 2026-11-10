@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../models/category_model.dart';
 import '../models/chat_model.dart';
 import 'home_data_source.dart';
 
@@ -69,5 +70,43 @@ class HomeDataSourceImpl implements HomeDataSource {
     );
 
     await docRef.set(chatToSave.toJson(), SetOptions(merge: true));
+  }
+
+  @override
+  Future<List<CategoryModel>> getCategories() async {
+    final user = firebaseAuth.currentUser;
+    if (user == null) {
+      throw Exception('User not authenticated');
+    }
+
+    final snapshot = await firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('categories')
+        .get();
+
+    return snapshot.docs.map((doc) {
+      final data = doc.data();
+      data['id'] = doc.id;
+      return CategoryModel.fromJson(data);
+    }).toList();
+  }
+
+  @override
+  Future<CategoryModel> addCategory(String name) async {
+    final user = firebaseAuth.currentUser;
+    if (user == null) {
+      throw Exception('User not authenticated');
+    }
+
+    final collection = firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('categories');
+
+    final docRef = collection.doc();
+    final category = CategoryModel(id: docRef.id, name: name);
+    await docRef.set(category.toJson());
+    return category;
   }
 }
