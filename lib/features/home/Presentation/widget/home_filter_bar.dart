@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../cubit/home_cubit.dart';
 import '../cubit/home_state.dart';
 import 'add_category/add_category_bottom_sheet.dart';
@@ -36,7 +37,8 @@ class HomeFilterBar extends StatelessWidget {
                   SizedBox(width: 8.w),
                   HomeFilterChipItem(
                     label: category.name,
-                    isSelected: state.selectedFilter.toLowerCase() ==
+                    isSelected:
+                        state.selectedFilter.toLowerCase() ==
                             category.id.toLowerCase() ||
                         state.selectedFilter.toLowerCase() ==
                             category.name.toLowerCase(),

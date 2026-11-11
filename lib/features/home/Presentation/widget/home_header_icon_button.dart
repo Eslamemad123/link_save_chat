@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../core/utils/colors.dart';
 
 class HomeHeaderIconButton extends StatelessWidget {
@@ -27,7 +28,9 @@ class HomeHeaderIconButton extends StatelessWidget {
             color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
             shape: BoxShape.circle,
             border: Border.all(
-              color: isDark ? AppColors.cardBorderDark : AppColors.cardBorderLight,
+              color: isDark
+                  ? AppColors.cardBorderDark
+                  : AppColors.cardBorderLight,
               width: 1.w,
             ),
             boxShadow: const [
@@ -45,4 +48,3 @@ class HomeHeaderIconButton extends StatelessWidget {
     );
   }
 }
-

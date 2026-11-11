@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../../core/utils/colors.dart';
 
 class AddCategoryHeader extends StatelessWidget {
@@ -19,7 +20,9 @@ class AddCategoryHeader extends StatelessWidget {
           style: TextStyle(
             fontSize: 18.sp,
             fontWeight: FontWeight.bold,
-            color: isDark ? AppColors.textPrimaryDark : AppColors.textTitleLight,
+            color: isDark
+                ? AppColors.textPrimaryDark
+                : AppColors.textTitleLight,
           ),
         ),
         IconButton(
@@ -36,4 +39,3 @@ class AddCategoryHeader extends StatelessWidget {
     );
   }
 }
-

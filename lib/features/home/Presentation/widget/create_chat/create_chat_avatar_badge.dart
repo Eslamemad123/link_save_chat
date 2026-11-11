@@ -5,10 +5,7 @@ import 'package:link_savw_chat/core/utils/colors.dart';
 class CreateChatAvatarBadge extends StatelessWidget {
   final VoidCallback? onTap;
 
-  const CreateChatAvatarBadge({
-    super.key,
-    this.onTap,
-  });
+  const CreateChatAvatarBadge({super.key, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +17,7 @@ class CreateChatAvatarBadge extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.brandBlue,
           shape: BoxShape.circle,
-          border: Border.all(
-            color: AppColors.white,
-            width: 2.w,
-          ),
+          border: Border.all(color: AppColors.white, width: 2.w),
           boxShadow: [
             BoxShadow(
               color: AppColors.shadowLight,

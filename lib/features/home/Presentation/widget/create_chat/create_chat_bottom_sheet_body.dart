@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_savw_chat/core/utils/colors.dart';
+
 import '../../../Data/models/category_model.dart';
 import 'create_chat_avatar_picker.dart';
 import 'create_chat_categories_bar.dart';
@@ -57,9 +58,7 @@ class CreateChatBottomSheetBody extends StatelessWidget {
           SizedBox(height: 12.h),
           const CreateChatDragHandle(),
           SizedBox(height: 12.h),
-          CreateChatHeader(
-            onClosePressed: onClosePressed,
-          ),
+          CreateChatHeader(onClosePressed: onClosePressed),
           SizedBox(height: 16.h),
           CreateChatAvatarPicker(
             icon: Icons.chat_bubble_outline_rounded,
@@ -80,13 +79,9 @@ class CreateChatBottomSheetBody extends StatelessWidget {
             onAddCategory: onAddCategory,
           ),
           SizedBox(height: 16.h),
-          CreateChatNameField(
-            controller: nameController,
-          ),
+          CreateChatNameField(controller: nameController),
           SizedBox(height: 12.h),
-          CreateChatDescriptionField(
-            controller: descriptionController,
-          ),
+          CreateChatDescriptionField(controller: descriptionController),
           SizedBox(height: 20.h),
           CreateChatSubmitButton(
             isLoading: isLoading,

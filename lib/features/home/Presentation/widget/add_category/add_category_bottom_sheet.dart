@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../../core/GetIt/gi.dart';
 import '../../../../../core/extentions/show_dialoges.dart';
 import '../../../../../core/utils/colors.dart';
@@ -110,4 +111,3 @@ class _AddCategoryBottomSheetState extends State<AddCategoryBottomSheet> {
     );
   }
 }
-

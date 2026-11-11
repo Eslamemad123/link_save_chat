@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../core/utils/colors.dart';
 
 class HomeFilterChipItem extends StatelessWidget {
@@ -23,7 +24,9 @@ class HomeFilterChipItem extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final backgroundColor = isSelected
-        ? (isDark ? AppColors.filterChipActiveDark : AppColors.filterChipActiveLight)
+        ? (isDark
+              ? AppColors.filterChipActiveDark
+              : AppColors.filterChipActiveLight)
         : (isDark ? AppColors.surfaceDark : AppColors.surfaceLight);
 
     final borderColor = isSelected
@@ -52,10 +55,7 @@ class HomeFilterChipItem extends StatelessWidget {
             children: [
               if (count != null && count! > 0) ...[
                 Container(
-                  constraints: BoxConstraints(
-                    minWidth: 18.r,
-                    minHeight: 18.r,
-                  ),
+                  constraints: BoxConstraints(minWidth: 18.r, minHeight: 18.r),
                   padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
                   decoration: BoxDecoration(
                     color: badgeColor ?? AppColors.brandBlue,
@@ -88,4 +88,3 @@ class HomeFilterChipItem extends StatelessWidget {
     );
   }
 }
-

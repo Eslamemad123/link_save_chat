@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
+
 import '../../../../core/utils/textStyles.dart';
 
 class HomeHeaderTitle extends StatelessWidget {
   final bool isSearchOpen;
 
-  const HomeHeaderTitle({
-    super.key,
-    required this.isSearchOpen,
-  });
+  const HomeHeaderTitle({super.key, required this.isSearchOpen});
 
   @override
   Widget build(BuildContext context) {
@@ -24,4 +22,3 @@ class HomeHeaderTitle extends StatelessWidget {
     );
   }
 }
-

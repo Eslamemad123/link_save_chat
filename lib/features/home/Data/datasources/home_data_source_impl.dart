@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 import '../models/category_model.dart';
 import '../models/chat_model.dart';
 import 'home_data_source.dart';
@@ -8,11 +9,9 @@ class HomeDataSourceImpl implements HomeDataSource {
   final FirebaseFirestore firestore;
   final FirebaseAuth firebaseAuth;
 
-  HomeDataSourceImpl({
-    FirebaseFirestore? firestore,
-    FirebaseAuth? firebaseAuth,
-  })  : firestore = firestore ?? FirebaseFirestore.instance,
-        firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
+  HomeDataSourceImpl({FirebaseFirestore? firestore, FirebaseAuth? firebaseAuth})
+    : firestore = firestore ?? FirebaseFirestore.instance,
+      firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
 
   @override
   Future<List<ChatModel>> getChats() async {

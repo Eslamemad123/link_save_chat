@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../../components/buttons/main_button.dart';
 
 class AddCategorySubmitButton extends StatelessWidget {
@@ -23,4 +24,3 @@ class AddCategorySubmitButton extends StatelessWidget {
     );
   }
 }
-

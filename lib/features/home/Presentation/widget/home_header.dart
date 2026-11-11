@@ -23,8 +23,9 @@ class _HomeHeaderState extends State<HomeHeader> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final iconColor =
-        isDark ? AppColors.textPrimaryDark : AppColors.textTitleLight;
+    final iconColor = isDark
+        ? AppColors.textPrimaryDark
+        : AppColors.textTitleLight;
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
@@ -32,8 +33,10 @@ class _HomeHeaderState extends State<HomeHeader> {
         height: 52.h,
         child: LayoutBuilder(
           builder: (context, constraints) {
-            final maxSearchWidth =
-                (constraints.maxWidth - 54.w).clamp(0.0, 420.w);
+            final maxSearchWidth = (constraints.maxWidth - 54.w).clamp(
+              0.0,
+              420.w,
+            );
 
             return Stack(
               alignment: Alignment.center,

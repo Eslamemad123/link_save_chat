@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'add_category_drag_handle.dart';
 import 'add_category_header.dart';
 import 'add_category_name_field.dart';
@@ -44,4 +45,3 @@ class AddCategoryBottomSheetBody extends StatelessWidget {
     );
   }
 }
-

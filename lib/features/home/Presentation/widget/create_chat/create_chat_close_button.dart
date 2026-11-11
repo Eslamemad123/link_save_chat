@@ -5,10 +5,7 @@ import 'package:link_savw_chat/core/utils/colors.dart';
 class CreateChatCloseButton extends StatelessWidget {
   final VoidCallback? onPressed;
 
-  const CreateChatCloseButton({
-    super.key,
-    this.onPressed,
-  });
+  const CreateChatCloseButton({super.key, this.onPressed});
 
   @override
   Widget build(BuildContext context) {

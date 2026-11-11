@@ -22,4 +22,3 @@ class CreateChatCategoryTitle extends StatelessWidget {
     );
   }
 }
-

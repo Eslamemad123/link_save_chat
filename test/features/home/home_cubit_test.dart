@@ -10,11 +10,9 @@ class MockHomeDataSource implements HomeDataSource {
   final List<ChatModel> _chats;
   final List<CategoryModel> _categories;
 
-  MockHomeDataSource({
-    List<ChatModel>? chats,
-    List<CategoryModel>? categories,
-  })  : _chats = chats ?? [],
-        _categories = categories ?? [];
+  MockHomeDataSource({List<ChatModel>? chats, List<CategoryModel>? categories})
+    : _chats = chats ?? [],
+      _categories = categories ?? [];
 
   @override
   Future<List<ChatModel>> getChats() async => _chats;
@@ -30,10 +28,7 @@ class MockHomeDataSource implements HomeDataSource {
 
   @override
   Future<CategoryModel> addCategory(String name) async {
-    final cat = CategoryModel(
-      id: 'cat_${_categories.length + 1}',
-      name: name,
-    );
+    final cat = CategoryModel(id: 'cat_${_categories.length + 1}', name: name);
     _categories.add(cat);
     return cat;
   }
@@ -98,10 +93,7 @@ void main() {
 
       final failingCubit = HomeCubit(
         dataSource: FailingHomeDataSource(
-          FirebaseException(
-            plugin: 'cloud_firestore',
-            code: 'unavailable',
-          ),
+          FirebaseException(plugin: 'cloud_firestore', code: 'unavailable'),
         ),
       );
       await failingCubit.loadChats();

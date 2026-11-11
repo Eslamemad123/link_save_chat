@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../../components/inputs/main_text_form_field.dart';
 import '../../../../../core/utils/colors.dart';
 
@@ -30,4 +31,3 @@ class AddCategoryNameField extends StatelessWidget {
     );
   }
 }
-

@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -193,8 +192,8 @@ class _CreateChatBottomSheetState extends State<CreateChatBottomSheet> {
     String? imageUrl,
     required List<CategoryModel> categories,
   }) {
-    final categoryId = categories.isNotEmpty &&
-            _selectedCategoryIndex < categories.length
+    final categoryId =
+        categories.isNotEmpty && _selectedCategoryIndex < categories.length
         ? categories[_selectedCategoryIndex].id
         : 'all';
     final description = _descriptionController.text.trim();

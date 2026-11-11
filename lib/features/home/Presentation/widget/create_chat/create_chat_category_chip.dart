@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_savw_chat/core/utils/colors.dart';
 import 'package:link_savw_chat/core/utils/textStyles.dart';
+
 import '../../../Data/models/category_model.dart';
 
 class CreateChatCategoryChip extends StatelessWidget {
@@ -22,8 +23,8 @@ class CreateChatCategoryChip extends StatelessWidget {
 
     final bgColor = isSelected
         ? (isDark
-            ? AppColors.filterChipActiveDark
-            : AppColors.filterChipActiveLight)
+              ? AppColors.filterChipActiveDark
+              : AppColors.filterChipActiveLight)
         : (isDark ? AppColors.surfaceDark : AppColors.surfaceLight);
 
     final borderColor = isSelected
@@ -41,10 +42,7 @@ class CreateChatCategoryChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(20.r),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          padding: EdgeInsets.symmetric(
-            horizontal: 14.w,
-            vertical: 8.h,
-          ),
+          padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
           decoration: BoxDecoration(
             color: bgColor,
             borderRadius: BorderRadius.circular(20.r),
@@ -55,10 +53,7 @@ class CreateChatCategoryChip extends StatelessWidget {
           ),
           child: Text(
             category.name,
-            style: AppFontStyles.font13MediumChip(
-              context,
-              color: textColor,
-            ),
+            style: AppFontStyles.font13MediumChip(context, color: textColor),
           ),
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_savw_chat/core/utils/colors.dart';
+
 import '../../../Data/models/category_model.dart';
 import 'create_chat_category_chip.dart';
 
@@ -36,8 +37,10 @@ class CreateChatCategoriesBar extends StatelessWidget {
                 onTap: onAddCategory,
                 borderRadius: BorderRadius.circular(20.r),
                 child: Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 12.w,
+                    vertical: 8.h,
+                  ),
                   decoration: BoxDecoration(
                     color: isDark
                         ? AppColors.surfaceDark

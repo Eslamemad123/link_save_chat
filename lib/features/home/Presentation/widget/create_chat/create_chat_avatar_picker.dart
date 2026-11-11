@@ -1,10 +1,10 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_savw_chat/core/utils/colors.dart';
+
 import 'create_chat_avatar_badge.dart';
 
 class CreateChatAvatarPicker extends StatelessWidget {
@@ -28,7 +28,8 @@ class CreateChatAvatarPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bg = backgroundColor ??
+    final bg =
+        backgroundColor ??
         (isDark
             ? AppColors.avatarBackgroundDark
             : AppColors.avatarBackgroundLight);
@@ -66,25 +67,15 @@ class CreateChatAvatarPicker extends StatelessWidget {
                 width: 96.w,
                 height: 96.h,
                 clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                  color: bg,
-                  shape: BoxShape.circle,
-                ),
+                decoration: BoxDecoration(color: bg, shape: BoxShape.circle),
                 alignment: Alignment.center,
-                child: displayImage ??
-                    Icon(
-                      icon,
-                      size: 42.r,
-                      color: ic,
-                    ),
+                child: displayImage ?? Icon(icon, size: 42.r, color: ic),
               ),
             ),
             Positioned(
               bottom: 4.h,
               left: 4.w,
-              child: CreateChatAvatarBadge(
-                onTap: onCameraTap,
-              ),
+              child: CreateChatAvatarBadge(onTap: onCameraTap),
             ),
           ],
         ),

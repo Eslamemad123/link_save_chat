@@ -19,31 +19,33 @@ void main() {
   Widget buildTestableWidget(Widget child) {
     return ScreenUtilInit(
       designSize: const Size(375, 812),
-      builder: (context, _) => MaterialApp(
-        home: Scaffold(body: child),
-      ),
+      builder: (context, _) => MaterialApp(home: Scaffold(body: child)),
     );
   }
 
   group('Home Widgets Tests', () {
-    testWidgets('ChatEmpty renders properly with text and icon', (tester) async {
+    testWidgets('ChatEmpty renders properly with text and icon', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         buildTestableWidget(const ChatEmpty(isDark: false)),
       );
       await tester.pump();
 
       expect(find.text('No Links or Tasks Found'), findsOneWidget);
-      expect(find.text('Tap the + button to create a new category'), findsOneWidget);
+      expect(
+        find.text('Tap the + button to create a new category'),
+        findsOneWidget,
+      );
       expect(find.byIcon(Icons.folder_open_rounded), findsOneWidget);
     });
 
-    testWidgets('ChatListView shows ChatEmpty when list is empty', (tester) async {
+    testWidgets('ChatListView shows ChatEmpty when list is empty', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         buildTestableWidget(
-          ChatListView(
-            chats: const [],
-            onRefresh: () async {},
-          ),
+          ChatListView(chats: const [], onRefresh: () async {}),
         ),
       );
       await tester.pump();
@@ -51,25 +53,31 @@ void main() {
       expect(find.byType(ChatEmpty), findsOneWidget);
     });
 
-    testWidgets('ChatListView pull-to-refresh triggers onRefresh in empty state', (tester) async {
-      bool refreshed = false;
-      await tester.pumpWidget(
-        buildTestableWidget(
-          ChatListView(
-            chats: const [],
-            onRefresh: () async {
-              refreshed = true;
-            },
+    testWidgets(
+      'ChatListView pull-to-refresh triggers onRefresh in empty state',
+      (tester) async {
+        bool refreshed = false;
+        await tester.pumpWidget(
+          buildTestableWidget(
+            ChatListView(
+              chats: const [],
+              onRefresh: () async {
+                refreshed = true;
+              },
+            ),
           ),
-        ),
-      );
-      await tester.pump();
+        );
+        await tester.pump();
 
-      await tester.drag(find.text('No Links or Tasks Found'), const Offset(0, 300));
-      await tester.pumpAndSettle();
+        await tester.drag(
+          find.text('No Links or Tasks Found'),
+          const Offset(0, 300),
+        );
+        await tester.pumpAndSettle();
 
-      expect(refreshed, isTrue);
-    });
+        expect(refreshed, isTrue);
+      },
+    );
 
     testWidgets('ChatListView renders items and triggers tap', (tester) async {
       ChatModel? tappedChat;
@@ -116,13 +124,19 @@ void main() {
 
       final threeDaysAgo = DateTime(now.year, now.month, now.day - 3, 10, 0);
       const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-      expect(ChatCardItem.formatTimestamp(threeDaysAgo), days[threeDaysAgo.weekday - 1]);
+      expect(
+        ChatCardItem.formatTimestamp(threeDaysAgo),
+        days[threeDaysAgo.weekday - 1],
+      );
 
       final lastYear = DateTime(now.year - 1, 3, 15);
       expect(ChatCardItem.formatTimestamp(lastYear), 'Mar 15, ${now.year - 1}');
 
       final futureDate = now.add(const Duration(minutes: 30));
-      expect(ChatCardItem.formatTimestamp(futureDate), matches(RegExp(r'^\d{2}:\d{2} (AM|PM)$')));
+      expect(
+        ChatCardItem.formatTimestamp(futureDate),
+        matches(RegExp(r'^\d{2}:\d{2} (AM|PM)$')),
+      );
 
       expect(ChatCardItem.formatTimestamp(null), '');
     });
@@ -136,16 +150,21 @@ void main() {
       expect(find.text('99'), findsOneWidget);
     });
 
-    testWidgets('ChatUnreadBadge renders counts greater than 99 without clipping', (tester) async {
-      await tester.pumpWidget(
-        buildTestableWidget(const ChatUnreadBadge(count: 150)),
-      );
-      await tester.pump();
+    testWidgets(
+      'ChatUnreadBadge renders counts greater than 99 without clipping',
+      (tester) async {
+        await tester.pumpWidget(
+          buildTestableWidget(const ChatUnreadBadge(count: 150)),
+        );
+        await tester.pump();
 
-      expect(find.text('150'), findsOneWidget);
-    });
+        expect(find.text('150'), findsOneWidget);
+      },
+    );
 
-    testWidgets('ChatIconAvatar generates initials when image is null', (tester) async {
+    testWidgets('ChatIconAvatar generates initials when image is null', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         buildTestableWidget(const ChatIconAvatar(name: 'LinkSync Team')),
       );
@@ -154,7 +173,9 @@ void main() {
       expect(find.text('LI'), findsOneWidget);
     });
 
-    testWidgets('ChatIconAvatar handles network image URL without errors', (tester) async {
+    testWidgets('ChatIconAvatar handles network image URL without errors', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         buildTestableWidget(
           const ChatIconAvatar(
@@ -169,7 +190,9 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('HomeFilterChipItem renders label and triggers onTap', (tester) async {
+    testWidgets('HomeFilterChipItem renders label and triggers onTap', (
+      tester,
+    ) async {
       bool tapped = false;
       await tester.pumpWidget(
         buildTestableWidget(
@@ -192,7 +215,9 @@ void main() {
       expect(tapped, isTrue);
     });
 
-    testWidgets('HomeHeaderSearchBar disposes controller cleanly', (tester) async {
+    testWidgets('HomeHeaderSearchBar disposes controller cleanly', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         buildTestableWidget(
           BlocProvider(
@@ -203,16 +228,16 @@ void main() {
       );
       await tester.pump();
 
-      await tester.pumpWidget(
-        buildTestableWidget(const SizedBox.shrink()),
-      );
+      await tester.pumpWidget(buildTestableWidget(const SizedBox.shrink()));
       await tester.pump();
 
       expect(tester.takeException(), isNull);
     });
 
     for (final width in [320.0, 360.0, 390.0]) {
-      testWidgets('HomeHeader renders without overflow on $width px width', (tester) async {
+      testWidgets('HomeHeader renders without overflow on $width px width', (
+        tester,
+      ) async {
         await tester.pumpWidget(
           ScreenUtilInit(
             designSize: const Size(375, 812),
@@ -237,4 +262,3 @@ void main() {
     }
   });
 }
-

@@ -23,11 +23,7 @@ class HomeHeaderSearchBar extends StatefulWidget {
   final ValueChanged<bool>? onToggle;
   final double? searchBoxWidth;
 
-  const HomeHeaderSearchBar({
-    super.key,
-    this.onToggle,
-    this.searchBoxWidth,
-  });
+  const HomeHeaderSearchBar({super.key, this.onToggle, this.searchBoxWidth});
 
   @override
   State<HomeHeaderSearchBar> createState() => _HomeHeaderSearchBarState();
@@ -61,9 +57,11 @@ class _HomeHeaderSearchBarState extends State<HomeHeaderSearchBar> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final iconColor =
-        isDark ? AppColors.textPrimaryDark : AppColors.textTitleLight;
-    final searchBoxWidth = widget.searchBoxWidth ??
+    final iconColor = isDark
+        ? AppColors.textPrimaryDark
+        : AppColors.textTitleLight;
+    final searchBoxWidth =
+        widget.searchBoxWidth ??
         (MediaQuery.sizeOf(context).width - 86.w).clamp(160.w, 420.w);
 
     return SearchBarAnimation(
@@ -77,12 +75,15 @@ class _HomeHeaderSearchBarState extends State<HomeHeaderSearchBar> {
       searchBoxColour: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
       buttonColour: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
       cursorColour: AppColors.brandBlue,
-      hintTextColour:
-          isDark ? AppColors.textSecondaryDark : AppColors.textSubtitleLight,
-      searchBoxBorderColour:
-          isDark ? AppColors.cardBorderDark : AppColors.cardBorderLight,
-      buttonBorderColour:
-          isDark ? AppColors.cardBorderDark : AppColors.cardBorderLight,
+      hintTextColour: isDark
+          ? AppColors.textSecondaryDark
+          : AppColors.textSubtitleLight,
+      searchBoxBorderColour: isDark
+          ? AppColors.cardBorderDark
+          : AppColors.cardBorderLight,
+      buttonBorderColour: isDark
+          ? AppColors.cardBorderDark
+          : AppColors.cardBorderLight,
       buttonShadowColour: AppColors.shadowLight,
       enableBoxBorder: true,
       enableButtonBorder: true,
@@ -108,11 +109,7 @@ class _HomeHeaderSearchBarState extends State<HomeHeaderSearchBar> {
         height: 20.h,
         colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
       ),
-      secondaryButtonWidget: Icon(
-        Icons.close,
-        size: 20.r,
-        color: iconColor,
-      ),
+      secondaryButtonWidget: Icon(Icons.close, size: 20.r, color: iconColor),
       buttonWidget: SvgPicture.asset(
         AppIcons.search,
         width: 20.w,
@@ -122,4 +119,3 @@ class _HomeHeaderSearchBarState extends State<HomeHeaderSearchBar> {
     );
   }
 }
-

@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../core/utils/colors.dart';
 
 class HomeFloatingActionButton extends StatelessWidget {
   final VoidCallback onPressed;
 
-  const HomeFloatingActionButton({
-    super.key,
-    required this.onPressed,
-  });
+  const HomeFloatingActionButton({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +30,7 @@ class HomeFloatingActionButton extends StatelessWidget {
           onTap: onPressed,
           borderRadius: BorderRadius.circular(20.r),
           child: Center(
-            child: Icon(
-              Icons.add_rounded,
-              color: AppColors.white,
-              size: 30.r,
-            ),
+            child: Icon(Icons.add_rounded, color: AppColors.white, size: 30.r),
           ),
         ),
       ),

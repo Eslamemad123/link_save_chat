@@ -21,10 +21,12 @@ class ImageSourceTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final defaultTextColor =
-        isDark ? AppColors.textPrimaryDark : AppColors.textPrimaryLight;
-    final defaultIconColor =
-        isDark ? AppColors.primaryDark : AppColors.primaryLight;
+    final defaultTextColor = isDark
+        ? AppColors.textPrimaryDark
+        : AppColors.textPrimaryLight;
+    final defaultIconColor = isDark
+        ? AppColors.primaryDark
+        : AppColors.primaryLight;
 
     return InkWell(
       onTap: onTap,
@@ -33,11 +35,7 @@ class ImageSourceTile extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
         child: Row(
           children: [
-            Icon(
-              icon,
-              size: 22.r,
-              color: iconColor ?? defaultIconColor,
-            ),
+            Icon(icon, size: 22.r, color: iconColor ?? defaultIconColor),
             SizedBox(width: 14.w),
             Expanded(
               child: Text(
@@ -55,4 +53,3 @@ class ImageSourceTile extends StatelessWidget {
     );
   }
 }
-
