@@ -1,5 +1,5 @@
 # LinkSync
-
+## https://lnkd.in/p/ekdah7Dw
 ## 📱 About The App
 **LinkSync** is a real-time, cross-platform productivity workspace designed to capture, organize, and synchronize links, videos, and tasks seamlessly between mobile devices and laptops inside dedicated chat rooms. It eliminates the friction of losing important links across different apps or sending messages to oneself on social media, integrating directly into the system's share sheet and offering a smart, automated 4-color priority lifecycle.
 
