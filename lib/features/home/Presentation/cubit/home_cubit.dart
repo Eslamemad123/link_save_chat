@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../Data/datasources/home_data_source.dart';
 import '../../Data/models/category_model.dart';
@@ -9,7 +11,8 @@ class HomeCubit extends Cubit<HomeState> {
 
   HomeCubit({required this.dataSource}) : super(const HomeState());
 
-  static final List<ChatModel> _mockChats = [
+  @visibleForTesting
+  static final List<ChatModel> mockChats = [
     ChatModel(
       id: '1',
       name: 'Coding Links',
@@ -97,23 +100,35 @@ class HomeCubit extends Cubit<HomeState> {
     ),
   ];
 
+
   Future<void> loadChats() async {
     emit(state.copyWith(status: HomeStatus.loading));
     try {
       final models = await dataSource.getChats();
-      final List<ChatModel> list = models.isNotEmpty ? models : _mockChats;
       final categories = await dataSource.getCategories();
       emit(
         state.copyWith(
           status: HomeStatus.success,
-          allChats: list,
+          allChats: models,
           categories: List<CategoryModel>.from(categories),
-          filteredChats: _filter(list, state.selectedFilter, state.searchQuery),
+          clearError: true,
+          filteredChats:
+              _filter(models, state.selectedFilter, state.searchQuery),
+        ),
+      );
+    } on FirebaseException catch (e) {
+      emit(
+        state.copyWith(
+          status: HomeStatus.failure,
+          errorMessage: _mapFirebaseError(e),
         ),
       );
     } catch (e) {
       emit(
-        state.copyWith(status: HomeStatus.failure, errorMessage: e.toString()),
+        state.copyWith(
+          status: HomeStatus.failure,
+          errorMessage: _mapGenericError(e),
+        ),
       );
     }
   }
@@ -121,26 +136,49 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> loadCategories() async {
     try {
       final categories = await dataSource.getCategories();
-      emit(state.copyWith(categories: categories));
+      emit(state.copyWith(categories: categories, clearError: true));
+    } on FirebaseException catch (e) {
+      emit(
+        state.copyWith(
+          status: HomeStatus.failure,
+          errorMessage: _mapFirebaseError(e),
+        ),
+      );
     } catch (e) {
       emit(
-        state.copyWith(status: HomeStatus.failure, errorMessage: e.toString()),
+        state.copyWith(
+          status: HomeStatus.failure,
+          errorMessage: _mapGenericError(e),
+        ),
       );
     }
   }
 
-  Future<void> addChat(ChatModel chat) async {
+  Future<bool> addChat(ChatModel chat) async {
     try {
       await dataSource.addChat(chat);
       await loadChats();
+      return true;
+    } on FirebaseException catch (e) {
+      emit(
+        state.copyWith(
+          status: HomeStatus.failure,
+          errorMessage: _mapFirebaseError(e),
+        ),
+      );
+      return false;
     } catch (e) {
       emit(
-        state.copyWith(status: HomeStatus.failure, errorMessage: e.toString()),
+        state.copyWith(
+          status: HomeStatus.failure,
+          errorMessage: _mapGenericError(e),
+        ),
       );
+      return false;
     }
   }
 
-  Future<void> addCategory(String name) async {
+  Future<bool> addCategory(String name) async {
     try {
       final newCat = await dataSource.addCategory(name);
       final exists = state.categories.any((c) => c.id == newCat.id);
@@ -150,6 +188,7 @@ class HomeCubit extends Cubit<HomeState> {
       emit(
         state.copyWith(
           categories: updatedList,
+          clearError: true,
           filteredChats: _filter(
             state.allChats,
             state.selectedFilter,
@@ -157,11 +196,48 @@ class HomeCubit extends Cubit<HomeState> {
           ),
         ),
       );
+      return true;
+    } on FirebaseException catch (e) {
+      emit(
+        state.copyWith(
+          status: HomeStatus.failure,
+          errorMessage: _mapFirebaseError(e),
+        ),
+      );
+      return false;
     } catch (e) {
       emit(
-        state.copyWith(status: HomeStatus.failure, errorMessage: e.toString()),
+        state.copyWith(
+          status: HomeStatus.failure,
+          errorMessage: _mapGenericError(e),
+        ),
       );
+      return false;
     }
+  }
+
+  String _mapFirebaseError(FirebaseException e) {
+    switch (e.code) {
+      case 'unavailable':
+      case 'network-request-failed':
+        return 'Network error. Please check your connection.';
+      case 'permission-denied':
+        return 'Permission denied. You do not have access.';
+      case 'deadline-exceeded':
+        return 'Request timed out. Please try again.';
+      default:
+        return e.message?.isNotEmpty == true
+            ? e.message!
+            : 'A database error occurred.';
+    }
+  }
+
+  String _mapGenericError(Object e) {
+    final msg = e.toString();
+    if (msg.contains('not authenticated')) {
+      return 'User not authenticated';
+    }
+    return msg.replaceFirst('Exception: ', '');
   }
 
   void changeFilter(String filter) {

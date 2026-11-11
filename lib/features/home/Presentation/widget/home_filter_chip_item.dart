@@ -52,11 +52,16 @@ class HomeFilterChipItem extends StatelessWidget {
             children: [
               if (count != null && count! > 0) ...[
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
+                  constraints: BoxConstraints(
+                    minWidth: 18.r,
+                    minHeight: 18.r,
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
                   decoration: BoxDecoration(
                     color: badgeColor ?? AppColors.brandBlue,
-                    shape: BoxShape.circle,
+                    borderRadius: BorderRadius.circular(9.r),
                   ),
+                  alignment: Alignment.center,
                   child: Text(
                     '$count',
                     style: TextStyle(

@@ -112,7 +112,9 @@ class ChatCardItem extends StatelessWidget {
                   ),
                   Gap(8),
                   Text(
-                    chat.time ?? _formatTimestamp(chat.date),
+                    (chat.time != null && chat.time!.isNotEmpty)
+                        ? chat.time!
+                        : formatTimestamp(chat.date),
                     style: TextStyle(
                       fontSize: 12.sp,
                       color: isDark
@@ -129,22 +131,26 @@ class ChatCardItem extends StatelessWidget {
     );
   }
 
-  static String _formatTimestamp(DateTime? dateTime) {
+  static String formatTimestamp(DateTime? dateTime) {
     if (dateTime == null) return '';
     final now = DateTime.now();
-    final diff = now.difference(dateTime);
 
-    if (diff.inDays == 0) {
-      final hour = dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12;
+    final todayUtc = DateTime.utc(now.year, now.month, now.day);
+    final dateUtc = DateTime.utc(dateTime.year, dateTime.month, dateTime.day);
+    final differenceInCalendarDays = todayUtc.difference(dateUtc).inDays;
+
+    if (differenceInCalendarDays <= 0) {
+      final hourInt = dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12;
+      final hour = hourInt.toString().padLeft(2, '0');
       final minute = dateTime.minute.toString().padLeft(2, '0');
       final period = dateTime.hour >= 12 ? 'PM' : 'AM';
       return '$hour:$minute $period';
-    } else if (diff.inDays == 1) {
+    } else if (differenceInCalendarDays == 1) {
       return 'Yesterday';
-    } else if (diff.inDays < 7) {
+    } else if (differenceInCalendarDays < 7) {
       const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
       return days[dateTime.weekday - 1];
-    } else {
+    } else if (now.year == dateTime.year) {
       const months = [
         'Jan',
         'Feb',
@@ -160,6 +166,22 @@ class ChatCardItem extends StatelessWidget {
         'Dec',
       ];
       return '${months[dateTime.month - 1]} ${dateTime.day}';
+    } else {
+      const months = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+      ];
+      return '${months[dateTime.month - 1]} ${dateTime.day}, ${dateTime.year}';
     }
   }
 }

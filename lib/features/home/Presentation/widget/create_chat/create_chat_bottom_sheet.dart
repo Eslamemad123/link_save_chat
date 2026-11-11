@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -50,6 +52,7 @@ class _CreateChatBottomSheetState extends State<CreateChatBottomSheet> {
 
   int _selectedCategoryIndex = 0;
   File? _selectedImage;
+  Uint8List? _selectedImageBytes;
   bool _isLoading = false;
 
   @override
@@ -77,13 +80,16 @@ class _CreateChatBottomSheetState extends State<CreateChatBottomSheet> {
 
     final option = await ImageSourcePickerSheet.show(
       context: context,
-      hasImage: _selectedImage != null,
+      hasImage: _selectedImage != null || _selectedImageBytes != null,
     );
 
     if (option == null || !mounted) return;
 
     if (option == ImageSourceOption.remove) {
-      setState(() => _selectedImage = null);
+      setState(() {
+        _selectedImage = null;
+        _selectedImageBytes = null;
+      });
       return;
     }
 
@@ -104,7 +110,13 @@ class _CreateChatBottomSheetState extends State<CreateChatBottomSheet> {
       );
 
       if (picked != null && mounted) {
-        setState(() => _selectedImage = File(picked.path));
+        final bytes = await picked.readAsBytes();
+        setState(() {
+          _selectedImageBytes = bytes;
+          if (!kIsWeb) {
+            _selectedImage = File(picked.path);
+          }
+        });
       }
     } catch (_) {
       if (mounted) {
@@ -126,7 +138,11 @@ class _CreateChatBottomSheetState extends State<CreateChatBottomSheet> {
 
     try {
       final imageUrl = await _uploadImageIfNeeded();
-      if (_selectedImage != null && (imageUrl == null || imageUrl.isEmpty)) {
+      if ((_selectedImage != null || _selectedImageBytes != null) &&
+          (imageUrl == null || imageUrl.isEmpty)) {
+        if (mounted) {
+          setState(() => _isLoading = false);
+        }
         return;
       }
 
@@ -136,12 +152,20 @@ class _CreateChatBottomSheetState extends State<CreateChatBottomSheet> {
         categories: categories,
       );
 
-      if (mounted) {
-        await context.read<HomeCubit>().addChat(newChat);
-      }
+      if (!mounted) return;
 
-      if (mounted) {
+      final success = await context.read<HomeCubit>().addChat(newChat);
+
+      if (!mounted) return;
+
+      if (success) {
         Navigator.of(context).pop();
+      } else {
+        final error = context.read<HomeCubit>().state.errorMessage;
+        showMyDialog(
+          context,
+          error ?? 'An error occurred while creating chat.',
+        );
       }
     } catch (_) {
       if (mounted) {
@@ -222,6 +246,7 @@ class _CreateChatBottomSheetState extends State<CreateChatBottomSheet> {
                 nameController: _nameController,
                 descriptionController: _descriptionController,
                 imageFile: _selectedImage,
+                imageBytes: _selectedImageBytes,
                 isLoading: _isLoading,
                 onClosePressed: () => Navigator.of(context).pop(),
                 onCameraTap: _onCameraTap,

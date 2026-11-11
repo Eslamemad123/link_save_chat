@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,6 +25,7 @@ class CreateChatBottomSheetBody extends StatelessWidget {
   final VoidCallback? onCameraTap;
   final VoidCallback onSubmitPressed;
   final File? imageFile;
+  final Uint8List? imageBytes;
   final bool isLoading;
 
   const CreateChatBottomSheetBody({
@@ -38,6 +40,7 @@ class CreateChatBottomSheetBody extends StatelessWidget {
     this.onCameraTap,
     required this.onSubmitPressed,
     this.imageFile,
+    this.imageBytes,
     this.isLoading = false,
   });
 
@@ -65,6 +68,7 @@ class CreateChatBottomSheetBody extends StatelessWidget {
                 ? AppColors.avatarBackgroundDark
                 : AppColors.avatarBackgroundLight,
             imageFile: imageFile,
+            imageBytes: imageBytes,
             onCameraTap: onCameraTap,
           ),
           SizedBox(height: 20.h),

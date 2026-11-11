@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -16,16 +17,24 @@ class ChatIconAvatar extends StatelessWidget {
     final img = image?.trim();
 
     if (img != null && img.isNotEmpty) {
-      final isOnline = img.startsWith('http://') || img.startsWith('https://');
+      final isOnline = img.startsWith('http://') ||
+          img.startsWith('https://') ;
 
-      return CircleAvatar(
-        radius: 24.r,
-        backgroundColor: _colorFromName(name),
-        backgroundImage: isOnline
-            ? NetworkImage(img)
-            : FileImage(File(img)) as ImageProvider,
-        onBackgroundImageError: (_, _) {},
-      );
+      ImageProvider? provider;
+      if (isOnline) {
+        provider = NetworkImage(img);
+      } else if (!kIsWeb) {
+        provider = FileImage(File(img));
+      }
+
+      if (provider != null) {
+        return CircleAvatar(
+          radius: 24.r,
+          backgroundColor: _colorFromName(name),
+          backgroundImage: provider,
+          onBackgroundImageError: (_, _) {},
+        );
+      }
     }
 
     return CircleAvatar(

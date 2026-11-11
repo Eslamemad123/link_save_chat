@@ -8,12 +8,25 @@ import '../../../../core/constatnts/icons.dart';
 import '../../../../core/utils/colors.dart';
 import '../cubit/home_cubit.dart';
 
+class _SafeTextEditingController extends TextEditingController {
+  bool _isDisposed = false;
+
+  @override
+  void dispose() {
+    if (_isDisposed) return;
+    _isDisposed = true;
+    super.dispose();
+  }
+}
+
 class HomeHeaderSearchBar extends StatefulWidget {
   final ValueChanged<bool>? onToggle;
+  final double? searchBoxWidth;
 
   const HomeHeaderSearchBar({
     super.key,
     this.onToggle,
+    this.searchBoxWidth,
   });
 
   @override
@@ -26,7 +39,13 @@ class _HomeHeaderSearchBarState extends State<HomeHeaderSearchBar> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController();
+    _controller = _SafeTextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   void _handleSearch(String query) {
@@ -44,8 +63,8 @@ class _HomeHeaderSearchBarState extends State<HomeHeaderSearchBar> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final iconColor =
         isDark ? AppColors.textPrimaryDark : AppColors.textTitleLight;
-    final searchBoxWidth =
-        (MediaQuery.sizeOf(context).width - 90.w).clamp(240.w, 420.w);
+    final searchBoxWidth = widget.searchBoxWidth ??
+        (MediaQuery.sizeOf(context).width - 86.w).clamp(160.w, 420.w);
 
     return SearchBarAnimation(
       textEditingController: _controller,

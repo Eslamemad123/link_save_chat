@@ -13,11 +13,14 @@ class ChatUnreadBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 22.w,
-      height: 22.h,
-      decoration: const BoxDecoration(
+      constraints: BoxConstraints(
+        minWidth: 22.r,
+        minHeight: 22.r,
+      ),
+      padding: EdgeInsets.symmetric(horizontal: 5.w),
+      decoration: BoxDecoration(
         color: AppColors.brandBlue,
-        shape: BoxShape.circle,
+        borderRadius: BorderRadius.circular(11.r),
       ),
       alignment: Alignment.center,
       child: Text(

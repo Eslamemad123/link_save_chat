@@ -30,42 +30,50 @@ class _HomeHeaderState extends State<HomeHeader> {
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       child: SizedBox(
         height: 52.h,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: HomeHeaderTitle(isSearchOpen: _isSearchOpen),
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  HomeHeaderSearchBar(
-                    onToggle: (isOpen) {
-                      setState(() {
-                        _isSearchOpen = isOpen;
-                      });
-                    },
-                  ),
-                  SizedBox(width: 10.w),
-                  HomeHeaderIconButton(
-                    onTap: () => pushTo(context, Routes.settings),
-                    icon: SvgPicture.asset(
-                      AppIcons.setting,
-                      width: 20.w,
-                      height: 20.h,
-                      colorFilter: ColorFilter.mode(
-                        iconColor,
-                        BlendMode.srcIn,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final maxSearchWidth =
+                (constraints.maxWidth - 54.w).clamp(0.0, 420.w);
+
+            return Stack(
+              alignment: Alignment.center,
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: HomeHeaderTitle(isSearchOpen: _isSearchOpen),
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      HomeHeaderSearchBar(
+                        searchBoxWidth: maxSearchWidth,
+                        onToggle: (isOpen) {
+                          setState(() {
+                            _isSearchOpen = isOpen;
+                          });
+                        },
                       ),
-                    ),
+                      SizedBox(width: 10.w),
+                      HomeHeaderIconButton(
+                        onTap: () => pushTo(context, Routes.settings),
+                        icon: SvgPicture.asset(
+                          AppIcons.setting,
+                          width: 20.w,
+                          height: 20.h,
+                          colorFilter: ColorFilter.mode(
+                            iconColor,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-          ],
+                ),
+              ],
+            );
+          },
         ),
       ),
     );

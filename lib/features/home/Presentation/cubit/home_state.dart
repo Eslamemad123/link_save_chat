@@ -45,6 +45,7 @@ class HomeState {
     String? selectedFilter,
     String? searchQuery,
     String? errorMessage,
+    bool clearError = false,
   }) {
     return HomeState(
       status: status ?? this.status,
@@ -53,7 +54,7 @@ class HomeState {
       categories: categories ?? this.categories,
       selectedFilter: selectedFilter ?? this.selectedFilter,
       searchQuery: searchQuery ?? this.searchQuery,
-      errorMessage: errorMessage ?? this.errorMessage,
+      errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
     );
   }
 

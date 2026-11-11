@@ -61,9 +61,17 @@ class _AddCategoryBottomSheetState extends State<AddCategoryBottomSheet> {
     setState(() => _isLoading = true);
 
     try {
-      await context.read<HomeCubit>().addCategory(name);
-      if (mounted) {
+      final success = await context.read<HomeCubit>().addCategory(name);
+      if (!mounted) return;
+
+      if (success) {
         Navigator.of(context).pop();
+      } else {
+        final error = context.read<HomeCubit>().state.errorMessage;
+        showMyDialog(
+          context,
+          error ?? 'An error occurred while adding category.',
+        );
       }
     } catch (_) {
       if (mounted) {
