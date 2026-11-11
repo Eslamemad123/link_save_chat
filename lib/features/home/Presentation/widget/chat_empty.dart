@@ -5,10 +5,7 @@ import 'package:link_savw_chat/core/utils/colors.dart';
 class ChatEmpty extends StatelessWidget {
   final bool isDark;
 
-  const ChatEmpty({
-    super.key,
-    required this.isDark,
-  });
+  const ChatEmpty({super.key, required this.isDark});
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +16,7 @@ class ChatEmpty extends StatelessWidget {
             parent: BouncingScrollPhysics(),
           ),
           child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: constraints.maxHeight,
-            ),
+            constraints: BoxConstraints(minHeight: constraints.maxHeight),
             child: Center(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 32.w),

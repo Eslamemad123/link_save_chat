@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../Data/datasources/home_data_source.dart';
 import '../../Data/models/category_model.dart';
 import '../../Data/models/chat_model.dart';
@@ -31,8 +32,7 @@ class HomeCubit extends Cubit<HomeState> {
       id: '2',
       name: 'Important Tasks',
       description: 'Firebase Project Integration',
-      lastMessage:
-          'https://testiqx.web.app/?fbclid=IwZXh0bgNhZW0CMTEAcGRvZgVzcnRjBmFwcF9pZAwzNTA2ODU1MzE3MjgAAR-XhgXp1KNiMhKRKURhLSdRF_N8fgfodceTFjA0yVko_Nw_QRK8fVAr1tXcYw_aem_vElDeNon_Lbf14SJodOO5Q',
+      lastMessage: 'https://testiqx.web.app/?fbclid=IwZXh0bgNhZW0CMTEAcGRvZgVzcnRjBmFwcF9pZAwzNTA2ODU1MzE3MjgAAR-XhgXp1KNiMhKRKURhLSdRF_N8fgfodceTFjA0yVko_Nw_QRK8fVAr1tXcYw_aem_vElDeNon_Lbf14SJodOO5Q',
       color_backgroung_icon: 0xFFF57F17,
       nummessage: 3,
       date: DateTime.now().subtract(const Duration(hours: 2)),
@@ -100,7 +100,6 @@ class HomeCubit extends Cubit<HomeState> {
     ),
   ];
 
-
   Future<void> loadChats() async {
     emit(state.copyWith(status: HomeStatus.loading));
     try {
@@ -112,8 +111,11 @@ class HomeCubit extends Cubit<HomeState> {
           allChats: models,
           categories: List<CategoryModel>.from(categories),
           clearError: true,
-          filteredChats:
-              _filter(models, state.selectedFilter, state.searchQuery),
+          filteredChats: _filter(
+            models,
+            state.selectedFilter,
+            state.searchQuery,
+          ),
         ),
       );
     } on FirebaseException catch (e) {
@@ -258,11 +260,7 @@ class HomeCubit extends Cubit<HomeState> {
     );
   }
 
-  List<ChatModel> _filter(
-    List<ChatModel> list,
-    String filter,
-    String query,
-  ) {
+  List<ChatModel> _filter(List<ChatModel> list, String filter, String query) {
     return list.where((chat) {
       final matchesFilter = filter == HomeState.filterAll
           ? true
@@ -287,7 +285,8 @@ class HomeCubit extends Cubit<HomeState> {
       if (cat.id.toLowerCase() == f && cat.name.toLowerCase() == c) {
         return true;
       }
-      if (cat.name.toLowerCase() == f && (cat.id.toLowerCase() == c || cat.name.toLowerCase() == c)) {
+      if (cat.name.toLowerCase() == f &&
+          (cat.id.toLowerCase() == c || cat.name.toLowerCase() == c)) {
         return true;
       }
     }

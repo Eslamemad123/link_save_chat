@@ -73,12 +73,12 @@ class HomeState {
 
   @override
   int get hashCode => Object.hash(
-        status,
-        allChats,
-        filteredChats,
-        categories,
-        selectedFilter,
-        searchQuery,
-        errorMessage,
-      );
+    status,
+    allChats,
+    filteredChats,
+    categories,
+    selectedFilter,
+    searchQuery,
+    errorMessage,
+  );
 }

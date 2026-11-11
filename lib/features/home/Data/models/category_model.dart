@@ -2,10 +2,7 @@ class CategoryModel {
   final String id;
   final String name;
 
-  const CategoryModel({
-    required this.id,
-    required this.name,
-  });
+  const CategoryModel({required this.id, required this.name});
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) {
     return CategoryModel(
@@ -15,20 +12,11 @@ class CategoryModel {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-    };
+    return {'id': id, 'name': name};
   }
 
-  CategoryModel copyWith({
-    String? id,
-    String? name,
-  }) {
-    return CategoryModel(
-      id: id ?? this.id,
-      name: name ?? this.name,
-    );
+  CategoryModel copyWith({String? id, String? name}) {
+    return CategoryModel(id: id ?? this.id, name: name ?? this.name);
   }
 
   @override
@@ -42,4 +30,3 @@ class CategoryModel {
   @override
   int get hashCode => Object.hash(id, name);
 }
-

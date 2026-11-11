@@ -17,8 +17,7 @@ class ChatIconAvatar extends StatelessWidget {
     final img = image?.trim();
 
     if (img != null && img.isNotEmpty) {
-      final isOnline = img.startsWith('http://') ||
-          img.startsWith('https://') ;
+      final isOnline = img.startsWith('http://') || img.startsWith('https://');
 
       ImageProvider? provider;
       if (isOnline) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../../../core/GetIt/gi.dart';
 import '../../../../core/routes/navigation.dart';
 import '../../../../core/routes/routes.dart';
@@ -30,10 +31,7 @@ class HomeView extends StatelessWidget {
               onPressed: () => CreateChatBottomSheet.show(fabContext),
             ),
           ),
-          body: SafeArea(
-            child: HomeViewBody(
-            ),
-          ),
+          body: SafeArea(child: HomeViewBody()),
         ),
       ),
     );

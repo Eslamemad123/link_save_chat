@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../core/utils/colors.dart';
 
 class ChatUnreadBadge extends StatelessWidget {
   final int count;
 
-  const ChatUnreadBadge({
-    super.key,
-    required this.count,
-  });
+  const ChatUnreadBadge({super.key, required this.count});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(
-        minWidth: 22.r,
-        minHeight: 22.r,
-      ),
+      constraints: BoxConstraints(minWidth: 22.r, minHeight: 22.r),
       padding: EdgeInsets.symmetric(horizontal: 5.w),
       decoration: BoxDecoration(
         color: AppColors.brandBlue,

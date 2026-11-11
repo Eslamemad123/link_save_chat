@@ -10,4 +10,3 @@ class AddChatUseCase {
     await repository.addChat(chat);
   }
 }
-

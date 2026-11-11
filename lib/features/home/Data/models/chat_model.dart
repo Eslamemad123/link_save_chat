@@ -55,12 +55,12 @@ class ChatModel {
       return fallback;
     }
 
-    final img = json['image'] as String? ??
+    final img =
+        json['image'] as String? ??
         json['image_or_icon'] as String? ??
         json['iconUrl'] as String?;
-    final lastMsg = json['lastMessage'] as String? ??
-        json['description'] as String? ??
-        '';
+    final lastMsg =
+        json['lastMessage'] as String? ?? json['description'] as String? ?? '';
     final chatName = json['name'] as String? ?? json['title'] as String? ?? '';
     final isPinned = parseBool(json['boolIsPin'] ?? json['isPinned'], false);
     final numMsg = parseInt(json['nummessage'] ?? json['uncompletedCount']);
@@ -164,19 +164,19 @@ class ChatModel {
 
   @override
   int get hashCode => Object.hash(
-        id,
-        name,
-        description,
-        lastMessage,
-        image,
-        color_backgroung_icon,
-        nummessage,
-        date,
-        time,
-        category,
-        datecreateChat,
-        wallpaper,
-        boolNotification,
-        boolIsPin,
-      );
+    id,
+    name,
+    description,
+    lastMessage,
+    image,
+    color_backgroung_icon,
+    nummessage,
+    date,
+    time,
+    category,
+    datecreateChat,
+    wallpaper,
+    boolNotification,
+    boolIsPin,
+  );
 }
