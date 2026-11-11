@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../core/routes/navigation.dart';
 import '../../../../core/utils/colors.dart';
 
@@ -34,11 +35,12 @@ class ChatBackButton extends StatelessWidget {
           child: Icon(
             Icons.arrow_back_ios_new_rounded,
             size: 18.r,
-            color: isDark ? AppColors.textPrimaryDark : AppColors.textTitleLight,
+            color: isDark
+                ? AppColors.textPrimaryDark
+                : AppColors.textTitleLight,
           ),
         ),
       ),
     );
   }
 }
-

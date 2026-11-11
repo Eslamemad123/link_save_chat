@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../core/constatnts/images.dart';
 import '../../../../core/utils/colors.dart';
 
@@ -30,4 +31,3 @@ class ChatBackgroundWallpaper extends StatelessWidget {
     );
   }
 }
-

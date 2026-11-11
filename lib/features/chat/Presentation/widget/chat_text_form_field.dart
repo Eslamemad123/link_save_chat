@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../core/utils/colors.dart';
 
 class ChatTextFormField extends StatelessWidget {
@@ -45,10 +46,7 @@ class ChatTextFormField extends StatelessWidget {
         ),
         border: InputBorder.none,
         isDense: true,
-        contentPadding: EdgeInsets.symmetric(
-          horizontal: 6.w,
-          vertical: 10.h,
-        ),
+        contentPadding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 10.h),
       ),
     );
   }

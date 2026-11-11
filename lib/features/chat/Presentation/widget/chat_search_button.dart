@@ -17,10 +17,29 @@ class ChatSearchButton extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12.r),
-        child: Icon(
-          Icons.search_rounded,
-          size: 23.r,
-          color: isDark ? AppColors.textPrimaryDark : AppColors.textTitleLight,
+        child: Container(
+          width: 40.w,
+          height: 40.h,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: isDark
+                ? AppColors.closeButtonBackgroundDark
+                : AppColors.closeButtonBackgroundLight,
+            borderRadius: BorderRadius.circular(12.r),
+            border: Border.all(
+              color: isDark
+                  ? AppColors.cardBorderDark
+                  : AppColors.avatarCyan,
+              width: 1.w,
+            ),
+          ),
+          child: Icon(
+            Icons.search_rounded,
+            size: 20.r,
+            color: isDark
+                ? AppColors.textPrimaryDark
+                : AppColors.textTitleLight,
+          ),
         ),
       ),
     );

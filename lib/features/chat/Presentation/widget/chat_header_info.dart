@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../core/utils/colors.dart';
 
 class ChatHeaderInfo extends StatelessWidget {
   final String name;
   final String? subtitle;
 
-  const ChatHeaderInfo({
-    super.key,
-    required this.name,
-    this.subtitle,
-  });
+  const ChatHeaderInfo({super.key, required this.name, this.subtitle});
 
   @override
   Widget build(BuildContext context) {
@@ -30,24 +27,42 @@ class ChatHeaderInfo extends StatelessWidget {
           style: TextStyle(
             fontSize: 16.sp,
             fontWeight: FontWeight.bold,
-            color: isDark ? AppColors.textPrimaryDark : AppColors.textTitleLight,
+            letterSpacing: -0.2,
+            color: isDark
+                ? AppColors.textPrimaryDark
+                : AppColors.textTitleLight,
           ),
         ),
         SizedBox(height: 2.h),
-        Text(
-          displaySubtitle,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            fontSize: 12.sp,
-            fontWeight: FontWeight.normal,
-            color: isDark
-                ? AppColors.chatHeaderSubtitleDark
-                : AppColors.chatHeaderSubtitleLight,
-          ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 6.r,
+              height: 6.r,
+              decoration: const BoxDecoration(
+                color: AppColors.brandBlue,
+                shape: BoxShape.circle,
+              ),
+            ),
+            SizedBox(width: 5.w),
+            Flexible(
+              child: Text(
+                displaySubtitle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w500,
+                  color: isDark
+                      ? AppColors.chatHeaderSubtitleDark
+                      : AppColors.chatHeaderSubtitleLight,
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );
   }
 }
-

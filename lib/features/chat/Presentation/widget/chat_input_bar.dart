@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../core/utils/colors.dart';
 import 'chat_input_divider.dart';
 import 'chat_send_button.dart';
@@ -8,10 +9,7 @@ import 'chat_text_form_field.dart';
 class ChatInputBar extends StatefulWidget {
   final ValueChanged<String>? onSendMessage;
 
-  const ChatInputBar({
-    super.key,
-    this.onSendMessage,
-  });
+  const ChatInputBar({super.key, this.onSendMessage});
 
   @override
   State<ChatInputBar> createState() => _ChatInputBarState();
@@ -79,18 +77,12 @@ class _ChatInputBarState extends State<ChatInputBar> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Expanded(
-                child: ChatTextFormField(
-                  controller: _controller,
-                ),
-              ),
+              Expanded(child: ChatTextFormField(controller: _controller)),
               Padding(
                 padding: EdgeInsets.only(bottom: 9.h),
                 child: const ChatInputDivider(),
               ),
-              ChatSendButton(
-                onPressed: _handleSend,
-              ),
+              ChatSendButton(onPressed: _handleSend),
             ],
           ),
         ),
