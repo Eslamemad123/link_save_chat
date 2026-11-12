@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:link_savw_chat/core/routes/routes.dart';
 import 'package:link_savw_chat/features/home/Data/models/chat_model.dart';
 
 import 'chat_app_bar.dart';
@@ -18,7 +20,12 @@ class ChatViewBody extends StatelessWidget {
         const ChatBackgroundWallpaper(),
         Column(
           children: [
-            ChatAppBar(chat: chat),
+            ChatAppBar(
+              chat: chat,
+              onInfoTap: () {
+                context.push(Routes.chatInfo, extra: chat);
+              },
+            ),
             const Expanded(child: ChatEmptyContent()),
             ChatInputBar(onSendMessage: (message) {}),
           ],

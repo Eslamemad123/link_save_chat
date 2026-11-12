@@ -8,6 +8,7 @@ import 'package:link_savw_chat/features/Auth/Presentation/page/forgot_password_v
 import 'package:link_savw_chat/features/Auth/Presentation/page/login_view.dart';
 import 'package:link_savw_chat/features/Auth/Presentation/page/sign_up_view.dart';
 import 'package:link_savw_chat/features/Splash/Presentation/page/splash_view.dart';
+import 'package:link_savw_chat/features/chat/Presentation/page/chat_info_view.dart';
 import 'package:link_savw_chat/features/chat/Presentation/page/chat_view.dart';
 import 'package:link_savw_chat/features/home/Data/models/chat_model.dart';
 import 'package:link_savw_chat/features/home/Presentation/page/home_view.dart';
@@ -25,6 +26,7 @@ class Routes {
   static const String forgotPassword = '/forgotPassword';
   static const String settings = '/settings';
   static const String chat = '/chat';
+  static const String chatInfo = '/chatInfo';
 
   static final routes = GoRouter(
     navigatorKey: navigatorKey,
@@ -90,6 +92,22 @@ class Routes {
                   category: 'all',
                 );
           return ChatView(chat: chatModel);
+        },
+      ),
+      GoRoute(
+        path: chatInfo,
+        builder: (context, state) {
+          final chatModel = state.extra is ChatModel
+              ? state.extra as ChatModel
+              : const ChatModel(
+                  id: '',
+                  name: 'Chat Info',
+                  description: '',
+                  color_backgroung_icon: 0,
+                  nummessage: 0,
+                  category: 'all',
+                );
+          return ChatInfoView(chat: chatModel);
         },
       ),
     ],

@@ -137,4 +137,8 @@ class AppColors {
   static const Color chatHeaderSubtitleDark = Color(0xFF94A3B8);
   static const Color chatHeaderIconContainerLight = Color(0xFFEFF4FF);
   static const Color chatHeaderIconContainerDark = Color(0xFF1E293B);
+
+  static const Color chatInfoWallpaperPreview = Color(0xFFAECBFA);
+  static const Color chatInfoDestructiveTextLight = Color(0xFFD32F2F);
+  static const Color chatInfoDestructiveTextDark = Color(0xFFEF5350);
 }
