@@ -72,6 +72,25 @@ class HomeDataSourceImpl implements HomeDataSource {
   }
 
   @override
+  Future<void> updateChat(ChatModel chat) async {
+    final user = firebaseAuth.currentUser;
+    if (user == null) {
+      throw Exception('User not authenticated');
+    }
+
+    final chatsCollection = firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('chats');
+
+    final docRef = chat.id.isNotEmpty
+        ? chatsCollection.doc(chat.id)
+        : chatsCollection.doc();
+
+    await docRef.set(chat.toJson(), SetOptions(merge: true));
+  }
+
+  @override
   Future<List<CategoryModel>> getCategories() async {
     final user = firebaseAuth.currentUser;
     if (user == null) {

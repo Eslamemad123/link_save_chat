@@ -23,6 +23,16 @@ class MockHomeDataSource implements HomeDataSource {
   }
 
   @override
+  Future<void> updateChat(ChatModel chat) async {
+    final index = _chats.indexWhere((c) => c.id == chat.id);
+    if (index != -1) {
+      _chats[index] = chat;
+    } else {
+      _chats.add(chat);
+    }
+  }
+
+  @override
   Future<List<CategoryModel>> getCategories() async =>
       List<CategoryModel>.from(_categories);
 
@@ -44,6 +54,9 @@ class FailingHomeDataSource implements HomeDataSource {
 
   @override
   Future<void> addChat(ChatModel chat) async => throw error;
+
+  @override
+  Future<void> updateChat(ChatModel chat) async => throw error;
 
   @override
   Future<List<CategoryModel>> getCategories() async => throw error;
@@ -194,6 +207,45 @@ void main() {
       expect(result, isFalse);
       expect(cubit.state.status, HomeStatus.failure);
       expect(cubit.state.errorMessage, 'Request timed out. Please try again.');
+    });
+
+    test('updateChat returns true and reloads chats on success', () async {
+      final initialChat = ChatModel(
+        id: 'c1',
+        name: 'Initial Name',
+        description: 'Initial Desc',
+        color_backgroung_icon: 0xFF2196F3,
+        nummessage: 0,
+        category: 'all',
+      );
+      final cubit = HomeCubit(
+        dataSource: MockHomeDataSource(chats: [initialChat]),
+      );
+      await cubit.loadChats();
+
+      final updatedChat = initialChat.copyWith(name: 'Updated Name');
+      final result = await cubit.updateChat(updatedChat);
+      expect(result, isTrue);
+      expect(cubit.state.allChats.first.name, 'Updated Name');
+    });
+
+    test('updateChat returns false on error', () async {
+      final cubit = HomeCubit(
+        dataSource: FailingHomeDataSource(
+          FirebaseException(plugin: 'cloud_firestore', code: 'unavailable'),
+        ),
+      );
+      final chat = ChatModel(
+        id: 'c1',
+        name: 'Name',
+        description: 'Desc',
+        color_backgroung_icon: 0xFF2196F3,
+        nummessage: 0,
+        category: 'all',
+      );
+      final result = await cubit.updateChat(chat);
+      expect(result, isFalse);
+      expect(cubit.state.status, HomeStatus.failure);
     });
 
     test('searchChats filters by query', () async {

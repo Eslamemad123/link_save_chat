@@ -141,4 +141,7 @@ class AppColors {
   static const Color chatInfoWallpaperPreview = Color(0xFFAECBFA);
   static const Color chatInfoDestructiveTextLight = Color(0xFFD32F2F);
   static const Color chatInfoDestructiveTextDark = Color(0xFFEF5350);
+
+  static const Color editChatBluePillLight = Color(0xFFE0EDFF);
+  static const Color editChatBluePillDark = Color(0xFF1E2F4D);
 }

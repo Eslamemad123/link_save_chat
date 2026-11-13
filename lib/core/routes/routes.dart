@@ -10,6 +10,7 @@ import 'package:link_savw_chat/features/Auth/Presentation/page/sign_up_view.dart
 import 'package:link_savw_chat/features/Splash/Presentation/page/splash_view.dart';
 import 'package:link_savw_chat/features/chat/Presentation/page/chat_info_view.dart';
 import 'package:link_savw_chat/features/chat/Presentation/page/chat_view.dart';
+import 'package:link_savw_chat/features/chat/Presentation/page/edit_chat_view.dart';
 import 'package:link_savw_chat/features/home/Data/models/chat_model.dart';
 import 'package:link_savw_chat/features/home/Presentation/page/home_view.dart';
 import 'package:link_savw_chat/features/onBoarding/Presentation/page/on_boarding_view.dart';
@@ -27,6 +28,7 @@ class Routes {
   static const String settings = '/settings';
   static const String chat = '/chat';
   static const String chatInfo = '/chatInfo';
+  static const String editChat = '/editChat';
 
   static final routes = GoRouter(
     navigatorKey: navigatorKey,
@@ -108,6 +110,22 @@ class Routes {
                   category: 'all',
                 );
           return ChatInfoView(chat: chatModel);
+        },
+      ),
+      GoRoute(
+        path: editChat,
+        builder: (context, state) {
+          final chatModel = state.extra is ChatModel
+              ? state.extra as ChatModel
+              : const ChatModel(
+                  id: '',
+                  name: 'Edit Chat',
+                  description: '',
+                  color_backgroung_icon: 0,
+                  nummessage: 0,
+                  category: 'all',
+                );
+          return EditChatView(chat: chatModel);
         },
       ),
     ],

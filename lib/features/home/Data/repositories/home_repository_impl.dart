@@ -19,6 +19,11 @@ class HomeRepositoryImpl implements HomeRepository {
   }
 
   @override
+  Future<void> updateChat(ChatModel chat) async {
+    await dataSource.updateChat(chat);
+  }
+
+  @override
   Future<List<CategoryModel>> getCategories() async {
     return await dataSource.getCategories();
   }

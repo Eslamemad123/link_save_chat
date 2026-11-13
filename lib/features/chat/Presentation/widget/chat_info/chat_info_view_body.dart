@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_savw_chat/core/extentions/show_dialoges.dart';
 import 'package:link_savw_chat/core/routes/navigation.dart';
+import 'package:link_savw_chat/core/routes/routes.dart';
 import 'package:link_savw_chat/features/home/Data/models/chat_model.dart';
 
 import 'chat_info_actions_container.dart';
@@ -21,14 +22,29 @@ class ChatInfoViewBody extends StatefulWidget {
 }
 
 class _ChatInfoViewBodyState extends State<ChatInfoViewBody> {
+  late ChatModel _chat;
   late bool _isPinned;
   late bool _isMuted;
 
   @override
   void initState() {
     super.initState();
+    _chat = widget.chat;
     _isPinned = widget.chat.boolIsPin;
     _isMuted = !widget.chat.boolNotification;
+  }
+
+  Future<void> _onEditChatPressed() async {
+    final updatedChat = await pushTo<ChatModel>(
+      context,
+      Routes.editChat,
+      _chat,
+    );
+    if (updatedChat != null && mounted) {
+      setState(() {
+        _chat = updatedChat;
+      });
+    }
   }
 
   void _onClearMessagesPressed() {
@@ -80,34 +96,20 @@ class _ChatInfoViewBodyState extends State<ChatInfoViewBody> {
             child: Column(
               children: [
                 ChatInfoTopBar(
-                  onEditTap: () {
-                    showMyDialog(
-                      context,
-                      'Edit chat details',
-                      type: DialogType.warning,
-                    );
-                  },
+                  onEditTap: _onEditChatPressed,
                 ),
                 SizedBox(height: 8.h),
                 ChatInfoProfileSection(
-                  image: widget.chat.image,
-                  name: widget.chat.name,
-                  createdAt: widget.chat.datecreateChat,
-                  onAvatarBadgeTap: () {
-                    showMyDialog(
-                      context,
-                      'Change chat icon',
-                      type: DialogType.warning,
-                    );
-                  },
+                  image: _chat.image,
+                  name: _chat.name,
+                  createdAt: _chat.datecreateChat,
+                  onAvatarBadgeTap: _onEditChatPressed,
                 ),
                 SizedBox(height: 24.h),
                 ChatInfoStatsSection(
                   overdueCount: 4,
                   completedCount: 28,
-                  totalCount: widget.chat.nummessage > 0
-                      ? widget.chat.nummessage
-                      : 42,
+                  totalCount: _chat.nummessage > 0 ? _chat.nummessage : 42,
                 ),
                 SizedBox(height: 20.h),
                 ChatInfoActionsContainer(

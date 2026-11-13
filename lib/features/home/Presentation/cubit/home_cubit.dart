@@ -180,6 +180,30 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
+  Future<bool> updateChat(ChatModel chat) async {
+    try {
+      await dataSource.updateChat(chat);
+      await loadChats();
+      return true;
+    } on FirebaseException catch (e) {
+      emit(
+        state.copyWith(
+          status: HomeStatus.failure,
+          errorMessage: _mapFirebaseError(e),
+        ),
+      );
+      return false;
+    } catch (e) {
+      emit(
+        state.copyWith(
+          status: HomeStatus.failure,
+          errorMessage: _mapGenericError(e),
+        ),
+      );
+      return false;
+    }
+  }
+
   Future<bool> addCategory(String name) async {
     try {
       final newCat = await dataSource.addCategory(name);
