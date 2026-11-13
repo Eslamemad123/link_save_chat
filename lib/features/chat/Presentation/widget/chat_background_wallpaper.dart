@@ -15,7 +15,7 @@ class ChatBackgroundWallpaper extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           Image.asset(
-            AppAssets.chatBackground,
+            AppAssets.chatWallpaperLight,
             fit: BoxFit.cover,
             errorBuilder: (context, error, stackTrace) {
               return const SizedBox.shrink();

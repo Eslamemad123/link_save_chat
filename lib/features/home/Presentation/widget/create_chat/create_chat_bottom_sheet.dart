@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:link_savw_chat/core/GetIt/gi.dart';
 import 'package:link_savw_chat/core/extentions/show_dialoges.dart';
 import 'package:link_savw_chat/core/services/cloudinary/image_upload.dart';
@@ -16,7 +15,6 @@ import '../../cubit/home_cubit.dart';
 import '../../cubit/home_state.dart';
 import '../add_category/add_category_bottom_sheet.dart';
 import 'create_chat_bottom_sheet_body.dart';
-import 'image_source_picker_sheet.dart';
 
 class CreateChatBottomSheet extends StatefulWidget {
   const CreateChatBottomSheet({super.key});
@@ -47,7 +45,6 @@ class CreateChatBottomSheet extends StatefulWidget {
 class _CreateChatBottomSheetState extends State<CreateChatBottomSheet> {
   late final TextEditingController _nameController;
   late final TextEditingController _descriptionController;
-  final ImagePicker _imagePicker = ImagePicker();
 
   int _selectedCategoryIndex = 0;
   File? _selectedImage;
@@ -77,51 +74,22 @@ class _CreateChatBottomSheetState extends State<CreateChatBottomSheet> {
   Future<void> _onCameraTap() async {
     if (_isLoading) return;
 
-    final option = await ImageSourcePickerSheet.show(
+    final result = await pickChatImage(
       context: context,
       hasImage: _selectedImage != null || _selectedImageBytes != null,
     );
 
-    if (option == null || !mounted) return;
+    if (result == null || !mounted) return;
 
-    if (option == ImageSourceOption.remove) {
-      setState(() {
+    setState(() {
+      if (result.isRemoved) {
         _selectedImage = null;
         _selectedImageBytes = null;
-      });
-      return;
-    }
-
-    final source = option == ImageSourceOption.camera
-        ? ImageSource.camera
-        : ImageSource.gallery;
-
-    await _pickImage(source);
-  }
-
-  Future<void> _pickImage(ImageSource source) async {
-    try {
-      final picked = await _imagePicker.pickImage(
-        source: source,
-        maxWidth: 1024,
-        maxHeight: 1024,
-        imageQuality: 90,
-      );
-
-      if (picked != null && mounted) {
-        final bytes = await picked.readAsBytes();
-        setState(() {
-          _selectedImageBytes = bytes;
-          if (!kIsWeb) {
-            _selectedImage = File(picked.path);
-          }
-        });
+      } else {
+        _selectedImage = result.file;
+        _selectedImageBytes = result.bytes;
       }
-    } catch (_) {
-      if (mounted) {
-        showMyDialog(context, 'Failed to pick image. Please try again.');
-      }
-    }
+    });
   }
 
   Future<void> _onSubmit(List<CategoryModel> categories) async {
@@ -179,12 +147,7 @@ class _CreateChatBottomSheetState extends State<CreateChatBottomSheet> {
 
   Future<String?> _uploadImageIfNeeded() async {
     if (_selectedImage == null) return null;
-    return uploadImageToCloudinary(
-      _selectedImage!,
-      'dislsl3sa',
-      'Chat_Link_Save',
-      context,
-    );
+    return uploadChatImageToCloudinary(_selectedImage!, context);
   }
 
   ChatModel _buildChatModel({

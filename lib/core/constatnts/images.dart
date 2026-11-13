@@ -6,4 +6,6 @@ class AppAssets {
   static const String chatBackground = 'assets/image/backGround.png';
   static const String emptyChat = 'assets/image/emptyChat.png';
   static const String folderIcon = 'assets/image/folderIcon.png';
+  static const String chatWallpaperLight = 'assets/image/chat_wallpaper_light.png';
+  static const String chatWallpaperDark = 'assets/image/chat_wallpaper_dark.png';
 }

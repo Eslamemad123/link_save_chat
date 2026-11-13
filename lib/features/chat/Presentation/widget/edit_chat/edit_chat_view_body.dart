@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:link_savw_chat/core/extentions/show_dialoges.dart';
 import 'package:link_savw_chat/core/routes/navigation.dart';
 import 'package:link_savw_chat/core/services/cloudinary/image_upload.dart';
@@ -12,12 +11,12 @@ import 'package:link_savw_chat/features/home/Data/models/chat_model.dart';
 import 'package:link_savw_chat/features/home/Presentation/cubit/home_cubit.dart';
 import 'package:link_savw_chat/features/home/Presentation/cubit/home_state.dart';
 import 'package:link_savw_chat/features/home/Presentation/widget/add_category/add_category_bottom_sheet.dart';
-import 'package:link_savw_chat/features/home/Presentation/widget/create_chat/image_source_picker_sheet.dart';
+import 'package:link_savw_chat/features/home/Presentation/widget/create_chat/create_chat_avatar_picker.dart';
+import 'package:link_savw_chat/features/home/Presentation/widget/create_chat/create_chat_categories_bar.dart';
+import 'package:link_savw_chat/features/home/Presentation/widget/create_chat/create_chat_category_title.dart';
+import 'package:link_savw_chat/features/home/Presentation/widget/create_chat/create_chat_description_field.dart';
+import 'package:link_savw_chat/features/home/Presentation/widget/create_chat/create_chat_name_field.dart';
 
-import 'edit_chat_avatar_preview.dart';
-import 'edit_chat_categories_section.dart';
-import 'edit_chat_description_card.dart';
-import 'edit_chat_name_card.dart';
 import 'edit_chat_top_bar.dart';
 
 class EditChatViewBody extends StatefulWidget {
@@ -32,7 +31,6 @@ class EditChatViewBody extends StatefulWidget {
 class _EditChatViewBodyState extends State<EditChatViewBody> {
   late final TextEditingController _nameController;
   late final TextEditingController _descriptionController;
-  final ImagePicker _imagePicker = ImagePicker();
 
   late String _selectedCategoryId;
   File? _selectedImageFile;
@@ -44,9 +42,8 @@ class _EditChatViewBodyState extends State<EditChatViewBody> {
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.chat.name);
-    _descriptionController = TextEditingController(
-      text: widget.chat.description,
-    );
+    _descriptionController =
+        TextEditingController(text: widget.chat.description);
     _selectedCategoryId = widget.chat.category;
     _existingImageUrl = widget.chat.image;
   }
@@ -61,62 +58,26 @@ class _EditChatViewBodyState extends State<EditChatViewBody> {
   Future<void> _onCameraTap() async {
     if (_isLoading) return;
 
-    final hasImage =
-        _selectedImageFile != null ||
+    final hasImage = _selectedImageFile != null ||
         _selectedImageBytes != null ||
         (_existingImageUrl != null && _existingImageUrl!.trim().isNotEmpty);
 
-    final option = await ImageSourcePickerSheet.show(
+    final result = await pickChatImage(
       context: context,
       hasImage: hasImage,
     );
 
-    if (option == null || !mounted) return;
+    if (result == null || !mounted) return;
 
-    if (option == ImageSourceOption.remove) {
-      setState(() {
+    setState(() {
+      if (result.isRemoved) {
         _selectedImageFile = null;
         _selectedImageBytes = null;
         _existingImageUrl = null;
-      });
-      return;
-    }
-
-    final source = option == ImageSourceOption.camera
-        ? ImageSource.camera
-        : ImageSource.gallery;
-
-    await _pickImage(source);
-  }
-
-  Future<void> _pickImage(ImageSource source) async {
-    try {
-      final picked = await _imagePicker.pickImage(
-        source: source,
-        maxWidth: 1024,
-        maxHeight: 1024,
-        imageQuality: 90,
-      );
-
-      if (picked != null && mounted) {
-        final bytes = await picked.readAsBytes();
-        setState(() {
-          _selectedImageBytes = bytes;
-          if (!kIsWeb) {
-            _selectedImageFile = File(picked.path);
-          }
-        });
+      } else {
+        _selectedImageFile = result.file;
+        _selectedImageBytes = result.bytes;
       }
-    } catch (_) {
-      if (mounted) {
-        showMyDialog(context, 'Failed to pick image. Please try again.');
-      }
-    }
-  }
-
-  void _onCategorySelected(String categoryId) {
-    setState(() {
-      _selectedCategoryId = categoryId;
     });
   }
 
@@ -135,10 +96,8 @@ class _EditChatViewBodyState extends State<EditChatViewBody> {
       String? finalImageUrl;
 
       if (_selectedImageFile != null) {
-        final uploadedUrl = await uploadImageToCloudinary(
+        final uploadedUrl = await uploadChatImageToCloudinary(
           _selectedImageFile!,
-          'dislsl3sa',
-          'Chat_Link_Save',
           context,
         );
         if (uploadedUrl == null || uploadedUrl.isEmpty) {
@@ -200,39 +159,58 @@ class _EditChatViewBodyState extends State<EditChatViewBody> {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
         final categories = state.categories;
+        final selectedIndex = categories.indexWhere(
+          (c) =>
+              c.id == _selectedCategoryId ||
+              c.name.toLowerCase() == _selectedCategoryId.toLowerCase(),
+        );
+        final safeIndex = selectedIndex != -1 ? selectedIndex : 0;
 
         return Column(
           children: [
-            EditChatTopBar(onSavePressed: _onSave, isLoading: _isLoading),
+            EditChatTopBar(
+              onSavePressed: _onSave,
+              isLoading: _isLoading,
+            ),
             Expanded(
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     SizedBox(height: 16.h),
-                    EditChatAvatarPreview(
-                      imageBytes: _selectedImageBytes,
+                    CreateChatAvatarPicker(
+                      icon: Icons.chat_bubble_outline_rounded,
                       imageFile: _selectedImageFile,
+                      imageBytes: _selectedImageBytes,
                       imageUrl: _existingImageUrl,
                       onCameraTap: _onCameraTap,
                     ),
-                    SizedBox(height: 22.h),
-                    EditChatNameCard(
+                    SizedBox(height: 24.h),
+                    const CreateChatCategoryTitle(),
+                    CreateChatCategoriesBar(
+                      categories: categories,
+                      selectedIndex: safeIndex,
+                      onCategorySelected: (idx) {
+                        setState(() {
+                          if (idx < categories.length) {
+                            _selectedCategoryId = categories[idx].id;
+                          }
+                        });
+                      },
+                      onAddCategory: () =>
+                          AddCategoryBottomSheet.show(context),
+                    ),
+                    SizedBox(height: 20.h),
+                    CreateChatNameField(
                       controller: _nameController,
                       onChanged: (val) => setState(() {}),
                     ),
                     SizedBox(height: 14.h),
-                    EditChatDescriptionCard(
+                    CreateChatDescriptionField(
                       controller: _descriptionController,
                       onChanged: (val) => setState(() {}),
-                    ),
-                    SizedBox(height: 18.h),
-                    EditChatCategoriesSection(
-                      categories: categories,
-                      selectedCategoryId: _selectedCategoryId,
-                      onCategorySelected: _onCategorySelected,
-                      onAddCategory: () => AddCategoryBottomSheet.show(context),
                     ),
                     SizedBox(height: 36.h),
                   ],

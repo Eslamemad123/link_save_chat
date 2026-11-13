@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:link_savw_chat/features/chat/Presentation/widget/chat_info/chat_info_back_button.dart';
 
-import 'edit_chat_back_button.dart';
 import 'edit_chat_save_button.dart';
 import 'edit_chat_title_text.dart';
 
@@ -22,7 +22,7 @@ class EditChatTopBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const EditChatBackButton(),
+          const ChatInfoBackButton(),
           const EditChatTitleText(),
           EditChatSaveButton(
             onPressed: onSavePressed,

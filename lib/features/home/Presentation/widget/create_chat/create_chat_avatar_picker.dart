@@ -13,6 +13,7 @@ class CreateChatAvatarPicker extends StatelessWidget {
   final Color? backgroundColor;
   final File? imageFile;
   final Uint8List? imageBytes;
+  final String? imageUrl;
   final VoidCallback? onCameraTap;
 
   const CreateChatAvatarPicker({
@@ -22,6 +23,7 @@ class CreateChatAvatarPicker extends StatelessWidget {
     this.backgroundColor,
     this.imageFile,
     this.imageBytes,
+    this.imageUrl,
     this.onCameraTap,
   });
 
@@ -47,6 +49,14 @@ class CreateChatAvatarPicker extends StatelessWidget {
     } else if (imageFile != null && !kIsWeb) {
       displayImage = Image.file(
         imageFile!,
+        width: 96.w,
+        height: 96.h,
+        fit: BoxFit.cover,
+        errorBuilder: (_, _, _) => Icon(icon, size: 42.r, color: ic),
+      );
+    } else if (imageUrl != null && imageUrl!.trim().isNotEmpty) {
+      displayImage = Image.network(
+        imageUrl!,
         width: 96.w,
         height: 96.h,
         fit: BoxFit.cover,
