@@ -78,6 +78,17 @@ Future<String?> uploadChatImageToCloudinary(
   );
 }
 
+Future<String?> resolveChatImageUrl({
+  required BuildContext context,
+  required File? newImageFile,
+  required String? existingImageUrl,
+}) async {
+  if (newImageFile != null) {
+    return uploadChatImageToCloudinary(newImageFile, context);
+  }
+  return existingImageUrl;
+}
+
 Future<String?> uploadImageToCloudinary(
   File imageFile,
   String cloudName,

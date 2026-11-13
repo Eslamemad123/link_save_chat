@@ -104,9 +104,13 @@ class _CreateChatBottomSheetState extends State<CreateChatBottomSheet> {
     setState(() => _isLoading = true);
 
     try {
-      final imageUrl = await _uploadImageIfNeeded();
-      if ((_selectedImage != null || _selectedImageBytes != null) &&
-          (imageUrl == null || imageUrl.isEmpty)) {
+      final imageUrl = await resolveChatImageUrl(
+        context: context,
+        newImageFile: _selectedImage,
+        existingImageUrl: null,
+      );
+
+      if (_selectedImage != null && (imageUrl == null || imageUrl.isEmpty)) {
         if (mounted) {
           setState(() => _isLoading = false);
         }
@@ -145,20 +149,12 @@ class _CreateChatBottomSheetState extends State<CreateChatBottomSheet> {
     }
   }
 
-  Future<String?> _uploadImageIfNeeded() async {
-    if (_selectedImage == null) return null;
-    return uploadChatImageToCloudinary(_selectedImage!, context);
-  }
-
   ChatModel _buildChatModel({
     required String name,
     String? imageUrl,
     required List<CategoryModel> categories,
   }) {
-    final categoryId =
-        categories.isNotEmpty && _selectedCategoryIndex < categories.length
-        ? categories[_selectedCategoryIndex].id
-        : 'all';
+    final categoryId = categories.findIdByIndex(_selectedCategoryIndex);
     final description = _descriptionController.text.trim();
     final now = DateTime.now();
 

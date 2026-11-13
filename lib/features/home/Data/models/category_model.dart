@@ -30,3 +30,18 @@ class CategoryModel {
   @override
   int get hashCode => Object.hash(id, name);
 }
+
+extension CategoryListExtension on List<CategoryModel> {
+  int findIndexByIdOrName(String idOrName) {
+    final target = idOrName.trim().toLowerCase();
+    final index = indexWhere(
+      (c) => c.id.toLowerCase() == target || c.name.toLowerCase() == target,
+    );
+    return index != -1 ? index : 0;
+  }
+
+  String findIdByIndex(int index) {
+    if (isEmpty || index < 0 || index >= length) return 'all';
+    return this[index].id;
+  }
+}

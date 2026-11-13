@@ -7,15 +7,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_savw_chat/core/extentions/show_dialoges.dart';
 import 'package:link_savw_chat/core/routes/navigation.dart';
 import 'package:link_savw_chat/core/services/cloudinary/image_upload.dart';
+import 'package:link_savw_chat/features/home/Data/models/category_model.dart';
 import 'package:link_savw_chat/features/home/Data/models/chat_model.dart';
 import 'package:link_savw_chat/features/home/Presentation/cubit/home_cubit.dart';
 import 'package:link_savw_chat/features/home/Presentation/cubit/home_state.dart';
 import 'package:link_savw_chat/features/home/Presentation/widget/add_category/add_category_bottom_sheet.dart';
-import 'package:link_savw_chat/features/home/Presentation/widget/create_chat/create_chat_avatar_picker.dart';
-import 'package:link_savw_chat/features/home/Presentation/widget/create_chat/create_chat_categories_bar.dart';
-import 'package:link_savw_chat/features/home/Presentation/widget/create_chat/create_chat_category_title.dart';
-import 'package:link_savw_chat/features/home/Presentation/widget/create_chat/create_chat_description_field.dart';
-import 'package:link_savw_chat/features/home/Presentation/widget/create_chat/create_chat_name_field.dart';
+import 'package:link_savw_chat/features/home/Presentation/widget/create_chat/chat_form_fields.dart';
 
 import 'edit_chat_top_bar.dart';
 
@@ -93,22 +90,18 @@ class _EditChatViewBodyState extends State<EditChatViewBody> {
     setState(() => _isLoading = true);
 
     try {
-      String? finalImageUrl;
+      final finalImageUrl = await resolveChatImageUrl(
+        context: context,
+        newImageFile: _selectedImageFile,
+        existingImageUrl: _existingImageUrl,
+      );
 
-      if (_selectedImageFile != null) {
-        final uploadedUrl = await uploadChatImageToCloudinary(
-          _selectedImageFile!,
-          context,
-        );
-        if (uploadedUrl == null || uploadedUrl.isEmpty) {
-          if (mounted) {
-            setState(() => _isLoading = false);
-          }
-          return;
+      if (_selectedImageFile != null &&
+          (finalImageUrl == null || finalImageUrl.isEmpty)) {
+        if (mounted) {
+          setState(() => _isLoading = false);
         }
-        finalImageUrl = uploadedUrl;
-      } else {
-        finalImageUrl = _existingImageUrl;
+        return;
       }
 
       final updatedChat = widget.chat.copyWith(
@@ -159,12 +152,8 @@ class _EditChatViewBodyState extends State<EditChatViewBody> {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
         final categories = state.categories;
-        final selectedIndex = categories.indexWhere(
-          (c) =>
-              c.id == _selectedCategoryId ||
-              c.name.toLowerCase() == _selectedCategoryId.toLowerCase(),
-        );
-        final safeIndex = selectedIndex != -1 ? selectedIndex : 0;
+        final selectedIndex =
+            categories.findIndexByIdOrName(_selectedCategoryId);
 
         return Column(
           children: [
@@ -180,37 +169,24 @@ class _EditChatViewBodyState extends State<EditChatViewBody> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     SizedBox(height: 16.h),
-                    CreateChatAvatarPicker(
-                      icon: Icons.chat_bubble_outline_rounded,
-                      imageFile: _selectedImageFile,
-                      imageBytes: _selectedImageBytes,
-                      imageUrl: _existingImageUrl,
-                      onCameraTap: _onCameraTap,
-                    ),
-                    SizedBox(height: 24.h),
-                    const CreateChatCategoryTitle(),
-                    CreateChatCategoriesBar(
+                    ChatFormFields(
                       categories: categories,
-                      selectedIndex: safeIndex,
+                      selectedCategoryIndex: selectedIndex,
                       onCategorySelected: (idx) {
                         setState(() {
-                          if (idx < categories.length) {
-                            _selectedCategoryId = categories[idx].id;
-                          }
+                          _selectedCategoryId = categories.findIdByIndex(idx);
                         });
                       },
                       onAddCategory: () =>
                           AddCategoryBottomSheet.show(context),
-                    ),
-                    SizedBox(height: 20.h),
-                    CreateChatNameField(
-                      controller: _nameController,
-                      onChanged: (val) => setState(() {}),
-                    ),
-                    SizedBox(height: 14.h),
-                    CreateChatDescriptionField(
-                      controller: _descriptionController,
-                      onChanged: (val) => setState(() {}),
+                      nameController: _nameController,
+                      descriptionController: _descriptionController,
+                      imageFile: _selectedImageFile,
+                      imageBytes: _selectedImageBytes,
+                      imageUrl: _existingImageUrl,
+                      onCameraTap: _onCameraTap,
+                      onNameChanged: (val) => setState(() {}),
+                      onDescriptionChanged: (val) => setState(() {}),
                     ),
                     SizedBox(height: 36.h),
                   ],
