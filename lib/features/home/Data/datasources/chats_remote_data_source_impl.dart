@@ -253,6 +253,19 @@ class ChatsRemoteDataSourceImpl implements ChatsRemoteDataSource {
       result['deleted'] = false;
     }
 
+    final resolvedImage =
+        result['image'] ?? result['iconUrl'] ?? result['image_or_icon'];
+    if (resolvedImage != null) {
+      result['image'] = resolvedImage.toString();
+      result['iconUrl'] = resolvedImage.toString();
+    }
+
+    final resolvedName = result['name'] ?? result['title'];
+    if (resolvedName != null) {
+      result['name'] = resolvedName.toString();
+      result['title'] = resolvedName.toString();
+    }
+
     return result;
   }
 }

@@ -74,6 +74,48 @@ void main() {
       final firestoreData = localOnlyChat.toFirestoreJson(isCreate: true);
       expect(firestoreData.containsKey('pendingImagePath'), isFalse);
       expect(firestoreData['image'], isNull);
+      expect(firestoreData['iconUrl'], isNull);
+    });
+
+    test('ChatModel fromHiveMap handles iconUrl and image_or_icon schemas', () {
+      final hiveMap1 = {
+        'id': 'legacy_icon',
+        'title': 'Legacy Icon Chat',
+        'iconUrl': 'https://res.cloudinary.com/demo/icon.jpg',
+        'uncompletedCount': 5,
+        'isPinned': true,
+      };
+
+      final chat1 = ChatModel.fromHiveMap(hiveMap1);
+      expect(chat1.id, 'legacy_icon');
+      expect(chat1.name, 'Legacy Icon Chat');
+      expect(chat1.image, 'https://res.cloudinary.com/demo/icon.jpg');
+      expect(chat1.nummessage, 5);
+      expect(chat1.boolIsPin, isTrue);
+
+      final hiveMap2 = {
+        'id': 'legacy_image_or_icon',
+        'name': 'Image Or Icon Chat',
+        'image_or_icon': 'https://res.cloudinary.com/demo/image_or_icon.jpg',
+      };
+
+      final chat2 = ChatModel.fromHiveMap(hiveMap2);
+      expect(chat2.image, 'https://res.cloudinary.com/demo/image_or_icon.jpg');
+    });
+
+    test('ChatModel copyWith clears image when clearImage is true', () {
+      const chat = ChatModel(
+        id: '1',
+        name: 'Chat',
+        description: '',
+        color_backgroung_icon: 0,
+        nummessage: 0,
+        category: 'all',
+        image: 'https://res.cloudinary.com/demo/img.jpg',
+      );
+
+      final cleared = chat.copyWith(clearImage: true);
+      expect(cleared.image, isNull);
     });
   });
 

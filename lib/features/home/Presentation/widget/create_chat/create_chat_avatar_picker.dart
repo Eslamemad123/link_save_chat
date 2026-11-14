@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -55,13 +56,38 @@ class CreateChatAvatarPicker extends StatelessWidget {
         errorBuilder: (_, _, _) => Icon(icon, size: 42.r, color: ic),
       );
     } else if (imageUrl != null && imageUrl!.trim().isNotEmpty) {
-      displayImage = Image.network(
-        imageUrl!,
-        width: 96.w,
-        height: 96.h,
-        fit: BoxFit.cover,
-        errorBuilder: (_, _, _) => Icon(icon, size: 42.r, color: ic),
-      );
+      final isOnline =
+          imageUrl!.startsWith('http://') || imageUrl!.startsWith('https://');
+      if (isOnline) {
+        displayImage = CachedNetworkImage(
+          imageUrl: imageUrl!,
+          width: 96.w,
+          height: 96.h,
+          fit: BoxFit.cover,
+          placeholder: (_, _) => Center(
+            child: SizedBox(
+              width: 24.w,
+              height: 24.h,
+              child: CircularProgressIndicator(
+                strokeWidth: 2.w,
+                color: ic,
+              ),
+            ),
+          ),
+          errorWidget: (_, _, _) => Icon(icon, size: 42.r, color: ic),
+        );
+      } else if (!kIsWeb) {
+        final file = File(imageUrl!);
+        if (file.existsSync()) {
+          displayImage = Image.file(
+            file,
+            width: 96.w,
+            height: 96.h,
+            fit: BoxFit.cover,
+            errorBuilder: (_, _, _) => Icon(icon, size: 42.r, color: ic),
+          );
+        }
+      }
     }
 
     return Center(

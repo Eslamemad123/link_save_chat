@@ -7,5 +7,25 @@ class AppIcons {
   static const String verify = 'assets/icons/verify.svg';
   static const String setting = 'assets/icons/settingLine.svg';
   static const String search = 'assets/icons/search.svg';
+  static const String search2 = 'assets/icons/Search2.svg';
+  static const String photo = 'assets/icons/photo.svg';
+  static const String volumeHigh = 'assets/icons/volume-high.svg';
+  static const String logout = 'assets/icons/logout.svg';
+  static const String edit = 'assets/icons/edit.svg';
+  static const String notification = 'assets/icons/notification.svg';
+  static const String file = 'assets/icons/file.svg';
+  static const String dateLine = 'assets/icons/dateLine.svg';
+  static const String editUser = 'assets/icons/editUser.svg';
+  static const String timeLine = 'assets/icons/timeLine.svg';
+  static const String timeFiled = 'assets/icons/timeFiled.svg';
+  static const String clipboardText = 'assets/icons/clipboard-text.svg';
+  static const String cloudChange = 'assets/icons/cloud-change.svg';
+  static const String exportIcon = 'assets/icons/export.svg';
+  static const String key = 'assets/icons/key.svg';
+  static const String link = 'assets/icons/link-svgrepo-com.svg';
+  static const String linkAlt = 'assets/icons/link-alt-svgrepo-com.svg';
+  static const String medalStar = 'assets/icons/medal-star.svg';
+  static const String property = 'assets/icons/Property.svg';
+  static const String send = 'assets/icons/send.svg';
+  static const String shieldSecurity = 'assets/icons/shield-security.svg';
 }
-

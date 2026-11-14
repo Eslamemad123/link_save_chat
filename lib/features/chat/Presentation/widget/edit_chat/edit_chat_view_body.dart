@@ -43,7 +43,7 @@ class _EditChatViewBodyState extends State<EditChatViewBody> {
     _descriptionController =
         TextEditingController(text: widget.chat.description);
     _selectedCategoryId = widget.chat.category;
-    _existingImageUrl = widget.chat.image;
+    _existingImageUrl = widget.chat.displayImage;
   }
 
   @override
@@ -95,6 +95,8 @@ class _EditChatViewBodyState extends State<EditChatViewBody> {
       category: _selectedCategoryId,
       image: localImagePath,
       pendingImagePath: _selectedImageFile?.path,
+      clearImage: _selectedImageFile == null && _existingImageUrl == null,
+      clearPendingImage: _selectedImageFile == null,
     );
 
     context

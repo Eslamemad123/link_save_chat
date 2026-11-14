@@ -129,25 +129,34 @@ class ChatModel {
       return fallback;
     }
 
+    final rawImage = map['image']?.toString() ??
+        map['image_or_icon']?.toString() ??
+        map['iconUrl']?.toString();
+    final chatName = map['name']?.toString() ?? map['title']?.toString() ?? '';
+    final lastMsg =
+        map['lastMessage']?.toString() ?? map['description']?.toString() ?? '';
+    final isPinned = parseBool(map['boolIsPin'] ?? map['isPinned'], false);
+    final numMsg = parseInt(map['nummessage'] ?? map['uncompletedCount']);
+
     final createdDate = parseMillis(map['createdAt']) ??
         parseMillis(map['datecreateChat']) ??
         parseMillis(map['updatedAt']);
 
     return ChatModel(
       id: map['id']?.toString() ?? '',
-      name: map['name']?.toString() ?? '',
+      name: chatName,
       description: map['description']?.toString() ?? '',
-      lastMessage: map['lastMessage']?.toString() ?? '',
-      image: map['image']?.toString(),
+      lastMessage: lastMsg,
+      image: rawImage,
       color_backgroung_icon: parseInt(map['color_backgroung_icon']),
-      nummessage: parseInt(map['nummessage']),
+      nummessage: numMsg,
       date: parseMillis(map['date']),
       time: map['time']?.toString(),
       category: map['category']?.toString() ?? 'all',
       datecreateChat: createdDate,
       wallpaper: map['wallpaper']?.toString(),
       boolNotification: parseBool(map['boolNotification'], true),
-      boolIsPin: parseBool(map['boolIsPin'], false),
+      boolIsPin: isPinned,
       createdAt: createdDate,
       updatedAt: parseMillis(map['updatedAt']) ?? createdDate,
       deleted: parseBool(map['deleted'], false),
@@ -159,11 +168,15 @@ class ChatModel {
     return {
       'id': id,
       'name': name,
+      'title': name,
       'description': description,
       'lastMessage': lastMessage,
       'image': image,
+      'iconUrl': image,
+      'image_or_icon': image,
       'color_backgroung_icon': color_backgroung_icon,
       'nummessage': nummessage,
+      'uncompletedCount': nummessage,
       'date': date?.millisecondsSinceEpoch,
       'time': time,
       'category': category,
@@ -171,6 +184,7 @@ class ChatModel {
       'wallpaper': wallpaper,
       'boolNotification': boolNotification,
       'boolIsPin': boolIsPin,
+      'isPinned': boolIsPin,
       'createdAt': (createdAt ?? datecreateChat)?.millisecondsSinceEpoch,
       'updatedAt': updatedAt?.millisecondsSinceEpoch ??
           DateTime.now().millisecondsSinceEpoch,
@@ -183,11 +197,14 @@ class ChatModel {
     return {
       'id': id,
       'name': name,
+      'title': name,
       'description': description,
       'lastMessage': lastMessage,
       'image': image,
+      'iconUrl': image,
       'color_backgroung_icon': color_backgroung_icon,
       'nummessage': nummessage,
+      'uncompletedCount': nummessage,
       'date': date != null ? Timestamp.fromDate(date!) : null,
       'time': time,
       'category': category,
@@ -197,6 +214,7 @@ class ChatModel {
       'wallpaper': wallpaper,
       'boolNotification': boolNotification,
       'boolIsPin': boolIsPin,
+      'isPinned': boolIsPin,
       'createdAt': createdAt != null
           ? Timestamp.fromDate(createdAt!)
           : FieldValue.serverTimestamp(),
@@ -212,11 +230,14 @@ class ChatModel {
     return {
       'id': id,
       'name': name,
+      'title': name,
       'description': description,
       'lastMessage': lastMessage,
       'image': isOnlineUrl ? image : null,
+      'iconUrl': isOnlineUrl ? image : null,
       'color_backgroung_icon': color_backgroung_icon,
       'nummessage': nummessage,
+      'uncompletedCount': nummessage,
       'date': date != null ? Timestamp.fromDate(date!) : null,
       'time': time,
       'category': category,
@@ -226,6 +247,7 @@ class ChatModel {
       'wallpaper': wallpaper,
       'boolNotification': boolNotification,
       'boolIsPin': boolIsPin,
+      'isPinned': boolIsPin,
       'createdAt': isCreate
           ? FieldValue.serverTimestamp()
           : (createdAt != null
@@ -256,13 +278,14 @@ class ChatModel {
     bool? deleted,
     String? pendingImagePath,
     bool clearPendingImage = false,
+    bool clearImage = false,
   }) {
     return ChatModel(
       id: id ?? this.id,
       name: name ?? this.name,
       description: description ?? this.description,
       lastMessage: lastMessage ?? this.lastMessage,
-      image: image ?? this.image,
+      image: clearImage ? null : (image ?? this.image),
       color_backgroung_icon:
           color_backgroung_icon ?? this.color_backgroung_icon,
       nummessage: nummessage ?? this.nummessage,

@@ -190,6 +190,23 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
+    testWidgets('ChatIconAvatar falls back to initials when local file does not exist', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        buildTestableWidget(
+          const ChatIconAvatar(
+            image: '/non/existent/path/avatar.png',
+            name: 'Offline Chat',
+          ),
+        ),
+      );
+      await tester.pump();
+
+      expect(find.text('OF'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+
     testWidgets('HomeFilterChipItem renders label and triggers onTap', (
       tester,
     ) async {

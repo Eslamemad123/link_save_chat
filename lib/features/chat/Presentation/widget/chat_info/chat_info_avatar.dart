@@ -28,21 +28,33 @@ class ChatInfoAvatar extends StatelessWidget {
     Widget content = const ChatInfoAvatarPlaceholder();
     if (img != null && img.isNotEmpty) {
       final isOnline = img.startsWith('http://') || img.startsWith('https://');
-      ImageProvider? provider;
-      if (isOnline) {
-        provider = CachedNetworkImageProvider(img);
-      } else if (!kIsWeb) {
-        provider = FileImage(File(img));
-      }
 
-      if (provider != null) {
-        content = CircleAvatar(
-          radius: 46.r,
-          backgroundColor: isDark
-              ? AppColors.avatarBackgroundDark
-              : AppColors.avatarBackgroundLight,
-          backgroundImage: provider,
+      if (isOnline) {
+        content = ClipOval(
+          child: CachedNetworkImage(
+            imageUrl: img,
+            width: 96.w,
+            height: 96.h,
+            fit: BoxFit.cover,
+            placeholder: (context, url) => const ChatInfoAvatarPlaceholder(),
+            errorWidget: (context, url, error) =>
+                const ChatInfoAvatarPlaceholder(),
+          ),
         );
+      } else if (!kIsWeb) {
+        final file = File(img);
+        if (file.existsSync()) {
+          content = ClipOval(
+            child: Image.file(
+              file,
+              width: 96.w,
+              height: 96.h,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) =>
+                  const ChatInfoAvatarPlaceholder(),
+            ),
+          );
+        }
       }
     }
 

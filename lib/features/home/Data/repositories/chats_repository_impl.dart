@@ -78,6 +78,7 @@ class ChatsRepositoryImpl implements ChatsRepository {
 
         chatsRemoteDataSource.updateChatFields(chatId, {
           'image': secureUrl,
+          'iconUrl': secureUrl,
         });
       }
     }).catchError((_) {});

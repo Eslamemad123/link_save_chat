@@ -79,20 +79,24 @@ Future<String?> uploadChatImageToCloudinary(
 }
 
 Future<String?> uploadChatImageBackground(File imageFile) async {
-  final url = Uri.parse(
-    'https://api.cloudinary.com/v1_1/$kCloudinaryCloudName/image/upload',
-  );
-
-  final request = http.MultipartRequest('POST', url);
-  request.fields['upload_preset'] = kCloudinaryUploadPreset;
-  request.files.add(
-    await http.MultipartFile.fromPath(
-      'file',
-      imageFile.path,
-    ),
-  );
-
   try {
+    if (!imageFile.existsSync()) {
+      return null;
+    }
+
+    final url = Uri.parse(
+      'https://api.cloudinary.com/v1_1/$kCloudinaryCloudName/image/upload',
+    );
+
+    final request = http.MultipartRequest('POST', url);
+    request.fields['upload_preset'] = kCloudinaryUploadPreset;
+    request.files.add(
+      await http.MultipartFile.fromPath(
+        'file',
+        imageFile.path,
+      ),
+    );
+
     final response = await request.send().timeout(
       const Duration(seconds: 30),
     );
@@ -126,20 +130,27 @@ Future<String?> uploadImageToCloudinary(
   String uploadPreset,
   BuildContext context,
 ) async {
-  final url = Uri.parse(
-    'https://api.cloudinary.com/v1_1/$cloudName/image/upload',
-  );
-
-  final request = http.MultipartRequest('POST', url);
-  request.fields['upload_preset'] = uploadPreset;
-  request.files.add(
-    await http.MultipartFile.fromPath(
-      'file',
-      imageFile.path,
-    ),
-  );
-
   try {
+    if (!imageFile.existsSync()) {
+      if (context.mounted) {
+        showMyDialog(context, 'Image file does not exist. Please pick again.');
+      }
+      return null;
+    }
+
+    final url = Uri.parse(
+      'https://api.cloudinary.com/v1_1/$cloudName/image/upload',
+    );
+
+    final request = http.MultipartRequest('POST', url);
+    request.fields['upload_preset'] = uploadPreset;
+    request.files.add(
+      await http.MultipartFile.fromPath(
+        'file',
+        imageFile.path,
+      ),
+    );
+
     final response = await request.send().timeout(
       const Duration(seconds: 25),
     );
