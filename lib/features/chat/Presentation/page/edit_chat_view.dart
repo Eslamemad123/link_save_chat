@@ -4,6 +4,7 @@ import 'package:link_savw_chat/core/GetIt/gi.dart';
 import 'package:link_savw_chat/features/home/Data/models/chat_model.dart';
 import 'package:link_savw_chat/features/home/Presentation/cubit/home_cubit.dart';
 
+import '../cubit/chat_cubit.dart';
 import '../widget/edit_chat/edit_chat_view_body.dart';
 
 class EditChatView extends StatelessWidget {
@@ -20,8 +21,11 @@ class EditChatView extends StatelessWidget {
       homeCubit = gi<HomeCubit>();
     }
 
-    return BlocProvider.value(
-      value: homeCubit..loadCategories(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: homeCubit..loadCategories()),
+        BlocProvider(create: (_) => gi<ChatCubit>(param1: chat)),
+      ],
       child: Scaffold(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: SafeArea(
@@ -31,4 +35,3 @@ class EditChatView extends StatelessWidget {
     );
   }
 }
-

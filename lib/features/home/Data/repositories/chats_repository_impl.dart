@@ -63,27 +63,6 @@ class ChatsRepositoryImpl implements ChatsRepository {
     }
   }
 
-  @override
-  Future<void> updateChat(ChatModel chat, {File? newImageFile}) async {
-    final now = DateTime.now();
-
-    final localChat = chat.copyWith(
-      updatedAt: now,
-      image: newImageFile != null ? newImageFile.path : chat.image,
-      pendingImagePath: newImageFile != null
-          ? newImageFile.path
-          : chat.pendingImagePath,
-    );
-
-    await chatsLocalDataSource.saveChat(localChat);
-
-    chatsRemoteDataSource.pushChat(localChat.toFirestoreJson(isCreate: false));
-
-    if (newImageFile != null) {
-      _uploadAndSyncChatImage(chat.id, newImageFile);
-    }
-  }
-
   void _uploadAndSyncChatImage(String chatId, File file) {
     uploadChatImageBackground(file).then((secureUrl) async {
       if (secureUrl != null && secureUrl.isNotEmpty) {
@@ -102,78 +81,6 @@ class ChatsRepositoryImpl implements ChatsRepository {
         });
       }
     }).catchError((_) {});
-  }
-
-  @override
-  Future<void> togglePin(String chatId, bool isPinned) async {
-    final existing = chatsLocalDataSource.getChat(chatId);
-    if (existing != null) {
-      final updated = existing.copyWith(
-        boolIsPin: isPinned,
-        updatedAt: DateTime.now(),
-      );
-      await chatsLocalDataSource.saveChat(updated);
-    }
-
-    chatsRemoteDataSource.updateChatFields(chatId, {
-      'boolIsPin': isPinned,
-    });
-  }
-
-  @override
-  Future<void> toggleMute(String chatId, bool isMuted) async {
-    final existing = chatsLocalDataSource.getChat(chatId);
-    if (existing != null) {
-      final updated = existing.copyWith(
-        boolNotification: !isMuted,
-        updatedAt: DateTime.now(),
-      );
-      await chatsLocalDataSource.saveChat(updated);
-    }
-
-    chatsRemoteDataSource.updateChatFields(chatId, {
-      'boolNotification': !isMuted,
-    });
-  }
-
-  @override
-  Future<void> updateWallpaper(String chatId, String? wallpaper) async {
-    final existing = chatsLocalDataSource.getChat(chatId);
-    if (existing != null) {
-      final updated = existing.copyWith(
-        wallpaper: wallpaper,
-        updatedAt: DateTime.now(),
-      );
-      await chatsLocalDataSource.saveChat(updated);
-    }
-
-    chatsRemoteDataSource.updateChatFields(chatId, {
-      'wallpaper': wallpaper,
-    });
-  }
-
-  @override
-  Future<void> clearChatMessages(String chatId) async {
-    final existing = chatsLocalDataSource.getChat(chatId);
-    if (existing != null) {
-      final updated = existing.copyWith(
-        nummessage: 0,
-        lastMessage: '',
-        updatedAt: DateTime.now(),
-      );
-      await chatsLocalDataSource.saveChat(updated);
-    }
-
-    chatsRemoteDataSource.updateChatFields(chatId, {
-      'nummessage': 0,
-      'lastMessage': '',
-    });
-  }
-
-  @override
-  Future<void> deleteChat(String chatId) async {
-    await chatsLocalDataSource.markDeleted(chatId);
-    chatsRemoteDataSource.softDeleteChat(chatId);
   }
 
   @override
@@ -213,4 +120,3 @@ class ChatsRepositoryImpl implements ChatsRepository {
     }
   }
 }
-

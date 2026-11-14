@@ -14,6 +14,7 @@ import 'package:link_savw_chat/features/home/Presentation/cubit/home_state.dart'
 import 'package:link_savw_chat/features/home/Presentation/widget/add_category/add_category_bottom_sheet.dart';
 import 'package:link_savw_chat/features/home/Presentation/widget/create_chat/chat_form_fields.dart';
 
+import '../../cubit/chat_cubit.dart';
 import 'edit_chat_top_bar.dart';
 
 class EditChatViewBody extends StatefulWidget {
@@ -96,8 +97,9 @@ class _EditChatViewBodyState extends State<EditChatViewBody> {
       pendingImagePath: _selectedImageFile?.path,
     );
 
-    final homeCubit = context.read<HomeCubit>();
-    homeCubit.updateChat(updatedChat, newImageFile: _selectedImageFile);
+    context
+        .read<ChatCubit>()
+        .updateChat(updatedChat, newImageFile: _selectedImageFile);
 
     showMyDialog(
       context,

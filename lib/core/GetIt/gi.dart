@@ -19,6 +19,13 @@ import '../../features/Auth/Domain/usecases/sign_up_use_case.dart';
 import '../../features/Auth/Domain/usecases/update_password_use_case.dart';
 import '../../features/Auth/Domain/usecases/watch_auth_state_use_case.dart';
 import '../../features/Auth/Presentation/cubit/auth_cubit.dart';
+import '../../features/chat/Data/datasources/chat_local_data_source.dart';
+import '../../features/chat/Data/datasources/chat_local_data_source_impl.dart';
+import '../../features/chat/Data/datasources/chat_remote_data_source.dart';
+import '../../features/chat/Data/datasources/chat_remote_data_source_impl.dart';
+import '../../features/chat/Data/repositories/chat_repository_impl.dart';
+import '../../features/chat/Domain/repositories/chat_repository.dart';
+import '../../features/chat/Presentation/cubit/chat_cubit.dart';
 import '../../features/home/Data/datasources/categories_local_data_source.dart';
 import '../../features/home/Data/datasources/categories_local_data_source_impl.dart';
 import '../../features/home/Data/datasources/chats_local_data_source.dart';
@@ -27,6 +34,7 @@ import '../../features/home/Data/datasources/chats_remote_data_source.dart';
 import '../../features/home/Data/datasources/chats_remote_data_source_impl.dart';
 import '../../features/home/Data/datasources/home_data_source.dart';
 import '../../features/home/Data/datasources/home_data_source_impl.dart';
+import '../../features/home/Data/models/chat_model.dart';
 import '../../features/home/Data/repositories/chats_repository_impl.dart';
 import '../../features/home/Data/repositories/home_repository_impl.dart';
 import '../../features/home/Domain/repositories/chats_repository.dart';
@@ -133,6 +141,31 @@ Future<void> setupServiceLocator() async {
       chatsLocalDataSource: gi<ChatsLocalDataSource>(),
       categoriesLocalDataSource: gi<CategoriesLocalDataSource>(),
       chatsRemoteDataSource: gi<ChatsRemoteDataSource>(),
+    ),
+  );
+
+  gi.registerLazySingleton<ChatLocalDataSource>(
+    () => ChatLocalDataSourceImpl(chatsBox: Hive.box('chats')),
+  );
+
+  gi.registerLazySingleton<ChatRemoteDataSource>(
+    () => ChatRemoteDataSourceImpl(
+      firestore: gi<FirebaseFirestore>(),
+      firebaseAuth: gi<FirebaseAuth>(),
+    ),
+  );
+
+  gi.registerLazySingleton<ChatRepository>(
+    () => ChatRepositoryImpl(
+      chatLocalDataSource: gi<ChatLocalDataSource>(),
+      chatRemoteDataSource: gi<ChatRemoteDataSource>(),
+    ),
+  );
+
+  gi.registerFactoryParam<ChatCubit, ChatModel, void>(
+    (chat, _) => ChatCubit(
+      repository: gi<ChatRepository>(),
+      initialChat: chat,
     ),
   );
 

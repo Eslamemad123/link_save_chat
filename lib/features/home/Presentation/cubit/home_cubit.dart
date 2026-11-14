@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:link_savw_chat/core/GetIt/gi.dart';
+import 'package:link_savw_chat/features/chat/Domain/repositories/chat_repository.dart';
 
 import '../../Data/datasources/home_data_source.dart';
 import '../../Data/models/category_model.dart';
@@ -296,7 +298,7 @@ class HomeCubit extends Cubit<HomeState> {
   Future<bool> updateChat(ChatModel chat, {File? newImageFile}) async {
     try {
       if (repository != null) {
-        await repository!.updateChat(chat, newImageFile: newImageFile);
+        await gi<ChatRepository>().updateChat(chat, newImageFile: newImageFile);
         return true;
       }
       if (dataSource != null) {
@@ -321,81 +323,6 @@ class HomeCubit extends Cubit<HomeState> {
         ),
       );
       return false;
-    }
-  }
-
-  Future<void> togglePin(String chatId, bool isPinned) async {
-    try {
-      if (repository != null) {
-        await repository!.togglePin(chatId, isPinned);
-      }
-    } catch (e) {
-      emit(
-        state.copyWith(
-          status: HomeStatus.failure,
-          errorMessage: e.toString(),
-        ),
-      );
-    }
-  }
-
-  Future<void> toggleMute(String chatId, bool isMuted) async {
-    try {
-      if (repository != null) {
-        await repository!.toggleMute(chatId, isMuted);
-      }
-    } catch (e) {
-      emit(
-        state.copyWith(
-          status: HomeStatus.failure,
-          errorMessage: e.toString(),
-        ),
-      );
-    }
-  }
-
-  Future<void> updateWallpaper(String chatId, String? wallpaper) async {
-    try {
-      if (repository != null) {
-        await repository!.updateWallpaper(chatId, wallpaper);
-      }
-    } catch (e) {
-      emit(
-        state.copyWith(
-          status: HomeStatus.failure,
-          errorMessage: e.toString(),
-        ),
-      );
-    }
-  }
-
-  Future<void> clearChatMessages(String chatId) async {
-    try {
-      if (repository != null) {
-        await repository!.clearChatMessages(chatId);
-      }
-    } catch (e) {
-      emit(
-        state.copyWith(
-          status: HomeStatus.failure,
-          errorMessage: e.toString(),
-        ),
-      );
-    }
-  }
-
-  Future<void> deleteChat(String chatId) async {
-    try {
-      if (repository != null) {
-        await repository!.deleteChat(chatId);
-      }
-    } catch (e) {
-      emit(
-        state.copyWith(
-          status: HomeStatus.failure,
-          errorMessage: e.toString(),
-        ),
-      );
     }
   }
 

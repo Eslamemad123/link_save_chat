@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:link_savw_chat/core/GetIt/gi.dart';
 import 'package:link_savw_chat/core/extentions/show_dialoges.dart';
 import 'package:link_savw_chat/core/routes/navigation.dart';
 import 'package:link_savw_chat/core/routes/routes.dart';
 import 'package:link_savw_chat/features/home/Data/models/chat_model.dart';
-import 'package:link_savw_chat/features/home/Domain/repositories/chats_repository.dart';
 
+import '../../cubit/chat_cubit.dart';
+import '../../cubit/chat_state.dart';
 import 'chat_info_actions_container.dart';
 import 'chat_info_background_glow.dart';
 import 'chat_info_confirmation_dialog.dart';
@@ -14,42 +15,23 @@ import 'chat_info_profile_section.dart';
 import 'chat_info_stats_section.dart';
 import 'chat_info_top_bar.dart';
 
-class ChatInfoViewBody extends StatefulWidget {
+class ChatInfoViewBody extends StatelessWidget {
   final ChatModel chat;
 
   const ChatInfoViewBody({super.key, required this.chat});
 
-  @override
-  State<ChatInfoViewBody> createState() => _ChatInfoViewBodyState();
-}
-
-class _ChatInfoViewBodyState extends State<ChatInfoViewBody> {
-  late ChatModel _chat;
-  late bool _isPinned;
-  late bool _isMuted;
-
-  @override
-  void initState() {
-    super.initState();
-    _chat = widget.chat;
-    _isPinned = widget.chat.boolIsPin;
-    _isMuted = !widget.chat.boolNotification;
-  }
-
-  Future<void> _onEditChatPressed() async {
+  Future<void> _onEditChatPressed(BuildContext context, ChatModel currentChat) async {
     final updatedChat = await pushTo<ChatModel>(
       context,
       Routes.editChat,
-      _chat,
+      currentChat,
     );
-    if (updatedChat != null && mounted) {
-      setState(() {
-        _chat = updatedChat;
-      });
+    if (updatedChat != null && context.mounted) {
+      context.read<ChatCubit>().updateChat(updatedChat);
     }
   }
 
-  void _onClearMessagesPressed() {
+  void _onClearMessagesPressed(BuildContext context) {
     showDialog(
       context: context,
       builder: (dialogContext) => ChatInfoConfirmationDialog(
@@ -57,23 +39,18 @@ class _ChatInfoViewBodyState extends State<ChatInfoViewBody> {
         message: 'Are you sure you want to clear all messages in this chat?',
         confirmLabel: 'Clear',
         onConfirm: () {
-          gi<ChatsRepository>().clearChatMessages(_chat.id);
-          if (mounted) {
-            setState(() {
-              _chat = _chat.copyWith(nummessage: 0, lastMessage: '');
-            });
-            showMyDialog(
-              context,
-              'Chat messages cleared',
-              type: DialogType.success,
-            );
-          }
+          context.read<ChatCubit>().clearChatMessages();
+          showMyDialog(
+            context,
+            'Chat messages cleared',
+            type: DialogType.success,
+          );
         },
       ),
     );
   }
 
-  void _onDeleteChatPressed() {
+  void _onDeleteChatPressed(BuildContext context) {
     showDialog(
       context: context,
       builder: (dialogContext) => ChatInfoConfirmationDialog(
@@ -82,7 +59,7 @@ class _ChatInfoViewBodyState extends State<ChatInfoViewBody> {
             'Are you sure you want to delete this chat permanently? This action cannot be undone.',
         confirmLabel: 'Delete',
         onConfirm: () {
-          gi<ChatsRepository>().deleteChat(_chat.id);
+          context.read<ChatCubit>().deleteChat();
           pop(context);
           pushAndRemoveUntil(context, Routes.home);
           showMyDialog(
@@ -97,79 +74,79 @@ class _ChatInfoViewBodyState extends State<ChatInfoViewBody> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        const ChatInfoBackgroundGlow(),
-        SafeArea(
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              children: [
-                ChatInfoTopBar(
-                  onEditTap: _onEditChatPressed,
+    return BlocBuilder<ChatCubit, ChatState>(
+      builder: (context, state) {
+        final currentChat = state.chat;
+
+        return Stack(
+          children: [
+            const ChatInfoBackgroundGlow(),
+            SafeArea(
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  children: [
+                    ChatInfoTopBar(
+                      onEditTap: () => _onEditChatPressed(context, currentChat),
+                    ),
+                    SizedBox(height: 8.h),
+                    ChatInfoProfileSection(
+                      image: currentChat.displayImage,
+                      name: currentChat.name,
+                      createdAt: currentChat.datecreateChat,
+                      onAvatarBadgeTap: () => _onEditChatPressed(context, currentChat),
+                    ),
+                    SizedBox(height: 24.h),
+                    ChatInfoStatsSection(
+                      overdueCount: 4,
+                      completedCount: 28,
+                      totalCount: currentChat.nummessage > 0
+                          ? currentChat.nummessage
+                          : 42,
+                    ),
+                    SizedBox(height: 20.h),
+                    ChatInfoActionsContainer(
+                      isPinned: state.isPinned,
+                      onPinChanged: (val) {
+                        context.read<ChatCubit>().togglePin(val);
+                      },
+                      isMuted: state.isMuted,
+                      onMuteChanged: (val) {
+                        context.read<ChatCubit>().toggleMute(val);
+                      },
+                      onWallpaperTap: () {
+                        context.read<ChatCubit>().updateWallpaper('default');
+                        showMyDialog(
+                          context,
+                          'Wallpaper settings',
+                          type: DialogType.warning,
+                        );
+                      },
+                      onSearchTap: () {
+                        showMyDialog(
+                          context,
+                          'Search in chat',
+                          type: DialogType.warning,
+                        );
+                      },
+                      onExportTap: () {
+                        showMyDialog(
+                          context,
+                          'Exporting links',
+                          type: DialogType.success,
+                        );
+                      },
+                      onClearMessagesTap: () => _onClearMessagesPressed(context),
+                      onDeleteChatTap: () => _onDeleteChatPressed(context),
+                    ),
+                    SizedBox(height: 36.h),
+                  ],
                 ),
-                SizedBox(height: 8.h),
-                ChatInfoProfileSection(
-                  image: _chat.displayImage,
-                  name: _chat.name,
-                  createdAt: _chat.datecreateChat,
-                  onAvatarBadgeTap: _onEditChatPressed,
-                ),
-                SizedBox(height: 24.h),
-                ChatInfoStatsSection(
-                  overdueCount: 4,
-                  completedCount: 28,
-                  totalCount: _chat.nummessage > 0 ? _chat.nummessage : 42,
-                ),
-                SizedBox(height: 20.h),
-                ChatInfoActionsContainer(
-                  isPinned: _isPinned,
-                  onPinChanged: (val) {
-                    setState(() {
-                      _isPinned = val;
-                      _chat = _chat.copyWith(boolIsPin: val);
-                    });
-                    gi<ChatsRepository>().togglePin(_chat.id, val);
-                  },
-                  isMuted: _isMuted,
-                  onMuteChanged: (val) {
-                    setState(() {
-                      _isMuted = val;
-                      _chat = _chat.copyWith(boolNotification: !val);
-                    });
-                    gi<ChatsRepository>().toggleMute(_chat.id, val);
-                  },
-                  onWallpaperTap: () {
-                    gi<ChatsRepository>().updateWallpaper(_chat.id, 'default');
-                    showMyDialog(
-                      context,
-                      'Wallpaper settings',
-                      type: DialogType.warning,
-                    );
-                  },
-                  onSearchTap: () {
-                    showMyDialog(
-                      context,
-                      'Search in chat',
-                      type: DialogType.warning,
-                    );
-                  },
-                  onExportTap: () {
-                    showMyDialog(
-                      context,
-                      'Exporting links',
-                      type: DialogType.success,
-                    );
-                  },
-                  onClearMessagesTap: _onClearMessagesPressed,
-                  onDeleteChatTap: _onDeleteChatPressed,
-                ),
-                SizedBox(height: 36.h),
-              ],
+              ),
             ),
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
   }
 }
