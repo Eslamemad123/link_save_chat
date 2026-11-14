@@ -78,6 +78,37 @@ Future<String?> uploadChatImageToCloudinary(
   );
 }
 
+Future<String?> uploadChatImageBackground(File imageFile) async {
+  final url = Uri.parse(
+    'https://api.cloudinary.com/v1_1/$kCloudinaryCloudName/image/upload',
+  );
+
+  final request = http.MultipartRequest('POST', url);
+  request.fields['upload_preset'] = kCloudinaryUploadPreset;
+  request.files.add(
+    await http.MultipartFile.fromPath(
+      'file',
+      imageFile.path,
+    ),
+  );
+
+  try {
+    final response = await request.send().timeout(
+      const Duration(seconds: 30),
+    );
+
+    if (response.statusCode == 200) {
+      final responseBody = await response.stream.bytesToString();
+      final responseData = json.decode(responseBody);
+      return responseData['secure_url'] as String?;
+    }
+    return null;
+  } catch (e) {
+    log('Cloudinary background upload exception: $e');
+    return null;
+  }
+}
+
 Future<String?> resolveChatImageUrl({
   required BuildContext context,
   required File? newImageFile,

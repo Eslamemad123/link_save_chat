@@ -47,7 +47,7 @@ class ChatCardItem extends StatelessWidget {
           ),
           child: Row(
             children: [
-              ChatIconAvatar(image: chat.image, name: chat.name),
+              ChatIconAvatar(image: chat.displayImage, name: chat.name),
               SizedBox(width: 12.w),
               Expanded(
                 child: Column(

@@ -1,8 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:link_savw_chat/core/GetIt/gi.dart';
 import 'package:link_savw_chat/core/routes/routes.dart';
+import 'package:link_savw_chat/core/services/sync/sync_service.dart';
 import 'package:link_savw_chat/core/utils/theme.dart';
 import 'package:link_savw_chat/firebase_options.dart';
 
@@ -11,7 +13,12 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await Hive.initFlutter();
+  await Hive.openBox('chats');
+  await Hive.openBox('categories');
+  await Hive.openBox('meta');
   await setupServiceLocator();
+  gi<SyncService>().start();
   runApp(const MainApp());
 }
 

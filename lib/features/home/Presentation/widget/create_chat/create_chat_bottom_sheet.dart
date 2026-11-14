@@ -49,7 +49,7 @@ class _CreateChatBottomSheetState extends State<CreateChatBottomSheet> {
   int _selectedCategoryIndex = 0;
   File? _selectedImage;
   Uint8List? _selectedImageBytes;
-  bool _isLoading = false;
+  final bool _isLoading = false;
 
   @override
   void initState() {
@@ -93,65 +93,23 @@ class _CreateChatBottomSheetState extends State<CreateChatBottomSheet> {
   }
 
   Future<void> _onSubmit(List<CategoryModel> categories) async {
-    if (_isLoading) return;
-
     final name = _nameController.text.trim();
     if (name.isEmpty) {
       showMyDialog(context, 'Please enter a chat name');
       return;
     }
 
-    setState(() => _isLoading = true);
+    final newChat = _buildChatModel(
+      name: name,
+      categories: categories,
+    );
 
-    try {
-      final imageUrl = await resolveChatImageUrl(
-        context: context,
-        newImageFile: _selectedImage,
-        existingImageUrl: null,
-      );
-
-      if (_selectedImage != null && (imageUrl == null || imageUrl.isEmpty)) {
-        if (mounted) {
-          setState(() => _isLoading = false);
-        }
-        return;
-      }
-
-      final newChat = _buildChatModel(
-        name: name,
-        imageUrl: imageUrl,
-        categories: categories,
-      );
-
-      if (!mounted) return;
-
-      final success = await context.read<HomeCubit>().addChat(newChat);
-
-      if (!mounted) return;
-
-      if (success) {
-        Navigator.of(context).pop();
-      } else {
-        final error = context.read<HomeCubit>().state.errorMessage;
-        showMyDialog(
-          context,
-          error ?? 'An error occurred while creating chat.',
-        );
-      }
-    } catch (_) {
-      if (mounted) {
-        showMyDialog(context, 'An error occurred while creating chat.');
-      }
-    } finally {
-      if (mounted && _isLoading) {
-        setState(() => _isLoading = false);
-      }
-    }
+    context.read<HomeCubit>().addChat(newChat, imageFile: _selectedImage);
+    Navigator.of(context).pop();
   }
 
   ChatModel _buildChatModel({
     required String name,
-    String? imageUrl,
     required List<CategoryModel> categories,
   }) {
     final categoryId = categories.findIdByIndex(_selectedCategoryIndex);
@@ -163,12 +121,14 @@ class _CreateChatBottomSheetState extends State<CreateChatBottomSheet> {
       name: name,
       description: description,
       lastMessage: description,
-      image: imageUrl,
+      image: null,
       color_backgroung_icon: AppColors.brandBlue.toARGB32(),
       nummessage: 0,
       category: categoryId,
       date: now,
       datecreateChat: now,
+      createdAt: now,
+      updatedAt: now,
       boolNotification: true,
       boolIsPin: false,
     );

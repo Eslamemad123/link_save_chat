@@ -15,6 +15,10 @@ class ChatModel {
   final String? wallpaper;
   final bool boolNotification;
   final bool boolIsPin;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final bool deleted;
+  final String? pendingImagePath;
 
   const ChatModel({
     required this.id,
@@ -31,7 +35,18 @@ class ChatModel {
     this.wallpaper,
     this.boolNotification = true,
     this.boolIsPin = false,
+    this.createdAt,
+    this.updatedAt,
+    this.deleted = false,
+    this.pendingImagePath,
   });
+
+  String? get displayImage {
+    if (pendingImagePath != null && pendingImagePath!.isNotEmpty) {
+      return pendingImagePath;
+    }
+    return image;
+  }
 
   factory ChatModel.fromJson(Map<String, dynamic> json) {
     DateTime? parseDate(dynamic value) {
@@ -55,8 +70,7 @@ class ChatModel {
       return fallback;
     }
 
-    final img =
-        json['image'] as String? ??
+    final rawImage = json['image'] as String? ??
         json['image_or_icon'] as String? ??
         json['iconUrl'] as String?;
     final lastMsg =
@@ -65,15 +79,16 @@ class ChatModel {
     final isPinned = parseBool(json['boolIsPin'] ?? json['isPinned'], false);
     final numMsg = parseInt(json['nummessage'] ?? json['uncompletedCount']);
     final createdDate = parseDate(
-      json['datecreateChat'] ?? json['updatedAt'] ?? json['createdAt'],
+      json['datecreateChat'] ?? json['createdAt'] ?? json['updatedAt'],
     );
+    final updatedDate = parseDate(json['updatedAt']) ?? createdDate;
 
     return ChatModel(
       id: json['id'] as String? ?? '',
       name: chatName,
       description: json['description'] as String? ?? '',
       lastMessage: lastMsg,
-      image: img,
+      image: rawImage,
       color_backgroung_icon: parseInt(json['color_backgroung_icon']),
       nummessage: numMsg,
       date: parseDate(json['date']),
@@ -83,7 +98,85 @@ class ChatModel {
       wallpaper: json['wallpaper'] as String?,
       boolNotification: parseBool(json['boolNotification'], true),
       boolIsPin: isPinned,
+      createdAt: createdDate,
+      updatedAt: updatedDate,
+      deleted: parseBool(json['deleted'], false),
+      pendingImagePath: json['pendingImagePath'] as String?,
     );
+  }
+
+  factory ChatModel.fromHiveMap(Map<dynamic, dynamic> map) {
+    DateTime? parseMillis(dynamic value) {
+      if (value == null) return null;
+      if (value is int) return DateTime.fromMillisecondsSinceEpoch(value);
+      if (value is String) {
+        final parsed = int.tryParse(value);
+        if (parsed != null) return DateTime.fromMillisecondsSinceEpoch(parsed);
+        return DateTime.tryParse(value);
+      }
+      return null;
+    }
+
+    int parseInt(dynamic value, [int fallback = 0]) {
+      if (value is int) return value;
+      if (value is String) return int.tryParse(value) ?? fallback;
+      return fallback;
+    }
+
+    bool parseBool(dynamic value, [bool fallback = false]) {
+      if (value is bool) return value;
+      if (value is String) return value.toLowerCase() == 'true';
+      return fallback;
+    }
+
+    final createdDate = parseMillis(map['createdAt']) ??
+        parseMillis(map['datecreateChat']) ??
+        parseMillis(map['updatedAt']);
+
+    return ChatModel(
+      id: map['id']?.toString() ?? '',
+      name: map['name']?.toString() ?? '',
+      description: map['description']?.toString() ?? '',
+      lastMessage: map['lastMessage']?.toString() ?? '',
+      image: map['image']?.toString(),
+      color_backgroung_icon: parseInt(map['color_backgroung_icon']),
+      nummessage: parseInt(map['nummessage']),
+      date: parseMillis(map['date']),
+      time: map['time']?.toString(),
+      category: map['category']?.toString() ?? 'all',
+      datecreateChat: createdDate,
+      wallpaper: map['wallpaper']?.toString(),
+      boolNotification: parseBool(map['boolNotification'], true),
+      boolIsPin: parseBool(map['boolIsPin'], false),
+      createdAt: createdDate,
+      updatedAt: parseMillis(map['updatedAt']) ?? createdDate,
+      deleted: parseBool(map['deleted'], false),
+      pendingImagePath: map['pendingImagePath']?.toString(),
+    );
+  }
+
+  Map<String, dynamic> toHiveMap() {
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'lastMessage': lastMessage,
+      'image': image,
+      'color_backgroung_icon': color_backgroung_icon,
+      'nummessage': nummessage,
+      'date': date?.millisecondsSinceEpoch,
+      'time': time,
+      'category': category,
+      'datecreateChat': (datecreateChat ?? createdAt)?.millisecondsSinceEpoch,
+      'wallpaper': wallpaper,
+      'boolNotification': boolNotification,
+      'boolIsPin': boolIsPin,
+      'createdAt': (createdAt ?? datecreateChat)?.millisecondsSinceEpoch,
+      'updatedAt': updatedAt?.millisecondsSinceEpoch ??
+          DateTime.now().millisecondsSinceEpoch,
+      'deleted': deleted,
+      'pendingImagePath': pendingImagePath,
+    };
   }
 
   Map<String, dynamic> toJson() {
@@ -98,12 +191,48 @@ class ChatModel {
       'date': date != null ? Timestamp.fromDate(date!) : null,
       'time': time,
       'category': category,
-      'datecreateChat': datecreateChat != null
-          ? Timestamp.fromDate(datecreateChat!)
+      'datecreateChat': (datecreateChat ?? createdAt) != null
+          ? Timestamp.fromDate(datecreateChat ?? createdAt!)
           : FieldValue.serverTimestamp(),
       'wallpaper': wallpaper,
       'boolNotification': boolNotification,
       'boolIsPin': boolIsPin,
+      'createdAt': createdAt != null
+          ? Timestamp.fromDate(createdAt!)
+          : FieldValue.serverTimestamp(),
+      'updatedAt': FieldValue.serverTimestamp(),
+      'deleted': deleted,
+    };
+  }
+
+  Map<String, dynamic> toFirestoreJson({bool isCreate = false}) {
+    final isOnlineUrl =
+        image != null && (image!.startsWith('http://') || image!.startsWith('https://'));
+
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'lastMessage': lastMessage,
+      'image': isOnlineUrl ? image : null,
+      'color_backgroung_icon': color_backgroung_icon,
+      'nummessage': nummessage,
+      'date': date != null ? Timestamp.fromDate(date!) : null,
+      'time': time,
+      'category': category,
+      'datecreateChat': (datecreateChat ?? createdAt) != null
+          ? Timestamp.fromDate(datecreateChat ?? createdAt!)
+          : FieldValue.serverTimestamp(),
+      'wallpaper': wallpaper,
+      'boolNotification': boolNotification,
+      'boolIsPin': boolIsPin,
+      'createdAt': isCreate
+          ? FieldValue.serverTimestamp()
+          : (createdAt != null
+              ? Timestamp.fromDate(createdAt!)
+              : FieldValue.serverTimestamp()),
+      'updatedAt': FieldValue.serverTimestamp(),
+      'deleted': deleted,
     };
   }
 
@@ -122,6 +251,11 @@ class ChatModel {
     String? wallpaper,
     bool? boolNotification,
     bool? boolIsPin,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    bool? deleted,
+    String? pendingImagePath,
+    bool clearPendingImage = false,
   }) {
     return ChatModel(
       id: id ?? this.id,
@@ -139,6 +273,12 @@ class ChatModel {
       wallpaper: wallpaper ?? this.wallpaper,
       boolNotification: boolNotification ?? this.boolNotification,
       boolIsPin: boolIsPin ?? this.boolIsPin,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deleted: deleted ?? this.deleted,
+      pendingImagePath: clearPendingImage
+          ? null
+          : (pendingImagePath ?? this.pendingImagePath),
     );
   }
 
@@ -160,23 +300,31 @@ class ChatModel {
           datecreateChat == other.datecreateChat &&
           wallpaper == other.wallpaper &&
           boolNotification == other.boolNotification &&
-          boolIsPin == other.boolIsPin;
+          boolIsPin == other.boolIsPin &&
+          createdAt == other.createdAt &&
+          updatedAt == other.updatedAt &&
+          deleted == other.deleted &&
+          pendingImagePath == other.pendingImagePath;
 
   @override
   int get hashCode => Object.hash(
-    id,
-    name,
-    description,
-    lastMessage,
-    image,
-    color_backgroung_icon,
-    nummessage,
-    date,
-    time,
-    category,
-    datecreateChat,
-    wallpaper,
-    boolNotification,
-    boolIsPin,
-  );
+        id,
+        name,
+        description,
+        lastMessage,
+        image,
+        color_backgroung_icon,
+        nummessage,
+        date,
+        time,
+        category,
+        datecreateChat,
+        wallpaper,
+        boolNotification,
+        boolIsPin,
+        createdAt,
+        updatedAt,
+        deleted,
+        pendingImagePath,
+      );
 }

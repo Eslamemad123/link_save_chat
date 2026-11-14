@@ -33,7 +33,7 @@ class _EditChatViewBodyState extends State<EditChatViewBody> {
   File? _selectedImageFile;
   Uint8List? _selectedImageBytes;
   String? _existingImageUrl;
-  bool _isLoading = false;
+  final bool _isLoading = false;
 
   @override
   void initState() {
@@ -79,72 +79,32 @@ class _EditChatViewBodyState extends State<EditChatViewBody> {
   }
 
   Future<void> _onSave() async {
-    if (_isLoading) return;
-
     final name = _nameController.text.trim();
     if (name.isEmpty) {
       showMyDialog(context, 'Please enter a chat name');
       return;
     }
 
-    setState(() => _isLoading = true);
+    final localImagePath =
+        _selectedImageFile != null ? _selectedImageFile!.path : _existingImageUrl;
 
-    try {
-      final finalImageUrl = await resolveChatImageUrl(
-        context: context,
-        newImageFile: _selectedImageFile,
-        existingImageUrl: _existingImageUrl,
-      );
+    final updatedChat = widget.chat.copyWith(
+      name: name,
+      description: _descriptionController.text.trim(),
+      category: _selectedCategoryId,
+      image: localImagePath,
+      pendingImagePath: _selectedImageFile?.path,
+    );
 
-      if (_selectedImageFile != null &&
-          (finalImageUrl == null || finalImageUrl.isEmpty)) {
-        if (mounted) {
-          setState(() => _isLoading = false);
-        }
-        return;
-      }
+    final homeCubit = context.read<HomeCubit>();
+    homeCubit.updateChat(updatedChat, newImageFile: _selectedImageFile);
 
-      final updatedChat = widget.chat.copyWith(
-        name: name,
-        description: _descriptionController.text.trim(),
-        category: _selectedCategoryId,
-        image: finalImageUrl,
-      );
-
-      if (!mounted) return;
-
-      final homeCubit = context.read<HomeCubit>();
-      final success = await homeCubit.updateChat(updatedChat);
-
-      if (!mounted) return;
-
-      setState(() => _isLoading = false);
-
-      if (success) {
-        showMyDialog(
-          context,
-          'Chat updated successfully',
-          type: DialogType.success,
-        );
-        pop(context, updatedChat);
-      } else {
-        final error = homeCubit.state.errorMessage;
-        showMyDialog(
-          context,
-          error ?? 'Failed to update chat',
-          type: DialogType.error,
-        );
-      }
-    } catch (_) {
-      if (mounted) {
-        setState(() => _isLoading = false);
-        showMyDialog(
-          context,
-          'An error occurred while updating chat',
-          type: DialogType.error,
-        );
-      }
-    }
+    showMyDialog(
+      context,
+      'Chat updated successfully',
+      type: DialogType.success,
+    );
+    pop(context, updatedChat);
   }
 
   @override

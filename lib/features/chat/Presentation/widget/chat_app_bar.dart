@@ -57,7 +57,7 @@ class ChatAppBar extends StatelessWidget {
               children: [
                 const ChatBackButton(),
                 SizedBox(width: 10.w),
-                ChatIconAvatar(image: chat.image, name: chat.name),
+                ChatIconAvatar(image: chat.displayImage, name: chat.name),
                 SizedBox(width: 12.w),
                 Expanded(
                   child: ChatHeaderInfo(

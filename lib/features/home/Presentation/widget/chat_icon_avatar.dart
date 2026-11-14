@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,7 +22,7 @@ class ChatIconAvatar extends StatelessWidget {
 
       ImageProvider? provider;
       if (isOnline) {
-        provider = NetworkImage(img);
+        provider = CachedNetworkImageProvider(img);
       } else if (!kIsWeb) {
         provider = FileImage(File(img));
       }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:link_savw_chat/core/GetIt/gi.dart';
 import 'package:link_savw_chat/core/extentions/show_dialoges.dart';
 import 'package:link_savw_chat/core/routes/navigation.dart';
 import 'package:link_savw_chat/core/routes/routes.dart';
 import 'package:link_savw_chat/features/home/Data/models/chat_model.dart';
+import 'package:link_savw_chat/features/home/Domain/repositories/chats_repository.dart';
 
 import 'chat_info_actions_container.dart';
 import 'chat_info_background_glow.dart';
@@ -55,11 +57,17 @@ class _ChatInfoViewBodyState extends State<ChatInfoViewBody> {
         message: 'Are you sure you want to clear all messages in this chat?',
         confirmLabel: 'Clear',
         onConfirm: () {
-          showMyDialog(
-            context,
-            'Chat messages cleared',
-            type: DialogType.success,
-          );
+          gi<ChatsRepository>().clearChatMessages(_chat.id);
+          if (mounted) {
+            setState(() {
+              _chat = _chat.copyWith(nummessage: 0, lastMessage: '');
+            });
+            showMyDialog(
+              context,
+              'Chat messages cleared',
+              type: DialogType.success,
+            );
+          }
         },
       ),
     );
@@ -74,7 +82,9 @@ class _ChatInfoViewBodyState extends State<ChatInfoViewBody> {
             'Are you sure you want to delete this chat permanently? This action cannot be undone.',
         confirmLabel: 'Delete',
         onConfirm: () {
+          gi<ChatsRepository>().deleteChat(_chat.id);
           pop(context);
+          pushAndRemoveUntil(context, Routes.home);
           showMyDialog(
             context,
             'Chat deleted successfully',
@@ -100,7 +110,7 @@ class _ChatInfoViewBodyState extends State<ChatInfoViewBody> {
                 ),
                 SizedBox(height: 8.h),
                 ChatInfoProfileSection(
-                  image: _chat.image,
+                  image: _chat.displayImage,
                   name: _chat.name,
                   createdAt: _chat.datecreateChat,
                   onAvatarBadgeTap: _onEditChatPressed,
@@ -117,15 +127,20 @@ class _ChatInfoViewBodyState extends State<ChatInfoViewBody> {
                   onPinChanged: (val) {
                     setState(() {
                       _isPinned = val;
+                      _chat = _chat.copyWith(boolIsPin: val);
                     });
+                    gi<ChatsRepository>().togglePin(_chat.id, val);
                   },
                   isMuted: _isMuted,
                   onMuteChanged: (val) {
                     setState(() {
                       _isMuted = val;
+                      _chat = _chat.copyWith(boolNotification: !val);
                     });
+                    gi<ChatsRepository>().toggleMute(_chat.id, val);
                   },
                   onWallpaperTap: () {
+                    gi<ChatsRepository>().updateWallpaper(_chat.id, 'default');
                     showMyDialog(
                       context,
                       'Wallpaper settings',
@@ -158,4 +173,3 @@ class _ChatInfoViewBodyState extends State<ChatInfoViewBody> {
     );
   }
 }
-
