@@ -144,4 +144,22 @@ class AppColors {
 
   static const Color editChatBluePillLight = Color(0xFFE0EDFF);
   static const Color editChatBluePillDark = Color(0xFF1E2F4D);
+
+  static const Color brandBlueLight = Color(0xFFEBF2FE);
+  static const Color brandBlueLightBorder = Color(0xFFC7DBFC);
+  static const Color activeDotGreen = Color(0xFF22C55E);
+  static const Color activeGreenContainerLight = Color(0xFFDCFCE7);
+  static const Color activeGreenContainerDark = Color(0xFF1B382B);
+  static const Color logoutRed = Color(0xFFE53935);
+  static const Color logoutRedContainerLight = Color(0xFFFDE8E8);
+  static const Color logoutRedContainerDark = Color(0xFF3B1E1E);
+  static const Color wallpaperPreviewBgLight = Color(0xFFF6F0E8);
+  static const Color wallpaperPreviewBgDark = Color(0xFF25221E);
+  static const Color wallpaperDoodleLineLight = Color(0xFFE3DACD);
+  static const Color wallpaperDoodleLineDark = Color(0xFF3E3933);
+  static const Color colorOptionRed = Color(0xFFE53935);
+  static const Color colorOptionOrange = Color(0xFFFB8C00);
+  static const Color colorOptionPurple = Color(0xFF8E24AA);
+  static const Color colorOptionGreen = Color(0xFF059669);
+  static const Color colorOptionBlue = Color(0xFF1E88E5);
 }

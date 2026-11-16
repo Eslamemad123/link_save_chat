@@ -12,8 +12,10 @@ import 'package:link_savw_chat/features/chat/Presentation/page/chat_info_view.da
 import 'package:link_savw_chat/features/chat/Presentation/page/chat_view.dart';
 import 'package:link_savw_chat/features/chat/Presentation/page/edit_chat_view.dart';
 import 'package:link_savw_chat/features/home/Data/models/chat_model.dart';
+import 'package:link_savw_chat/features/devicePairing/Presentation/page/linked_devices_view.dart';
 import 'package:link_savw_chat/features/home/Presentation/page/home_view.dart';
 import 'package:link_savw_chat/features/onBoarding/Presentation/page/on_boarding_view.dart';
+import 'package:link_savw_chat/features/setting/Presentation/page/edit_profile_view.dart';
 import 'package:link_savw_chat/features/setting/Presentation/page/settings_view.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -26,6 +28,8 @@ class Routes {
   static const String home = '/home';
   static const String forgotPassword = '/forgotPassword';
   static const String settings = '/settings';
+  static const String linkedDevices = '/linkedDevices';
+  static const String editProfile = '/editProfile';
   static const String chat = '/chat';
   static const String chatInfo = '/chatInfo';
   static const String editChat = '/editChat';
@@ -79,6 +83,14 @@ class Routes {
       GoRoute(
         path: settings,
         builder: (context, state) => const SettingsView(),
+      ),
+      GoRoute(
+        path: linkedDevices,
+        builder: (context, state) => const LinkedDevicesView(),
+      ),
+      GoRoute(
+        path: editProfile,
+        builder: (context, state) => const EditProfileView(),
       ),
       GoRoute(
         path: chat,
