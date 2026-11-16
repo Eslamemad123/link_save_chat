@@ -21,11 +21,14 @@ class HomeFilterBar extends StatelessWidget {
       builder: (context, state) {
         final cubit = context.read<HomeCubit>();
         return SizedBox(
+          width: double.infinity,
           height: 38.h,
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 HomeFilterChipItem(
                   label: 'All',
