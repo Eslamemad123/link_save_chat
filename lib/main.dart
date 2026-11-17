@@ -4,15 +4,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:link_savw_chat/core/GetIt/gi.dart';
 import 'package:link_savw_chat/core/routes/routes.dart';
+import 'package:link_savw_chat/core/services/cache/LocalHelper.dart';
 import 'package:link_savw_chat/core/services/sync/sync_service.dart';
 import 'package:link_savw_chat/core/utils/theme.dart';
 import 'package:link_savw_chat/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Localhelper.init();
   await Hive.initFlutter();
   await Hive.openBox('chats');
   await Hive.openBox('categories');

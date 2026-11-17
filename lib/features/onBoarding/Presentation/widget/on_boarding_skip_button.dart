@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_savw_chat/core/routes/navigation.dart';
 import 'package:link_savw_chat/core/routes/routes.dart';
+import 'package:link_savw_chat/core/services/cache/LocalHelper.dart';
 import 'package:link_savw_chat/core/utils/textStyles.dart';
 
 class OnBoardingSkipButton extends StatelessWidget {
@@ -12,6 +13,7 @@ class OnBoardingSkipButton extends StatelessWidget {
     return TextButton(
       onPressed: () {
         pushReplacement(context, Routes.login);
+        Localhelper.setBool(Localhelper.kUserShowOnBoarding, true);
       },
       style: TextButton.styleFrom(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),

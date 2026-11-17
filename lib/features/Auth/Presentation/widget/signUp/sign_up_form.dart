@@ -25,7 +25,6 @@ class _SignUpFormState extends State<SignUpForm> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
-  final _passwordStrengthNotifier = ValueNotifier<PasswordStrength?>(null);
   final _termsAcceptedNotifier = ValueNotifier<bool>(false);
 
   @override
@@ -34,13 +33,8 @@ class _SignUpFormState extends State<SignUpForm> {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
-    _passwordStrengthNotifier.dispose();
     _termsAcceptedNotifier.dispose();
     super.dispose();
-  }
-
-  void _onPasswordChanged(String value) {
-    _passwordStrengthNotifier.value = PasswordStrength.calculate(text: value);
   }
 
   void _onSignUpPressed() {
@@ -60,10 +54,10 @@ class _SignUpFormState extends State<SignUpForm> {
     }
 
     context.read<AuthCubit>().signUp(
-          email: _emailController.text.trim(),
-          password: _passwordController.text,
-          name: _nameController.text.trim(),
-        );
+      email: _emailController.text.trim(),
+      password: _passwordController.text,
+      name: _nameController.text.trim(),
+    );
   }
 
   @override
@@ -109,19 +103,22 @@ class _SignUpFormState extends State<SignUpForm> {
             prefixIcon: AppIcons.lock,
             ispassword: true,
             textInputNext: TextInputAction.next,
-            onChanged: _onPasswordChanged,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter your password';
               }
-              if (value.length < 6) {
+              if (value.length < 8) {
                 return 'Password must be at least 6 characters';
               }
               return null;
             },
           ),
           SizedBox(height: 8.h),
-          PasswordStrengthIndicator(strength: _passwordStrengthNotifier),
+          ValueListenableBuilder<TextEditingValue>(
+            valueListenable: _passwordController,
+            builder: (context, value, _) =>
+                PasswordStrengthIndicator(password: value.text),
+          ),
           SizedBox(height: 12.h),
           MainTextFormField(
             controller: _confirmPasswordController,
@@ -154,7 +151,8 @@ class _SignUpFormState extends State<SignUpForm> {
             buildWhen: (prev, curr) =>
                 (prev is AuthLoading) != (curr is AuthLoading),
             builder: (context, state) {
-              final isEmailLoading = state is AuthLoading &&
+              final isEmailLoading =
+                  state is AuthLoading &&
                   (state.action == 'email' || state.action == null);
               return MainButton(
                 buttonText: 'Sign Up',

@@ -10,7 +10,7 @@ class ForgotPasswordHeaderText extends StatelessWidget {
     return Column(
       children: [
         Text(
-          'Forgot Password 🔐',
+          'Forgot Password ',
           textAlign: TextAlign.center,
           style: AppFontStyles.font24BoldTitle(context),
         ),
@@ -27,4 +27,3 @@ class ForgotPasswordHeaderText extends StatelessWidget {
     );
   }
 }
-

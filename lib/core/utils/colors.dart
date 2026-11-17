@@ -57,6 +57,11 @@ class AppColors {
   static const Color warning = Color(0xFFFFC107);
   static const Color error = Color(0xFFF44336);
 
+  static const Color passwordWeak = Color(0xFFFF1744);
+  static const Color passwordMedium = Color(0xFFFF9100);
+  static const Color passwordGood = Color(0xFFFFD600);
+  static const Color passwordStrong = Color(0xFF04CC3D);
+
   static const Color amberContainerLight = Color(0xFFFEF3C7);
   static const Color amberContainerDark = Color(0xFF3E2723);
 

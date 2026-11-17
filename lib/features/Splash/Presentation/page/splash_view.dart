@@ -1,8 +1,10 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:link_savw_chat/core/routes/navigation.dart';
 import 'package:link_savw_chat/core/routes/routes.dart';
+import 'package:link_savw_chat/core/services/cache/LocalHelper.dart';
 import 'package:link_savw_chat/features/Auth/Presentation/cubit/auth_cubit.dart';
 import 'package:link_savw_chat/features/Splash/Presentation/widget/splash_view_body.dart';
 
@@ -27,7 +29,13 @@ class _SplashViewState extends State<SplashView> {
         if (user != null) {
           pushAndRemoveUntil(context, Routes.home);
         } else {
-          pushReplacement(context, Routes.onBoarding);
+          bool isShowOnboarding =
+              Localhelper.getBool(Localhelper.kUserShowOnBoarding) ?? false;
+          if (!isShowOnboarding) {
+            pushReplacement(context, Routes.onBoarding);
+          } else {
+            pushReplacement(context, Routes.login);
+          }
         }
       }
     });

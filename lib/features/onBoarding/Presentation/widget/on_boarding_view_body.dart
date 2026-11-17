@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_savw_chat/core/routes/navigation.dart';
 import 'package:link_savw_chat/core/routes/routes.dart';
+import 'package:link_savw_chat/core/services/cache/LocalHelper.dart';
 import 'package:link_savw_chat/features/onBoarding/Data/models/on_boarding_model.dart';
 import 'package:link_savw_chat/features/onBoarding/Presentation/widget/on_boarding_action_button.dart';
 import 'package:link_savw_chat/features/onBoarding/Presentation/widget/on_boarding_indicator.dart';
@@ -34,6 +35,7 @@ class _OnBoardingViewBodyState extends State<OnBoardingViewBody> {
   void _onActionButtonPressed() {
     if (_currentIndex == OnBoardingModel.items.length - 1) {
       pushReplacement(context, Routes.login);
+      Localhelper.setBool(Localhelper.kUserShowOnBoarding, true);
     } else {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),

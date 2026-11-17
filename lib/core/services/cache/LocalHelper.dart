@@ -2,6 +2,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Localhelper {
   static late SharedPreferences pref;
+  static String kUserShowOnBoarding = 'user_show_onboarding';
   static String kUserEmail = 'user_email';
   static String kUserIsLogin = 'user_isLogin';
 
