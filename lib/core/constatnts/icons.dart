@@ -28,4 +28,7 @@ class AppIcons {
   static const String property = 'assets/icons/Property.svg';
   static const String send = 'assets/icons/send.svg';
   static const String shieldSecurity = 'assets/icons/shield-security.svg';
+  static const String pin = 'assets/icons/pin.svg';
+  static const String pinCircler = 'assets/icons/pinCirclercom.svg';
+  static const String addChat = 'assets/icons/addChat.svg';
 }

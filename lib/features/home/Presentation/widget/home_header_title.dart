@@ -17,6 +17,8 @@ class HomeHeaderTitle extends StatelessWidget {
         child: Text(
           'My Links & Tasks',
           style: AppFontStyles.font24BoldTitle(context),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
       ),
     );

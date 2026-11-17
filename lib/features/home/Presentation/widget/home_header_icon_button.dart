@@ -16,14 +16,17 @@ class HomeHeaderIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final buttonWidth = 44.w.clamp(40.0, 48.0);
+    final buttonHeight = 44.h.clamp(40.0, 48.0);
+
     return Material(
       color: AppColors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(22.r),
+        borderRadius: BorderRadius.circular(buttonWidth / 2),
         child: Container(
-          width: 44.w,
-          height: 44.h,
+          width: buttonWidth,
+          height: buttonHeight,
           decoration: BoxDecoration(
             color: isDark ? AppColors.surfaceDark : AppColors.surfaceLight,
             shape: BoxShape.circle,
@@ -31,7 +34,7 @@ class HomeHeaderIconButton extends StatelessWidget {
               color: isDark
                   ? AppColors.cardBorderDark
                   : AppColors.cardBorderLight,
-              width: 1.w,
+              width: 1.w.clamp(1.0, 2.0),
             ),
             boxShadow: const [
               BoxShadow(

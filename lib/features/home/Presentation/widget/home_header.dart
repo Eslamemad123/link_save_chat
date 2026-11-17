@@ -30,35 +30,41 @@ class _HomeHeaderState extends State<HomeHeader> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
       child: SizedBox(
-        height: 52.h,
+        height: 52.h.clamp(52.0, 64.0),
         child: LayoutBuilder(
           builder: (context, constraints) {
-            final maxSearchWidth = (constraints.maxWidth - 54.w).clamp(
-              0.0,
-              420.w,
-            );
+            final buttonWidth = 44.w.clamp(40.0, 48.0);
+            final spacingWidth = 10.w.clamp(8.0, 16.0);
+            final reservedWidth = buttonWidth + spacingWidth + 8.0;
+            final availableWidth = constraints.maxWidth - reservedWidth;
+            final maxSearchWidth = availableWidth > 420.0
+                ? 420.0
+                : availableWidth.clamp(0.0, availableWidth);
+            final shouldHideTitle = _isSearchOpen && constraints.maxWidth < 720;
 
             return Stack(
               alignment: Alignment.center,
               children: [
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: HomeHeaderTitle(isSearchOpen: _isSearchOpen),
+                  child: HomeHeaderTitle(isSearchOpen: shouldHideTitle),
                 ),
                 Align(
                   alignment: Alignment.centerRight,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      HomeHeaderSearchBar(
-                        searchBoxWidth: maxSearchWidth,
-                        onToggle: (isOpen) {
-                          setState(() {
-                            _isSearchOpen = isOpen;
-                          });
-                        },
+                      Flexible(
+                        child: HomeHeaderSearchBar(
+                          searchBoxWidth: maxSearchWidth,
+                          onToggle: (isOpen) {
+                            setState(() {
+                              _isSearchOpen = isOpen;
+                            });
+                          },
+                        ),
                       ),
-                      SizedBox(width: 10.w),
+                      SizedBox(width: spacingWidth),
                       HomeHeaderIconButton(
                         onTap: () => pushTo(context, Routes.settings),
                         icon: SvgPicture.asset(

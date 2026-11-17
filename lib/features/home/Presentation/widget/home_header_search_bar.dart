@@ -60,9 +60,9 @@ class _HomeHeaderSearchBarState extends State<HomeHeaderSearchBar> {
     final iconColor = isDark
         ? AppColors.textPrimaryDark
         : AppColors.textTitleLight;
-    final searchBoxWidth =
-        widget.searchBoxWidth ??
-        (MediaQuery.sizeOf(context).width - 86.w).clamp(160.w, 420.w);
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final fallbackWidth = (screenWidth - 90.w).clamp(120.0, 420.0);
+    final searchBoxWidth = widget.searchBoxWidth ?? fallbackWidth;
 
     return SearchBarAnimation(
       textEditingController: _controller,
