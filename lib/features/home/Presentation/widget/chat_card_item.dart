@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:link_savw_chat/core/constatnts/icons.dart';
 
 import '../../../../core/utils/colors.dart';
 import '../../Data/models/chat_model.dart';
@@ -68,12 +70,14 @@ class ChatCardItem extends StatelessWidget {
                     SizedBox(height: 6.h),
                     Row(
                       children: [
-                        Icon(
-                          Icons.link_rounded,
-                          size: 16.r,
-                          color: isDark
-                              ? AppColors.textSecondaryDark
-                              : AppColors.textSubtitleLight,
+                        SvgPicture.asset(
+                          AppIcons.link,
+                          colorFilter: ColorFilter.mode(
+                            isDark
+                                ? AppColors.textSecondaryDark
+                                : AppColors.textSubtitleLight,
+                            BlendMode.srcIn,
+                          ),
                         ),
                         SizedBox(width: 4.w),
                         Expanded(

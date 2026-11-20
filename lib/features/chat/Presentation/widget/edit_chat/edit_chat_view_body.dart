@@ -15,6 +15,7 @@ import 'package:link_savw_chat/features/home/Presentation/widget/add_category/ad
 import 'package:link_savw_chat/features/home/Presentation/widget/create_chat/chat_form_fields.dart';
 
 import '../../cubit/chat_cubit.dart';
+import 'edit_chat_save_button.dart';
 import 'edit_chat_top_bar.dart';
 
 class EditChatViewBody extends StatefulWidget {
@@ -34,7 +35,7 @@ class _EditChatViewBodyState extends State<EditChatViewBody> {
   File? _selectedImageFile;
   Uint8List? _selectedImageBytes;
   String? _existingImageUrl;
-  final bool _isLoading = false;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -86,6 +87,8 @@ class _EditChatViewBodyState extends State<EditChatViewBody> {
       return;
     }
 
+    setState(() => _isLoading = true);
+
     final localImagePath =
         _selectedImageFile != null ? _selectedImageFile!.path : _existingImageUrl;
 
@@ -99,9 +102,13 @@ class _EditChatViewBodyState extends State<EditChatViewBody> {
       clearPendingImage: _selectedImageFile == null,
     );
 
-    context
+    await context
         .read<ChatCubit>()
         .updateChat(updatedChat, newImageFile: _selectedImageFile);
+
+    if (!mounted) return;
+
+    setState(() => _isLoading = false);
 
     showMyDialog(
       context,
@@ -121,10 +128,7 @@ class _EditChatViewBodyState extends State<EditChatViewBody> {
 
         return Column(
           children: [
-            EditChatTopBar(
-              onSavePressed: _onSave,
-              isLoading: _isLoading,
-            ),
+            const EditChatTopBar(),
             Expanded(
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
@@ -151,6 +155,11 @@ class _EditChatViewBodyState extends State<EditChatViewBody> {
                       onCameraTap: _onCameraTap,
                       onNameChanged: (val) => setState(() {}),
                       onDescriptionChanged: (val) => setState(() {}),
+                    ),
+                    SizedBox(height: 24.h),
+                    EditChatSaveButton(
+                      onPressed: _onSave,
+                      isLoading: _isLoading,
                     ),
                     SizedBox(height: 36.h),
                   ],

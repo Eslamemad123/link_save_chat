@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:link_savw_chat/core/constatnts/icons.dart';
 
 import '../../../../core/utils/colors.dart';
 
@@ -32,10 +34,10 @@ class HomeAddCategoryButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(20.r),
             border: Border.all(color: borderColor, width: 1.w),
           ),
-          child: Icon(
-            Icons.add_rounded,
-            size: 18.r,
-            color: AppColors.brandBlue,
+
+          child: SvgPicture.asset(
+            AppIcons.file,
+            colorFilter: ColorFilter.mode(AppColors.brandBlue, .srcIn),
           ),
         ),
       ),

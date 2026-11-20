@@ -33,8 +33,8 @@ class ChatInfoAvatar extends StatelessWidget {
         content = ClipOval(
           child: CachedNetworkImage(
             imageUrl: img,
-            width: 96.w,
-            height: 96.h,
+            width: 120.w,
+            height: 120.h,
             fit: BoxFit.cover,
             placeholder: (context, url) => const ChatInfoAvatarPlaceholder(),
             errorWidget: (context, url, error) =>
@@ -47,8 +47,8 @@ class ChatInfoAvatar extends StatelessWidget {
           content = ClipOval(
             child: Image.file(
               file,
-              width: 96.w,
-              height: 96.h,
+              width: 120.w,
+              height: 120.h,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) =>
                   const ChatInfoAvatarPlaceholder(),
@@ -60,14 +60,14 @@ class ChatInfoAvatar extends StatelessWidget {
 
     return Center(
       child: SizedBox(
-        width: 104.w,
-        height: 104.h,
+        width: 140.w,
+        height: 140.h,
         child: Stack(
           alignment: Alignment.center,
           children: [
             Container(
-              width: 96.w,
-              height: 96.h,
+              width: 130.w,
+              height: 130.h,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(

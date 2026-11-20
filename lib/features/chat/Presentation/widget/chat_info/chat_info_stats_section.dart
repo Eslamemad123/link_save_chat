@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:link_savw_chat/core/constatnts/icons.dart';
 import 'package:link_savw_chat/core/utils/colors.dart';
 
 import 'chat_info_stat_card.dart';
@@ -26,7 +27,7 @@ class ChatInfoStatsSection extends StatelessWidget {
         children: [
           Expanded(
             child: ChatInfoStatCard(
-              icon: Icons.access_time_rounded,
+              icon: AppIcons.timeLine,
               iconColor: isDark
                   ? AppColors.taskOverdueDark
                   : AppColors.taskOverdueLight,
@@ -43,7 +44,7 @@ class ChatInfoStatsSection extends StatelessWidget {
           SizedBox(width: 12.w),
           Expanded(
             child: ChatInfoStatCard(
-              icon: Icons.check_rounded,
+              icon: AppIcons.doneLine,
               iconColor: isDark
                   ? AppColors.taskCompletedDark
                   : AppColors.taskCompletedLight,
@@ -60,7 +61,7 @@ class ChatInfoStatsSection extends StatelessWidget {
           SizedBox(width: 12.w),
           Expanded(
             child: ChatInfoStatCard(
-              icon: Icons.link_rounded,
+              icon: AppIcons.link,
               iconColor: AppColors.brandBlue,
               badgeBackgroundColor: isDark
                   ? AppColors.iconContainerDark
@@ -77,4 +78,3 @@ class ChatInfoStatsSection extends StatelessWidget {
     );
   }
 }
-

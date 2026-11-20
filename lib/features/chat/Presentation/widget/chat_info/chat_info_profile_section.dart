@@ -39,4 +39,3 @@ class ChatInfoProfileSection extends StatelessWidget {
     );
   }
 }
-

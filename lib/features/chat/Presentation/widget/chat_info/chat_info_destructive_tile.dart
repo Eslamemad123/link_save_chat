@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:link_savw_chat/core/utils/colors.dart';
 
 class ChatInfoDestructiveTile extends StatelessWidget {
-  final IconData icon;
+  final String icon;
   final String title;
   final VoidCallback? onTap;
 
@@ -29,10 +30,14 @@ class ChatInfoDestructiveTile extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
           child: Row(
             children: [
-              Icon(
+              SvgPicture.asset(
                 icon,
-                size: 22.r,
-                color: destructiveColor,
+                colorFilter: ColorFilter.mode(
+                  AppColors.avatarRed,
+                  BlendMode.srcIn,
+                ),
+                width: 25,
+                height: 25,
               ),
               SizedBox(width: 14.w),
               Expanded(
@@ -57,4 +62,3 @@ class ChatInfoDestructiveTile extends StatelessWidget {
     );
   }
 }
-

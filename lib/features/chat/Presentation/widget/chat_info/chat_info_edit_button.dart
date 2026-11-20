@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:link_savw_chat/core/constatnts/icons.dart';
 import 'package:link_savw_chat/core/utils/colors.dart';
 
 class ChatInfoEditButton extends StatelessWidget {
@@ -37,16 +39,17 @@ class ChatInfoEditButton extends StatelessWidget {
               ),
             ],
           ),
-          child: Icon(
-            Icons.edit_outlined,
-            size: 19.r,
-            color: isDark
-                ? AppColors.textPrimaryDark
-                : AppColors.textTitleLight,
+          child: SvgPicture.asset(
+            AppIcons.edit,
+            colorFilter: ColorFilter.mode(
+              isDark ? AppColors.textPrimaryDark : AppColors.textSubtitleLight,
+              BlendMode.srcIn,
+            ),
+            width: 20,
+            height: 20,
           ),
         ),
       ),
     );
   }
 }
-

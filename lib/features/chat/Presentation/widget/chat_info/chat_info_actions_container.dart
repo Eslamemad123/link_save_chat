@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:link_savw_chat/core/constatnts/icons.dart';
 import 'package:link_savw_chat/core/utils/colors.dart';
 
 import 'chat_info_action_tile.dart';
@@ -59,46 +60,40 @@ class ChatInfoActionsContainer extends StatelessWidget {
         child: Column(
           children: [
             ChatInfoActionTile(
-              icon: Icons.wallpaper_rounded,
+              icon: AppIcons.photo,
               title: 'Chat Wallpaper',
               trailing: const ChatInfoWallpaperPreview(),
               onTap: onWallpaperTap,
             ),
             const ChatInfoDivider(),
-            ChatInfoActionTile(
-              icon: Icons.search_rounded,
-              title: 'Search in Chat',
-              onTap: onSearchTap,
-            ),
-            const ChatInfoDivider(),
             ChatInfoSwitchTile(
-              icon: Icons.push_pin_outlined,
+              icon: AppIcons.pinCircler,
               title: 'Pin Chat',
               value: isPinned,
               onChanged: onPinChanged,
             ),
             const ChatInfoDivider(),
             ChatInfoSwitchTile(
-              icon: Icons.notifications_none_rounded,
+              icon: AppIcons.notification,
               title: 'Mute Notifications',
               value: isMuted,
               onChanged: onMuteChanged,
             ),
             const ChatInfoDivider(),
             ChatInfoActionTile(
-              icon: Icons.ios_share_rounded,
+              icon: AppIcons.exportIcon,
               title: 'Export Links',
               onTap: onExportTap,
             ),
             const ChatInfoDivider(),
             ChatInfoDestructiveTile(
-              icon: Icons.cleaning_services_outlined,
+              icon: AppIcons.clear,
               title: 'Clear Chat Messages',
               onTap: onClearMessagesTap,
             ),
             const ChatInfoDivider(),
             ChatInfoDestructiveTile(
-              icon: Icons.delete_outline_rounded,
+              icon: AppIcons.deleteLine,
               title: 'Delete Chat',
               onTap: onDeleteChatTap,
             ),
@@ -108,4 +103,3 @@ class ChatInfoActionsContainer extends StatelessWidget {
     );
   }
 }
-

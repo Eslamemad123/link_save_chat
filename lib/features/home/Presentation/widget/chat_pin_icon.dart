@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:link_savw_chat/core/constatnts/icons.dart';
 
 import '../../../../core/utils/colors.dart';
 
@@ -13,14 +15,11 @@ class ChatPinIcon extends StatelessWidget {
     return SizedBox(
       height: 22.h,
       child: Center(
-        child: Transform.rotate(
-          angle: 0.785398,
-          child: Icon(
-            Icons.push_pin,
-            size: 16.r,
-            color: isDark
-                ? AppColors.textSecondaryDark
-                : AppColors.textSubtitleLight,
+        child: SvgPicture.asset(
+          AppIcons.pin,
+          colorFilter: ColorFilter.mode(
+            isDark ? AppColors.textSecondaryDark : AppColors.textSubtitleLight,
+            BlendMode.srcIn,
           ),
         ),
       ),

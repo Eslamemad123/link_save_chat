@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:link_savw_chat/core/constatnts/icons.dart';
 import 'package:link_savw_chat/core/utils/colors.dart';
 
 class ChatInfoDateBadge extends StatelessWidget {
@@ -32,12 +34,14 @@ class ChatInfoDateBadge extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(
-          Icons.calendar_today_outlined,
-          size: 14.r,
-          color: isDark
-              ? AppColors.textSecondaryDark
-              : AppColors.textSubtitleLight,
+        SvgPicture.asset(
+          AppIcons.dateLine,
+          colorFilter: ColorFilter.mode(
+            isDark ? AppColors.textPrimaryDark : AppColors.textSubtitleLight,
+            BlendMode.srcIn,
+          ),
+          width: 20,
+          height: 20,
         ),
         SizedBox(width: 6.w),
         Text(
@@ -54,4 +58,3 @@ class ChatInfoDateBadge extends StatelessWidget {
     );
   }
 }
-

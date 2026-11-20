@@ -5,7 +5,7 @@ import 'package:link_savw_chat/core/utils/colors.dart';
 import 'chat_info_stat_icon_badge.dart';
 
 class ChatInfoStatCard extends StatelessWidget {
-  final IconData icon;
+  final String icon;
   final Color iconColor;
   final Color badgeBackgroundColor;
   final String value;

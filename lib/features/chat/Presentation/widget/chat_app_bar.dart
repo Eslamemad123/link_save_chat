@@ -2,14 +2,14 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:link_savw_chat/core/constatnts/icons.dart';
 import 'package:link_savw_chat/features/home/Data/models/chat_model.dart';
 import 'package:link_savw_chat/features/home/Presentation/widget/chat_icon_avatar.dart';
 
 import '../../../../core/utils/colors.dart';
+import 'chat_action_button.dart';
 import 'chat_back_button.dart';
 import 'chat_header_info.dart';
-import 'chat_info_button.dart';
-import 'chat_search_button.dart';
 
 class ChatAppBar extends StatelessWidget {
   final ChatModel chat;
@@ -56,7 +56,7 @@ class ChatAppBar extends StatelessWidget {
             child: Row(
               children: [
                 const ChatBackButton(),
-                SizedBox(width: 10.w),
+                SizedBox(width: 15.w),
                 ChatIconAvatar(image: chat.displayImage, name: chat.name),
                 SizedBox(width: 12.w),
                 Expanded(
@@ -67,9 +67,9 @@ class ChatAppBar extends StatelessWidget {
                         : 'New Chat',
                   ),
                 ),
-                ChatSearchButton(onTap: onSearchTap),
-                SizedBox(width: 8.w),
-                ChatInfoButton(onTap: onInfoTap),
+                ChatActionButton(icon: AppIcons.search2, onTap: onSearchTap),
+                SizedBox(width: 16.w),
+                ChatActionButton(icon: AppIcons.info, onTap: onInfoTap),
               ],
             ),
           ),

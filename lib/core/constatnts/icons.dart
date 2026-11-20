@@ -31,4 +31,11 @@ class AppIcons {
   static const String pin = 'assets/icons/pin.svg';
   static const String pinCircler = 'assets/icons/pinCirclercom.svg';
   static const String addChat = 'assets/icons/addChat.svg';
+  static const String infoChat = 'assets/icons/infoChat.svg';
+  static const String info = 'assets/icons/info.svg';
+  static const String link2 = 'assets/icons/link.svg';
+  static const String doneLine = 'assets/icons/doneLine.svg';
+  static const String clear = 'assets/icons/clear.svg';
+  static const String deleteLine = 'assets/icons/deleteLine.svg';
+  static const String deleteFill = 'assets/icons/deleteFiled.svg';
 }

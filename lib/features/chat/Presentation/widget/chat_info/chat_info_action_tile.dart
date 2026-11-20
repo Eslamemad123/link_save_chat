@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:link_savw_chat/core/utils/colors.dart';
 
 class ChatInfoActionTile extends StatelessWidget {
-  final IconData icon;
+  final String icon;
   final String title;
   final Widget? trailing;
   final VoidCallback? onTap;
@@ -28,13 +29,15 @@ class ChatInfoActionTile extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
           child: Row(
             children: [
-              Icon(
-                icon,
-                size: 22.r,
-                color: isDark
-                    ? AppColors.textPrimaryDark
-                    : AppColors.textTitleLight,
-              ),
+              SvgPicture.asset(
+          icon,
+          colorFilter: ColorFilter.mode(
+            isDark ? AppColors.textPrimaryDark : AppColors.textSubtitleLight,
+            BlendMode.srcIn,
+          ),
+          width: 25,
+          height: 25,
+        ),
               SizedBox(width: 14.w),
               Expanded(
                 child: Text(

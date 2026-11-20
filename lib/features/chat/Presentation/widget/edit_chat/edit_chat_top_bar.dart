@@ -2,18 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:link_savw_chat/features/chat/Presentation/widget/chat_info/chat_info_back_button.dart';
 
-import 'edit_chat_save_button.dart';
 import 'edit_chat_title_text.dart';
 
 class EditChatTopBar extends StatelessWidget {
-  final VoidCallback? onSavePressed;
-  final bool isLoading;
-
-  const EditChatTopBar({
-    super.key,
-    required this.onSavePressed,
-    this.isLoading = false,
-  });
+  const EditChatTopBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +16,7 @@ class EditChatTopBar extends StatelessWidget {
         children: [
           const ChatInfoBackButton(),
           const EditChatTitleText(),
-          EditChatSaveButton(
-            onPressed: onSavePressed,
-            isLoading: isLoading,
-          ),
+          SizedBox(width: 44.w),
         ],
       ),
     );
